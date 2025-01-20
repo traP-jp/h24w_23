@@ -2,6 +2,7 @@
 #include <windows.h>
 
 #include <iostream>
+#include <thread>
 
 #include "view/IPDialog.h"
 #include "view/MainWindow.h"
@@ -16,14 +17,19 @@ int WINAPI wWinMain(
     int nCmdShow
 )
 {
-    DialogBox(
-        hInstance,
-        MAKEINTRESOURCE(IDD_DIALOG1),
-        nullptr,
-        reinterpret_cast<DLGPROC>(IPDialog::DlgProc)
-    );
+    std::thread t(
+        []()
+        {
+            DialogBox(
+                GetModuleHandle(nullptr),
+                MAKEINTRESOURCE(IDD_DIALOG1),
+                nullptr,
+                reinterpret_cast<DLGPROC>(IPDialog::DlgProc)
+            );
 
-    std::cout << IPDialog::GetIPAddr() << std::endl;
+            std::cout << IPDialog::GetIPAddr() << std::endl;
+        }
+    );
 
     MainWindow window;
     HRESULT hr = window.Create(
@@ -40,6 +46,8 @@ int WINAPI wWinMain(
     {
         return -1;
     }
+
+    t.join();
 
     ShowWindow(window.Window(), nCmdShow);
 

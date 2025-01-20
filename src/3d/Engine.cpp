@@ -1,5 +1,7 @@
 #include "3d/Engine.h"
 
+#include <iostream>
+
 Engine::Engine(HWND hwnd, RECT wr) : m_hwnd(hwnd), m_wr(wr)
 {
     AquaEngine::Factory::Init(true);
@@ -33,14 +35,19 @@ void Engine::Init()
     m_d2dEngine = std::make_unique<D2DEngine>(m_hwnd, m_wr, m_command.get());
     auto desc = m_display->GetSwapChainDesc();
     m_d2dEngine->Init(desc.BufferCount, m_display->GetBackBufferResouces());
+
+    m_gameView = std::make_unique<GameView>(m_hwnd, m_wr);
+    m_gameView->Init(*m_command);
+
+    std::cout << "Engine initialized" << std::endl;
 }
 
-void Engine::Render() const
+void Engine::Render()
 {
+    AquaEngine::GlobalDescriptorHeapManager::SetToCommand(*m_command);
+
     m_display->BeginRender();
     m_display->SetViewports();
-
-    m_display->EndRender();
 
     HRESULT hr = m_command->Execute();
     if (FAILED(hr))

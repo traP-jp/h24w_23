@@ -540,3 +540,5 @@ FodyWeavers.xsd
 *.sln.iml
 
 .idea
+vcpkg_installed
+resources
