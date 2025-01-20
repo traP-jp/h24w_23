@@ -21,13 +21,21 @@ public:
 
 private:
     HWND m_hwnd;
+    RECT m_rc;
 
     std::unique_ptr<AquaEngine::FBXModel> m_model1;
     std::unique_ptr<AquaEngine::FBXModel> m_model2;
+    std::unique_ptr<AquaEngine::SkyBox> m_skyBox;
+    std::shared_ptr<AquaEngine::Camera> m_camera;
 
     AquaEngine::PipelineState m_pipelineState;
     AquaEngine::RootSignature m_rootSignature;
-    AquaEngine::Camera m_camera;
+
+    void CreateModels(
+        AquaEngine::Command& command,
+        AquaEngine::DescriptorHeapSegmentManager& manager
+    );
+    void CreateSkyBox(AquaEngine::Command& command);
 };
 
 #endif  // GAMEVIEW_H

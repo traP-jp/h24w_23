@@ -74,8 +74,11 @@ set(resources
         resources/models/isu.png
         resources/models/ninja.png
         resources/models/ninja.fbx
+        resources/textures/space.hdr
         shaders/main.hlsl
         shaders/renderTarget.hlsl
+        ThirdParty/aqua-engine-0.1.2/shaders/cubemap.hlsl
+        ThirdParty/aqua-engine-0.1.2/shaders/skybox.hlsl
 )
 
 create_executable(${src_files} ${include_files} ${resources})

@@ -40,9 +40,40 @@ VS_OUTPUT vs(VS_INPUT input)
 TextureCube cubeTexture : register(t0);
 SamplerState cubeSampler : register(s0);
 
+static float exposure = 1.0f;
+
+float ReinhardToneMapping(float l)
+{
+    return (l * exposure) / (1.0f + l * exposure);
+}
+
+static float acesa = 2.51f;
+static float acesb = 0.03f;
+static float acesc = 2.43f;
+static float acesd = 0.59f;
+static float acese = 0.14f;
+
+float ACESToneMapping(float l)
+{
+   return ((l * (acesa * l + acesb)) / (l * (acesc * l + acesd) + acese));
+}
+
+static float gamma = 1.5f;
+
+float GammaToneMapping(float l)
+{
+    float mapped = pow(l, 1.0f / gamma);
+    return ReinhardToneMapping(mapped);
+}
+
 float4 ps(VS_OUTPUT input) : SV_TARGET
 {
     float3 color = cubeTexture.Sample(cubeSampler, normalize(input.direction)).rgb;
+    float luminance = dot(color, float3(0.299f, 0.587f, 0.114f));
 
-    return float4(color, 1.0f);
+    float toneMappedluminance = ACESToneMapping(luminance);
+
+    float4 finalColor = float4(color * (toneMappedluminance / luminance), 1.0f);
+
+    return finalColor * 12.0f;
 }
