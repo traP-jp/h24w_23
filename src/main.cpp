@@ -3,6 +3,9 @@
 
 #include <iostream>
 
+#include "view/IPDialog.h"
+#include "view/resource.h"
+
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 int WINAPI wWinMain(
@@ -12,6 +15,17 @@ int WINAPI wWinMain(
     int nCmdShow
 )
 {
+    MessageBox(nullptr, "Hello, Windows Desktop!", "Aqua Engine", MB_OK);
+
+    DialogBox(
+        hInstance,
+        MAKEINTRESOURCE(IDD_DIALOG1),
+        nullptr,
+        reinterpret_cast<DLGPROC>(IPDialog::DlgProc)
+    );
+
+    std::cout << IPDialog::GetIPAddr() << std::endl;
+
     WNDCLASSEX wc = {};
 
     wc.cbSize = sizeof(WNDCLASSEX);

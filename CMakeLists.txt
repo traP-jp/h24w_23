@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 3.29)
 project(h24w_23)
 
 set(CMAKE_CXX_STANDARD 23)
@@ -9,7 +9,7 @@ macro(create_executable files)
 
     set(srcs ${ARGV})
     foreach (src ${srcs})
-        if (src MATCHES ".*\\.(cpp|c|cc|cxx|h|hpp)$")
+        if (src MATCHES ".*\\.(cpp|c|cc|cxx|h|hpp|rc)$")
             list(APPEND src_list ${src})
         endif ()
         if (src MATCHES ".*\\.(hlsl|hlsli)$")
@@ -37,6 +37,23 @@ macro(create_executable files)
     target_link_libraries(h24w_23 PUBLIC $ENV{FBXSDK_DIR}/lib/x64/debug/zlib-md.lib)
 endmacro()
 
-set(src_files src/main.cpp)
+set(src_files
+        src/main.cpp
+        src/view/MainWindow.cpp
+        src/view/IPDialog.cpp
+        src/3d/Engine.cpp
+)
 
-create_executable(${src_files})
+set(include_files
+        include/view/BaseWindow.h
+        include/view/MainWindow.h
+        include/view/IPDialog.h
+        include/3d/Engine.h
+)
+
+set(resources
+        include/view/resource.h
+        include/view/IPDialog.rc
+)
+
+create_executable(${src_files} ${include_files} ${resources})
