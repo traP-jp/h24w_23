@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "view/IPDialog.h"
+#include "view/MainWindow.h"
 #include "view/resource.h"
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -26,47 +27,23 @@ int WINAPI wWinMain(
 
     std::cout << IPDialog::GetIPAddr() << std::endl;
 
-    WNDCLASSEX wc = {};
-
-    wc.cbSize = sizeof(WNDCLASSEX);
-    wc.style = CS_HREDRAW | CS_VREDRAW;
-    wc.lpfnWndProc = WindowProc;
-    wc.hInstance = hInstance;
-    wc.lpszClassName = "WindowClass";
-
-    RegisterClassEx(&wc);
-
-    RECT wr = {0, 0, 800, 600};
-
-    HWND hwnd = CreateWindowEx(
-        0,
-        "WindowClass",
-        "Hello, Engine!",
+    MainWindow window;
+    HRESULT hr = window.Create(
+        "MainWindow",
         WS_OVERLAPPEDWINDOW,
-        wr.left,
-        wr.top,
-        wr.right - wr.left,
-        wr.bottom - wr.top,
-        nullptr,
-        nullptr,
-        hInstance,
+        0,
+        0,
+        0,
+        1920,
+        1200,
         nullptr
     );
-    if (hwnd == nullptr)
+    if (FAILED(hr))
     {
         return -1;
     }
 
-    // d3d init
-    AquaEngine::Factory::Init(true);
-    AquaEngine::Device::GetAdaptors();
-    AquaEngine::Device::Init(1);
-    AquaEngine::GlobalDescriptorHeapManager::Init();
-    AquaEngine::Command command;
-    AquaEngine::Display display(hwnd, wr, command);
-    display.SetBackgroundColor(1.0f, 1.0f, 0.0f, 1.0f);
-
-    ShowWindow(hwnd, nCmdShow);
+    ShowWindow(window.Window(), nCmdShow);
 
     MSG msg = {};
 
@@ -74,21 +51,7 @@ int WINAPI wWinMain(
     {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
-
-        display.BeginRender();
-        display.SetViewports();
-        display.EndRender();
-
-        command.Execute();
-
-        display.Present();
     }
-
-    AquaEngine::GlobalDescriptorHeapManager::Shutdown();
-    AquaEngine::Device::Shutdown();
-    AquaEngine::Factory::Shutdown();
-
-    UnregisterClass("WindowClass", hInstance);
 
     return 0;
 }

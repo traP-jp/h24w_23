@@ -3,7 +3,6 @@
 
 #include <Windows.h>
 
-template<class DERIVED_TYPE>
 class BaseWindow
 {
 public:
@@ -12,7 +11,7 @@ public:
     }
 
     virtual HRESULT Create(
-        PCWSTR lpWindowName,
+        LPCSTR lpWindowName,
         DWORD dwStyle,
         DWORD dwExStyle = 0,
         int x = CW_USEDEFAULT,
@@ -27,7 +26,7 @@ public:
         WNDCLASSEX wc
             = {.cbSize = sizeof(WNDCLASSEX),
                .style = CS_HREDRAW | CS_VREDRAW,
-               .lpfnWndProc = DERIVED_TYPE::WindowProc,
+               .lpfnWndProc = WindowProc,
                .cbClsExtra = 0,
                .cbWndExtra = 0,
                .hInstance = GetModuleHandle(nullptr),
@@ -75,13 +74,13 @@ protected:
     static LRESULT CALLBACK
     WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
-        DERIVED_TYPE *pThis = nullptr;
+        BaseWindow *pThis = nullptr;
 
         if (uMsg == WM_CREATE)
         {
             CREATESTRUCT *pCreateStruct
                 = reinterpret_cast<CREATESTRUCT *>(lParam);
-            pThis = static_cast<DERIVED_TYPE *>(pCreateStruct->lpCreateParams);
+            pThis = static_cast<BaseWindow *>(pCreateStruct->lpCreateParams);
             SetWindowLongPtr(
                 hwnd,
                 GWLP_USERDATA,
@@ -92,7 +91,7 @@ protected:
         }
         else
         {
-            pThis = reinterpret_cast<DERIVED_TYPE *>(
+            pThis = reinterpret_cast<BaseWindow *>(
                 GetWindowLongPtr(hwnd, GWLP_USERDATA)
             );
         }
@@ -105,7 +104,7 @@ protected:
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
 
-    virtual PCWSTR ClassName() const = 0;
+    virtual LPCSTR ClassName() const = 0;
     virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 
     HWND m_hwnd;

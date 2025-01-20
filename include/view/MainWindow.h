@@ -5,11 +5,11 @@
 #include "3d/Engine.h"
 #include "BaseWindow.h"
 
-class MainWindow : public BaseWindow<MainWindow>
+class MainWindow : public BaseWindow
 {
 public:
     HRESULT Create(
-        PCWSTR lpWindowName,
+        LPCSTR lpWindowName,
         DWORD dwStyle,
         DWORD dwExStyle,
         int x,
@@ -20,9 +20,9 @@ public:
     ) override;
 
 private:
-    PCWSTR ClassName() const override
+    LPCSTR ClassName() const override
     {
-        return L"MainWindow";
+        return "MainWindow";
     }
 
     LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) override;

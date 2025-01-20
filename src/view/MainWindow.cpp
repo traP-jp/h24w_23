@@ -1,7 +1,7 @@
 #include "view/MainWindow.h"
 
 HRESULT MainWindow::Create(
-    PCWSTR lpWindowName,
+    LPCSTR lpWindowName,
     DWORD dwStyle,
     DWORD dwExStyle,
     int x,
@@ -11,7 +11,7 @@ HRESULT MainWindow::Create(
     HWND hWndParent
 )
 {
-    HRESULT hr = BaseWindow<MainWindow>::Create(
+    HRESULT hr = BaseWindow::Create(
         lpWindowName,
         dwStyle,
         dwExStyle,
@@ -39,6 +39,17 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_DESTROY:
             PostQuitMessage(0);
             return 0;
+
+        case WM_PAINT:
+        {
+            PAINTSTRUCT ps;
+            HDC hdc = BeginPaint(m_hwnd, &ps);
+
+            m_engine->Render();
+
+            EndPaint(m_hwnd, &ps);
+            return 0;
+        }
 
         default:
             return DefWindowProc(m_hwnd, uMsg, wParam, lParam);
