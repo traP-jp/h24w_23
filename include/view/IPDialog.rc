@@ -1,4 +1,4 @@
-﻿// Microsoft Visual C++ generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
 #include "winres.h"
@@ -39,15 +39,18 @@ END
 // Dialog
 //
 
-IDD_DIALOG1 DIALOGEX 0, 0, 309, 176
+IDD_DIALOG1 DIALOGEX 0, 0, 385, 242
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Dialog"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,72,126,50,14
-    PUSHBUTTON      "キャンセル",IDCANCEL,187,126,50,14
-    EDITTEXT        IDC_EDIT1,45,77,225,14,ES_AUTOHSCROLL
-    LTEXT           "スタティック",IDC_STATIC,135,56,33,8
+    DEFPUSHBUTTON   "OK",IDOK,118,175,50,14
+    PUSHBUTTON      "キャンセル",IDCANCEL,215,175,50,14
+    EDITTEXT        IDC_EDIT1,77,143,223,14,ES_AUTOHSCROLL
+    LTEXT           "相手のIPアドレス",IDC_STATIC,153,119,103,8
+    GROUPBOX        "プレイヤー選択",IDC_STATIC,71,38,222,40
+    CONTROL         "プレイヤー1",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON,87,57,51,10
+    CONTROL         "プレイヤー2",IDC_RADIO3,"Button",BS_AUTORADIOBUTTON,194,57,51,10
 END
 
 
@@ -61,10 +64,10 @@ GUIDELINES DESIGNINFO
 BEGIN
     IDD_DIALOG1, DIALOG
     BEGIN
-        LEFTMARGIN, 6
-        RIGHTMARGIN, 302
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 378
         TOPMARGIN, 7
-        BOTTOMMARGIN, 169
+        BOTTOMMARGIN, 235
     END
 END
 #endif    // APSTUDIO_INVOKED

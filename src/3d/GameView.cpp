@@ -21,7 +21,7 @@ void GameView::Init(AquaEngine::Command &command)
         D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
     );
     m_camera = std::make_shared<AquaEngine::Camera>(m_rc);
-    m_camera->Init({0.0f, 0.0f, -2.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f});
+    m_camera->Init({0.0f, 1.0f, -2.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 2.0f, 1.0f});
     m_camera->AddManager("main_game", std::move(camera_range));
 
     auto model_input_element = m_model1->GetInputElementDescs();
@@ -59,19 +59,21 @@ void GameView::Init(AquaEngine::Command &command)
     }
 
     m_model1->PlayAnimation(
-        "metarig|hirou",
+        "metarig|hasirimotion",
         AquaEngine::FBXModel::AnimationMode::LOOP
     );
 
     m_model1->RotX(-DirectX::XM_PIDIV2);
-    m_model1->RotY(DirectX::XM_PI);
+    m_model1->Move(0.0f, -1.0f, 0.0f);
+
+    m_model2->PlayAnimation(
+        "metarig|hasirimotion",
+        AquaEngine::FBXModel::AnimationMode::LOOP
+    );
+
     m_model2->RotX(-DirectX::XM_PIDIV2);
-
-    m_model1->Move(-1.5f, -1.0f, 0.0f);
-    m_model2->Move(1.5f, -1.0f, 0.0f);
-
-    m_model1->Scale(2.0f, 2.0f, 2.0f);
-    m_model2->Scale(2.0f, 2.0f, 2.0f);
+    m_model2->RotY(DirectX::XM_PI);
+    m_model2->Move(0.0f, -1.0f, 1.0f);
 }
 
 void GameView::CreateModels(
@@ -141,8 +143,8 @@ void GameView::CreateModels(
     m_model1->CreateMaterialBufferView(material_segment, 0);
 
     m_model2 = std::make_unique<AquaEngine::FBXModel>(
-        "resources/models/isu.fbx",
-        "resources/models/isu.png",
+        "resources/models/ninja.fbx",
+        "resources/models/ninja.png",
         command
     );
     m_model2->Create();
@@ -182,8 +184,6 @@ void GameView::CreateSkyBox(AquaEngine::Command &command)
 
 void GameView::Render(AquaEngine::Command &command)
 {
-    m_model2->RotY(-0.1f);
-
     m_skyBox->Render(command);
 
     m_rootSignature.SetToCommand(command);

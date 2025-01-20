@@ -37,6 +37,14 @@ public:
                     case IDCANCEL:
                         EndDialog(hWnd, IDCANCEL);
                         return TRUE;
+
+                    case IDC_RADIO2:
+                        m_isPlayer1 = true;
+                        return TRUE;
+
+                    case IDC_RADIO3:
+                        m_isPlayer1 = false;
+                        return TRUE;
                 }
 
                 break;
@@ -51,8 +59,14 @@ public:
         return m_ipaddr;
     }
 
+    static bool IsPlayer1()
+    {
+        return m_isPlayer1;
+    }
+
 private:
     static std::string m_ipaddr;
+    static bool m_isPlayer1;
 };
 
 #endif  // IPDIALOG_H

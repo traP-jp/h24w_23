@@ -44,5 +44,5 @@ float4 ps(Type input) : SV_TARGET
 	float3 light = normalize(float3(-1.0, -1.0, -1.0));
 	float brightness = dot(input.normal.xyz, light);
 
-	return float4(brightness, brightness, brightness, 1.0) * tex.Sample(sam, input.uv);
+	return float4(brightness, brightness, brightness, 1.0) * tex.Sample(sam, input.uv) + 0.2f;
 }

@@ -17,6 +17,8 @@ int WINAPI wWinMain(
     int nCmdShow
 )
 {
+    std::string ip_addr;
+    bool is_player1 = false;
     std::thread t(
         []()
         {
@@ -26,8 +28,6 @@ int WINAPI wWinMain(
                 nullptr,
                 reinterpret_cast<DLGPROC>(IPDialog::DlgProc)
             );
-
-            std::cout << IPDialog::GetIPAddr() << std::endl;
         }
     );
 
@@ -48,6 +48,9 @@ int WINAPI wWinMain(
     }
 
     t.join();
+
+    ip_addr = IPDialog::GetIPAddr();
+    is_player1 = IPDialog::IsPlayer1();
 
     ShowWindow(window.Window(), nCmdShow);
 
