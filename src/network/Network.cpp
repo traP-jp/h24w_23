@@ -81,6 +81,8 @@ void Network::Listen()
         SendData* data = new SendData;
         memcpy(data, recvbuf, sizeof(SendData));
 
+        std::cout << "Received data" << std::endl;
+
         SendMessage(m_hwnd, WM_H24RECV, 0, reinterpret_cast<LPARAM>(data));
     }
 }

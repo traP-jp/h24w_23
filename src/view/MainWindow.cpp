@@ -105,6 +105,11 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             m_engine->Timer(wParam);
             return 0;
 
+        case WM_H24RECV:
+            SendData data = *reinterpret_cast<SendData *>(lParam);
+            m_engine->TranslatePartner(data.transform);
+            return 0;
+
         default:
             return DefWindowProc(m_hwnd, uMsg, wParam, lParam);
     }
