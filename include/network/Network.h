@@ -3,9 +3,12 @@
 
 #define WM_H24RECV (WM_USER + 2)
 
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
 #include <DirectXMath.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
+#include <WinSock2.h>
 
 #include <string>
 

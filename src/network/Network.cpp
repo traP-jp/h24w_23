@@ -1,5 +1,11 @@
 #include "network/Network.h"
 
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
+#include <WS2tcpip.h>
+
 #include <iostream>
 #include <print>
 #include <utility>
