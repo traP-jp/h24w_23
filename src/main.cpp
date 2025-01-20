@@ -58,6 +58,9 @@ int WINAPI wWinMain(
     ip_addr = IPDialog::GetIPAddr();
     is_player1 = IPDialog::IsPlayer1();
 
+    std::cout << "ip_addr: " << ip_addr << std::endl;
+    std::cout << "is_player1: " << is_player1 << std::endl;
+
     window.InitNetwork(ip_addr, is_player1);
 
     std::thread t2(&MainWindow::Listen, &window);

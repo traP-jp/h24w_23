@@ -25,6 +25,8 @@ public:
     {
         m_network = std::make_unique<Network>(ipaddr, m_hwnd);
         m_network->CreateSocket();
+
+        m_engine->SetIsPlayer1(isServer);
     }
 
     void Listen() const

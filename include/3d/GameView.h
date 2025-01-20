@@ -32,6 +32,7 @@ public:
     void MoveModel(float dx, float dy, float dz) const
     {
         (m_isPlayer1 ? m_model1 : m_model2)->Move(dx, dy, dz);
+        InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
     DirectX::XMMATRIX GetMatrix() const
