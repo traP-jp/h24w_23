@@ -33,6 +33,9 @@ public:
     }
 
 private:
+    std::unique_ptr<Engine> m_engine;
+    std::unique_ptr<Network> m_network;
+
     LPCSTR ClassName() const override
     {
         return "MainWindow";
@@ -40,8 +43,7 @@ private:
 
     LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) override;
 
-    std::unique_ptr<Engine> m_engine;
-    std::unique_ptr<Network> m_network;
+    void Send();
 };
 
 #endif  // MAINWINDOW_H

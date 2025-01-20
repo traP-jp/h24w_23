@@ -11,7 +11,7 @@
 class GameView
 {
 public:
-    GameView(HWND hwnd, RECT rc, bool isPlayer1);
+    GameView(HWND hwnd, RECT rc);
     ~GameView() = default;
 
     void Init(AquaEngine::Command& command);
@@ -19,16 +19,24 @@ public:
     void Timer(int id) const;
     void StartAnimation();
 
-    void Transform(const DirectX::XMMATRIX& transform) const
+    void SetIsPlayer1(bool is_player1)
     {
-        if (m_isPlayer1)
-        {
-            m_model1->SetMatrix(transform);
-        }
-        else
-        {
-            m_model2->SetMatrix(transform);
-        }
+        m_isPlayer1 = is_player1;
+    }
+
+    void TransformPartner(const DirectX::XMMATRIX& transform) const
+    {
+        (m_isPlayer1 ? m_model2 : m_model1)->SetMatrix(transform);
+    }
+
+    void MoveModel(float dx, float dy, float dz) const
+    {
+        (m_isPlayer1 ? m_model1 : m_model2)->Move(dx, dy, dz);
+    }
+
+    DirectX::XMMATRIX GetMatrix() const
+    {
+        return (m_isPlayer1 ? m_model1 : m_model2)->GetMatrix();
     }
 
 private:

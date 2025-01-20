@@ -21,15 +21,21 @@ public:
         RUNNING
     };
 
-    Engine(HWND hwnd, RECT wr, bool isPlayer1);
+    Engine(HWND hwnd, RECT wr);
     ~Engine();
 
     void Init();
     void Render();
     void Timer(int id);
 
-    void Translate(DirectX::XMMATRIX &transform)
+    void TranslatePartner(const DirectX::XMMATRIX &transform) const
     {
+        m_gameView->TransformPartner(transform);
+    }
+
+    void MoveModel(float dx, float dy, float dz) const
+    {
+        m_gameView->MoveModel(dx, dy, dz);
     }
 
     void SetStartStatus(StartStatus status)
@@ -37,9 +43,19 @@ public:
         m_startStatus = status;
     }
 
+    void SetIsPlayer1(bool isPlayer1)
+    {
+        m_gameView->SetIsPlayer1(isPlayer1);
+    }
+
     [[nodiscard]] StartStatus GetStartStatus() const
     {
         return m_startStatus;
+    }
+
+    [[nodiscard]] DirectX::XMMATRIX GetMatrix() const
+    {
+        return m_gameView->GetMatrix();
     }
 
 private:
@@ -67,8 +83,6 @@ private:
 
     StartStatus m_startStatus = StartStatus::TITLE;
     float m_elapsedTime = 0.0f;
-
-    bool m_isPlayer1;
 
     void InitRenderTargets();
 };

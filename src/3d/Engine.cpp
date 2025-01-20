@@ -2,8 +2,7 @@
 
 #include <iostream>
 
-Engine::Engine(HWND hwnd, RECT wr, bool isPlayer1)
-    : m_hwnd(hwnd), m_wr(wr), m_isPlayer1(isPlayer1)
+Engine::Engine(HWND hwnd, RECT wr) : m_hwnd(hwnd), m_wr(wr)
 {
     AquaEngine::Factory::Init(true);
     AquaEngine::Device::GetAdaptors();
@@ -39,7 +38,7 @@ void Engine::Init()
     auto desc = m_display->GetSwapChainDesc();
     m_d2dEngine->Init(desc.BufferCount, m_display->GetBackBufferResouces());
 
-    m_gameView = std::make_unique<GameView>(m_hwnd, m_wr, m_isPlayer1);
+    m_gameView = std::make_unique<GameView>(m_hwnd, m_wr);
     m_gameView->Init(*m_command);
 
     std::cout << "Engine initialized" << std::endl;

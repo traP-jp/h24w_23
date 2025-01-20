@@ -1,7 +1,7 @@
 #include "3d/GameView.h"
 
-GameView::GameView(HWND hwnd, RECT rc, bool isPlayer1)
-    : m_hwnd(hwnd), m_rc(rc), m_isPlayer1(isPlayer1)
+GameView::GameView(HWND hwnd, RECT rc)
+    : m_hwnd(hwnd), m_rc(rc), m_isPlayer1(false)
 {
 }
 

@@ -1,7 +1,6 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
-#define WM_H24SEND (WM_USER + 1)
 #define WM_H24RECV (WM_USER + 2)
 
 #include <DirectXMath.h>
@@ -10,14 +9,14 @@
 
 #include <string>
 
+struct SendData
+{
+    DirectX::XMMATRIX transform;
+};
+
 class Network
 {
 public:
-    struct SendData
-    {
-        DirectX::XMMATRIX transform;
-    };
-
     Network(std::string partnerIpAddr, HWND hwnd)
         : m_partnerIpAddr(std::move(partnerIpAddr))
         , m_sock(INVALID_SOCKET)
