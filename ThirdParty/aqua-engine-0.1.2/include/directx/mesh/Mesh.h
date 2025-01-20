@@ -151,6 +151,11 @@ namespace AquaEngine
             m_matrixBuffer.SetMatrixBuffer(m_transformMatrix * m_coordinateMatrix);
         }
 
+        void SetMatrix(const DirectX::XMMATRIX &matrix)
+        {
+            m_matrixBuffer.SetMatrixBuffer(matrix);
+        }
+
         [[nodiscard]] DirectX::XMMATRIX GetCoordinate() const
         {
             return m_coordinateMatrix;

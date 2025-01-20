@@ -11,13 +11,25 @@
 class GameView
 {
 public:
-    GameView(HWND hwnd, RECT rc);
+    GameView(HWND hwnd, RECT rc, bool isPlayer1);
     ~GameView() = default;
 
     void Init(AquaEngine::Command& command);
     void Render(AquaEngine::Command& command);
     void Timer(int id) const;
     void StartAnimation();
+
+    void Transform(const DirectX::XMMATRIX& transform) const
+    {
+        if (m_isPlayer1)
+        {
+            m_model1->SetMatrix(transform);
+        }
+        else
+        {
+            m_model2->SetMatrix(transform);
+        }
+    }
 
 private:
     HWND m_hwnd;
@@ -30,6 +42,8 @@ private:
 
     AquaEngine::PipelineState m_pipelineState;
     AquaEngine::RootSignature m_rootSignature;
+
+    bool m_isPlayer1;
 
     void CreateModels(
         AquaEngine::Command& command,
