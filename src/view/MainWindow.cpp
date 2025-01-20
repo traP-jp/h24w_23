@@ -42,7 +42,7 @@ HRESULT MainWindow::Create(
 void MainWindow::Send()
 {
     SendData data = {m_engine->GetMatrix()};
-    //std::cout << "Sending data" << std::endl;
+    // std::cout << "Sending data" << std::endl;
     m_network->Send(data);
 }
 
