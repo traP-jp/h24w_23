@@ -67,6 +67,12 @@ void GameView::Init(AquaEngine::Command &command)
         0,
         D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
     );
+    material_segment->SetRootParameter(
+        D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
+        D3D12_SHADER_VISIBILITY_ALL,
+        std::move(material_range),
+        1
+    );
 
     m_model1 = std::make_unique<AquaEngine::FBXModel>(
         "resources/models/ninja.fbx",
@@ -123,8 +129,6 @@ void GameView::Init(AquaEngine::Command &command)
         "metarig|hirou",
         AquaEngine::FBXModel::AnimationMode::LOOP
     );
-    SetTimer(m_hwnd, TIMER_MODEL1, m_model1->GetFrameCount(), nullptr);
-    SetTimer(m_hwnd, TIMER_MODEL2, m_model2->GetFrameCount(), nullptr);
 
     m_model1->RotX(-DirectX::XM_PIDIV2);
     m_model1->RotY(DirectX::XM_PI);
@@ -164,4 +168,10 @@ void GameView::Timer(int id) const
         default:
             break;
     }
+}
+
+void GameView::StartAnimation()
+{
+    SetTimer(m_hwnd, TIMER_MODEL1, m_model1->GetFrameCount(), nullptr);
+    SetTimer(m_hwnd, TIMER_MODEL2, m_model2->GetFrameCount(), nullptr);
 }

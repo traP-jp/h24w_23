@@ -17,6 +17,7 @@ public:
     void Init(AquaEngine::Command& command);
     void Render(AquaEngine::Command& command);
     void Timer(int id) const;
+    void StartAnimation();
 
 private:
     HWND m_hwnd;

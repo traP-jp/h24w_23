@@ -51,6 +51,20 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             return 0;
         }
 
+        case WM_KEYDOWN:
+        {
+            if (m_engine->GetStartStatus() == Engine::StartStatus::TITLE)
+            {
+                SetTimer(m_hwnd, TIMER_TITLE, 25, nullptr);
+                m_engine->SetStartStatus(Engine::StartStatus::STARTING);
+            }
+            return 0;
+        }
+
+        case WM_TIMER:
+            m_engine->Timer(wParam);
+            return 0;
+
         default:
             return DefWindowProc(m_hwnd, uMsg, wParam, lParam);
     }

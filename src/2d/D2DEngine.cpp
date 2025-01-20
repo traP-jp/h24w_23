@@ -85,10 +85,10 @@ void D2DEngine::Init(
     }
 
     m_wrappedBackBuffers.resize(back_buffer_count);
-    m_d2dRenderTargets.resize(back_buffer_count);
+    m_d2dBackBufferRenderTargets.resize(back_buffer_count);
+    D3D11_RESOURCE_FLAGS flags = {D3D11_BIND_RENDER_TARGET};
     for (int i = 0; i < back_buffer_count; ++i)
     {
-        D3D11_RESOURCE_FLAGS flags = {D3D11_BIND_RENDER_TARGET};
         hr = m_d3d11On12Device->CreateWrappedResource(
             back_buffers[i],
             &flags,
@@ -113,7 +113,7 @@ void D2DEngine::Init(
         hr = m_d2dDeviceContext->CreateBitmapFromDxgiSurface(
             surface.Get(),
             nullptr,
-            &m_d2dRenderTargets[i]
+            &m_d2dBackBufferRenderTargets[i]
         );
         if (FAILED(hr))
         {
@@ -145,7 +145,9 @@ void D2DEngine::BeginRender(UINT back_buffer_index)
         1
     );
 
-    m_d2dDeviceContext->SetTarget(m_d2dRenderTargets[back_buffer_index].Get());
+    m_d2dDeviceContext->SetTarget(
+        m_d2dBackBufferRenderTargets[back_buffer_index].Get()
+    );
     m_d2dDeviceContext->BeginDraw();
     m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
 }
@@ -170,7 +172,43 @@ void D2DEngine::EndRender(UINT back_buffer_index)
 void D2DEngine::RenderTitleText(UINT back_buffer_index)
 {
     BeginRender(back_buffer_index);
-    m_d2dDeviceContext->Clear(D2D1::ColorF(D2D1::ColorF::White));
+    m_d2dDeviceContext->Clear(m_titleBackgroundColor);
     m_title.Render(m_d2dDeviceContext, m_d2dBlackBrush);
     EndRender(back_buffer_index);
+}
+
+void D2DEngine::RenderTitleTextRenderTarget()
+{
+    BeginRenderRenderTarget();
+    m_d2dDeviceContext->Clear(m_titleBackgroundColor);
+    m_title.Render(m_d2dDeviceContext, m_d2dBlackBrush);
+    EndRenderRenderTarget();
+}
+
+void D2DEngine::BeginRenderRenderTarget()
+{
+    m_d3d11On12Device->AcquireWrappedResources(
+        m_wrappedRenderTarget.GetAddressOf(),
+        1
+    );
+
+    m_d2dDeviceContext->SetTarget(m_d2dRenderTarget.Get());
+    m_d2dDeviceContext->BeginDraw();
+    m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
+}
+
+void D2DEngine::EndRenderRenderTarget()
+{
+    HRESULT hr = m_d2dDeviceContext->EndDraw();
+    if (FAILED(hr))
+    {
+        std::println("Failed to draw text");
+        return;
+    }
+
+    m_d3d11On12Device->ReleaseWrappedResources(
+        m_wrappedRenderTarget.GetAddressOf(),
+        1
+    );
+    m_d3d11DeviceContext->Flush();
 }

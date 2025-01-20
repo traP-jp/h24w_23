@@ -32,9 +32,9 @@ macro(create_executable files)
 
     add_executable(h24w_23 WIN32 ${src_list})
     target_include_directories(h24w_23 PRIVATE include)
-    target_include_directories(h24w_23 PRIVATE ThirdParty/aqua-engine-0.1.1/include)
+    target_include_directories(h24w_23 PRIVATE ThirdParty/aqua-engine-0.1.2/include)
     target_include_directories(h24w_23 PRIVATE $ENV{FBXSDK_DIR}/include)
-    target_link_libraries(h24w_23 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/aqua-engine-0.1.1/lib/aqua-engine.lib)
+    target_link_libraries(h24w_23 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/aqua-engine-0.1.2/lib/aqua-engine.lib)
     target_link_libraries(h24w_23 PUBLIC d2d1.lib)
     target_link_libraries(h24w_23 PUBLIC dwrite.lib)
     target_link_libraries(h24w_23 PUBLIC d3d12.lib)
@@ -75,6 +75,7 @@ set(resources
         resources/models/ninja.png
         resources/models/ninja.fbx
         shaders/main.hlsl
+        shaders/renderTarget.hlsl
 )
 
 create_executable(${src_files} ${include_files} ${resources})

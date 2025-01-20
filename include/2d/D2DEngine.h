@@ -23,10 +23,18 @@ public:
         const std::vector<ID3D12Resource*>& back_buffers
     );
     void RenderTitleText(UINT back_buffer_index);
+    void RenderTitleTextRenderTarget();
+
+    void SetTitleBackgroundColor(const D2D1::ColorF& title_background_color)
+    {
+        m_titleBackgroundColor = title_background_color;
+    }
 
 private:
     void BeginRender(UINT back_buffer_index);
     void EndRender(UINT back_buffer_index);
+    void BeginRenderRenderTarget();
+    void EndRenderRenderTarget();
 
     HWND m_hwnd;
     RECT m_wr;
@@ -37,17 +45,22 @@ private:
     Microsoft::WRL::ComPtr<ID3D11On12Device> m_d3d11On12Device;
     Microsoft::WRL::ComPtr<ID3D11DeviceContext> m_d3d11DeviceContext;
     std::vector<Microsoft::WRL::ComPtr<ID3D11Resource>> m_wrappedBackBuffers;
+    Microsoft::WRL::ComPtr<ID3D11Resource> m_wrappedRenderTarget;
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> m_wrappedRenderTargetTexture;
 
     Microsoft::WRL::ComPtr<ID2D1Factory3> m_d2dFactory;
     Microsoft::WRL::ComPtr<IDXGIDevice> m_dxgiDevice;
     Microsoft::WRL::ComPtr<ID2D1Device2> m_d2dDevice;
     Microsoft::WRL::ComPtr<ID2D1DeviceContext2> m_d2dDeviceContext;
     Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> m_d2dBlackBrush;
-    std::vector<Microsoft::WRL::ComPtr<ID2D1Bitmap1>> m_d2dRenderTargets;
+    std::vector<Microsoft::WRL::ComPtr<ID2D1Bitmap1>>
+        m_d2dBackBufferRenderTargets;
+    Microsoft::WRL::ComPtr<ID2D1Bitmap1> m_d2dRenderTarget;
 
     Microsoft::WRL::ComPtr<IDWriteFactory> m_dwriteFactory;
 
     Title m_title;
+    D2D1::ColorF m_titleBackgroundColor = D2D1::ColorF::White;
 };
 
 #endif  // D2DENGINE_H

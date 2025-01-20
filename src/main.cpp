@@ -61,14 +61,3 @@ int WINAPI wWinMain(
 
     return 0;
 }
-
-LRESULT WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-    if (uMsg == WM_DESTROY)
-    {
-        PostQuitMessage(0);
-        return 0;
-    }
-
-    return DefWindowProc(hwnd, uMsg, wParam, lParam);
-}
