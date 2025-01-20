@@ -42,6 +42,8 @@ set(src_files
         src/view/MainWindow.cpp
         src/view/IPDialog.cpp
         src/3d/Engine.cpp
+        src/2d/D2DEngine.cpp
+        src/2d/Title.cpp
 )
 
 set(include_files
@@ -49,6 +51,8 @@ set(include_files
         include/view/MainWindow.h
         include/view/IPDialog.h
         include/3d/Engine.h
+        include/2d/D2DEngine.h
+        include/2d/Title.h
 )
 
 set(resources

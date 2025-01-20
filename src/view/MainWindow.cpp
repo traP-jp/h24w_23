@@ -43,7 +43,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_PAINT:
         {
             PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(m_hwnd, &ps);
+            BeginPaint(m_hwnd, &ps);
 
             m_engine->Render();
 
