@@ -31,6 +31,8 @@ int WINAPI wWinMain(
         }
     );
 
+    Network::InitWinsock();
+
     MainWindow window;
     HRESULT hr = window.Create(
         "MainWindow",
@@ -52,6 +54,10 @@ int WINAPI wWinMain(
     ip_addr = IPDialog::GetIPAddr();
     is_player1 = IPDialog::IsPlayer1();
 
+    window.InitNetwork(ip_addr, is_player1);
+
+    std::thread t2(&MainWindow::Listen, &window);
+
     ShowWindow(window.Window(), nCmdShow);
 
     MSG msg = {};
@@ -61,6 +67,8 @@ int WINAPI wWinMain(
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
+
+    t2.join();
 
     return 0;
 }

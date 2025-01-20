@@ -1,9 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+
 #include <memory>
 
 #include "3d/Engine.h"
 #include "BaseWindow.h"
+#include "network/Network.h"
 
 class MainWindow : public BaseWindow
 {
@@ -19,6 +21,17 @@ public:
         HWND hWndParent
     ) override;
 
+    void InitNetwork(const std::string& ipaddr, bool isServer)
+    {
+        m_network = std::make_unique<Network>(ipaddr, m_hwnd);
+        m_network->CreateSocket();
+    }
+
+    void Listen() const
+    {
+        m_network->Listen();
+    }
+
 private:
     LPCSTR ClassName() const override
     {
@@ -28,6 +41,7 @@ private:
     LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) override;
 
     std::unique_ptr<Engine> m_engine;
+    std::unique_ptr<Network> m_network;
 };
 
 #endif  // MAINWINDOW_H
