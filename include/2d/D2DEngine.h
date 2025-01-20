@@ -22,7 +22,7 @@ public:
         UINT back_buffer_count,
         const std::vector<ID3D12Resource*>& back_buffers
     );
-    void RenderTItleText(UINT back_buffer_index);
+    void RenderTitleText(UINT back_buffer_index);
 
 private:
     void BeginRender(UINT back_buffer_index);

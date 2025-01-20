@@ -1,5 +1,7 @@
 #include "2d/Title.h"
 
+#include <DWrite.h>
+
 void Title::Init(
     const Microsoft::WRL::ComPtr<IDWriteFactory>& dwriteFactory,
     const D2D1_RECT_F& textRect

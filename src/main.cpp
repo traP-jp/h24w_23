@@ -16,8 +16,6 @@ int WINAPI wWinMain(
     int nCmdShow
 )
 {
-    MessageBox(nullptr, "Hello, Windows Desktop!", "Aqua Engine", MB_OK);
-
     DialogBox(
         hInstance,
         MAKEINTRESOURCE(IDD_DIALOG1),

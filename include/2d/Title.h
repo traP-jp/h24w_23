@@ -1,9 +1,8 @@
 #ifndef TITLE_H
 #define TITLE_H
-#include <d2d1.h>
-#include <wrl/client.h>
 
-#include "D2DEngine.h"
+#include <d2d1_3.h>
+#include <wrl/client.h>
 
 class Title
 {

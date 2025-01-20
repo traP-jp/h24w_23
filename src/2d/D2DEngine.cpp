@@ -166,9 +166,11 @@ void D2DEngine::EndRender(UINT back_buffer_index)
     m_d3d11DeviceContext->Flush();
 }
 
-void D2DEngine::RenderTItleText(UINT back_buffer_index)
+// clear the back buffer and render the title text
+void D2DEngine::RenderTitleText(UINT back_buffer_index)
 {
     BeginRender(back_buffer_index);
+    m_d2dDeviceContext->Clear(D2D1::ColorF(D2D1::ColorF::White));
     m_title.Render(m_d2dDeviceContext, m_d2dBlackBrush);
     EndRender(back_buffer_index);
 }

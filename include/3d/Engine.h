@@ -6,6 +6,8 @@
 
 #include <memory>
 
+#include "2d/D2DEngine.h"
+
 class Engine
 {
 public:
@@ -18,6 +20,8 @@ public:
 private:
     std::unique_ptr<AquaEngine::Command> m_command;
     std::unique_ptr<AquaEngine::Display> m_display;
+
+    std::unique_ptr<D2DEngine> m_d2dEngine;
 
     HWND m_hwnd;
     RECT m_wr;
