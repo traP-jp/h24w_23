@@ -56,6 +56,7 @@ set(src_files
         src/view/IPDialog.cpp
         src/3d/Engine.cpp
         src/3d/GameView.cpp
+        src/3d/Player.cpp
         src/2d/D2DEngine.cpp
         src/2d/Title.cpp
         src/network/Network.cpp
@@ -67,11 +68,13 @@ set(include_files
         include/view/IPDialog.h
         include/3d/Engine.h
         include/3d/GameView.h
+        include/3d/Player.h
         include/2d/D2DEngine.h
         include/2d/Title.h
         include/network/Network.h
 )
 
+# TODO: delete isu, ninja
 set(resources
         include/view/resource.h
         include/view/IPDialog.rc
@@ -79,6 +82,21 @@ set(resources
         resources/models/isu.png
         resources/models/ninja.png
         resources/models/ninja.fbx
+        resources/models/player_model/arm.fbx
+        resources/models/player_model/body.fbx
+        resources/models/player_model/buster.fbx
+        resources/models/player_model/eye.fbx
+        resources/models/player_model/gun.fbx
+        resources/models/player_model/head.fbx
+        resources/models/player_model/ring.fbx
+        resources/models/player_model/thuraster.fbx
+        resources/models/player_texture/arm_diff_tex.png
+        resources/models/player_texture/body_diff_tex.png
+        resources/models/player_texture/buster_diff_tex.png
+        resources/models/player_texture/gun_diff_tex.png
+        resources/models/player_texture/head_diff_tex.png
+        resources/models/player_texture/ring_diff_tex.png
+        resources/models/player_texture/thuraster_diff_tex.png
         resources/textures/space.hdr
         shaders/main.hlsl
         shaders/renderTarget.hlsl
