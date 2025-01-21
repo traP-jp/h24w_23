@@ -48,6 +48,16 @@ public:
         m_gameView->SetIsPlayer1(isPlayer1);
     }
 
+    void Accel()
+    {
+        m_gameView->Accel();
+    }
+
+    void Decel()
+    {
+        m_gameView->Decel();
+    }
+
     [[nodiscard]] StartStatus GetStartStatus() const
     {
         return m_startStatus;

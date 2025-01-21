@@ -3,6 +3,7 @@
 
 #define TIMER_MODEL1 1
 #define TIMER_MODEL2 2
+#define TIMER_FRAME  10
 
 #include <AquaEngine.h>
 
@@ -20,6 +21,7 @@ public:
     void Render(AquaEngine::Command& command);
     void Timer(int id) const;
     void StartAnimation();
+    void Start();
 
     void SetIsPlayer1(bool is_player1)
     {
@@ -34,6 +36,18 @@ public:
     void MoveModel(float dx, float dy, float dz) const
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Move(dx, dy, dz);
+        InvalidateRect(m_hwnd, &m_rc, FALSE);
+    }
+
+    void Accel()
+    {
+        (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Accel();
+        InvalidateRect(m_hwnd, &m_rc, FALSE);
+    }
+
+    void Decel()
+    {
+        (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Decel();
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 

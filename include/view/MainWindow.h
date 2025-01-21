@@ -38,6 +38,9 @@ private:
     std::unique_ptr<Engine> m_engine;
     std::unique_ptr<Network> m_network;
 
+    bool m_isAccel = false;
+    bool m_isDecel = false;
+
     LPCSTR ClassName() const override
     {
         return "MainWindow";

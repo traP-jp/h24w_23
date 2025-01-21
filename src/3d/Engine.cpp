@@ -274,7 +274,7 @@ void Engine::Timer(int id)
             if (m_elapsedTime >= 3.0f && m_startStatus != StartStatus::RUNNING)
             {
                 m_startStatus = StartStatus::RUNNING;
-                //m_gameView->StartAnimation();
+                m_gameView->Start();
             }
             InvalidateRect(m_hwnd, &m_wr, FALSE);
             return;

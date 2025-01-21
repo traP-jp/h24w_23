@@ -77,33 +77,50 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             {
                 switch (wParam)
                 {
-                    case VK_LEFT:
-                        m_engine->MoveModel(-0.1f, 0.0f, 0.0f);
-                        Send();
+                    case VK_SHIFT:
+                        m_isAccel = true;
                         break;
 
-                    case VK_RIGHT:
-                        m_engine->MoveModel(0.1f, 0.0f, 0.0f);
-                        Send();
-                        break;
-
-                    case VK_UP:
-                        m_engine->MoveModel(0.0f, 0.0f, 0.1f);
-                        Send();
-                        break;
-
-                    case VK_DOWN:
-                        m_engine->MoveModel(0.0f, 0.0f, -0.1f);
-                        Send();
+                    case VK_SPACE:
+                        m_isDecel = true;
                         break;
                 }
             }
             return 0;
         }
 
+        case WM_KEYUP:
+        {
+            switch (wParam)
+            {
+                case VK_SHIFT:
+                    m_isAccel = false;
+                    break;
+
+                case VK_SPACE:
+                    m_isDecel = false;
+                    break;
+            }
+        }
+
         case WM_TIMER:
+        {
+            if (wParam == TIMER_FRAME)
+            {
+                if (m_isDecel)
+                {
+                    m_engine->Decel();
+                }
+                else if (m_isAccel)
+                {
+                    m_engine->Accel();
+                }
+            }
             m_engine->Timer(wParam);
+
+            // Send();
             return 0;
+        }
 
         case WM_H24RECV:
             SendData data = *reinterpret_cast<SendData *>(lParam);

@@ -98,6 +98,13 @@ set(resources
         resources/models/player_texture/ring_diff_tex.png
         resources/models/player_texture/thuraster_diff_tex.png
         resources/models/player_texture/player_tex.png
+        resources/models/player_texture/hanten/head_diff_tex_lr.png
+        resources/models/player_texture/hanten/head_diff_tex_ud.png
+        resources/models/player_texture/hanten/head_diff_tex_lrud.png
+        resources/models/player_texture/hanten/buster_diff_tex_lr.png
+        resources/models/player_texture/hanten/buster_diff_tex_ud.png
+        resources/models/player_texture/hanten/buster_diff_tex_lrud.png
+        resources/models/player_texture/hanten/head_diff_tex2.png
         resources/textures/space.hdr
         shaders/main.hlsl
         shaders/renderTarget.hlsl
