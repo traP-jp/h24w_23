@@ -97,6 +97,7 @@ set(resources
         resources/models/player_texture/head_diff_tex.png
         resources/models/player_texture/ring_diff_tex.png
         resources/models/player_texture/thuraster_diff_tex.png
+        resources/models/player_texture/player_tex.png
         resources/textures/space.hdr
         shaders/main.hlsl
         shaders/renderTarget.hlsl

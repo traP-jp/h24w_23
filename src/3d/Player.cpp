@@ -23,21 +23,24 @@ void Player::ImportModel(AquaEngine::Command& command)
 {
     m_arm = std::make_unique<AquaEngine::FBXModel>(
         "resources/models/arm.fbx",
-        "resources/models/arm_diff_tex.png",
+        //"resources/models/arm_diff_tex.png",
+        "resources/models/player_tex.png",
         command
     );
     m_arm->Create();
 
     m_body = std::make_unique<AquaEngine::FBXModel>(
         "resources/models/body.fbx",
-        "resources/models/body_diff_tex.png",
+//        "resources/models/body_diff_tex.png",
+        "resources/models/player_tex.png",
         command
     );
     m_body->Create();
 
     m_buster = std::make_unique<AquaEngine::FBXModel>(
         "resources/models/buster.fbx",
-        "resources/models/buster_diff_tex.png",
+        //"resources/models/buster_diff_tex.png",
+        "resources/models/player_tex.png",
         command
     );
     m_buster->Create();
@@ -47,28 +50,32 @@ void Player::ImportModel(AquaEngine::Command& command)
 
     m_gun = std::make_unique<AquaEngine::FBXModel>(
         "resources/models/gun.fbx",
-        "resources/models/gun_diff_tex.png",
+        //"resources/models/gun_diff_tex.png",
+        "resources/models/player_tex.png",
         command
     );
     m_gun->Create();
 
     m_head = std::make_unique<AquaEngine::FBXModel>(
         "resources/models/head.fbx",
-        "resources/models/head_diff_tex.png",
+        //"resources/models/head_diff_tex.png",
+        "resources/models/player_tex.png",
         command
     );
     m_head->Create();
 
     m_ring = std::make_unique<AquaEngine::FBXModel>(
         "resources/models/ring.fbx",
-        "resources/models/ring_diff_tex.png",
+        //"resources/models/ring_diff_tex.png",
+        "resources/models/player_tex.png",
         command
     );
     m_ring->Create();
 
     m_thuraster = std::make_unique<AquaEngine::FBXModel>(
         "resources/models/thuraster.fbx",
-        "resources/models/thuraster_diff_tex.png",
+        //"resources/models/thuraster_diff_tex.png",
+        "resources/models/player_tex.png",
         command
     );
     m_thuraster->Create();
@@ -153,7 +160,7 @@ void Player::Timer() const
     m_ring->Timer();
     m_thuraster->Timer();
 
-    DirectX::XMVECTOR dr = 
+
 }
 
 void Player::Scale(float x, float y, float z) const
@@ -170,12 +177,28 @@ void Player::Scale(float x, float y, float z) const
 
 void Player::Rot(float x, float y, float z) const
 {
-    m_arm->SetRot(x, y, z);
-    m_body->SetRot(x, y, z);
-    m_buster->SetRot(x, y, z);
-    m_eye->SetRot(x, y, z);
-    m_gun->SetRot(x, y, z);
-    m_head->SetRot(x, y, z);
-    m_ring->SetRot(x, y, z);
-    m_thuraster->SetRot(x, y, z);
+    m_arm->RotX(x);
+    m_arm->RotY(y);
+    m_arm->RotZ(z);
+    m_body->RotX(x);
+    m_body->RotY(y);
+    m_body->RotZ(z);
+    m_buster->RotX(x);
+    m_buster->RotY(y);
+    m_buster->RotZ(z);
+    m_eye->RotX(x);
+    m_eye->RotY(y);
+    m_eye->RotZ(z);
+    m_gun->RotX(x);
+    m_gun->RotY(y);
+    m_gun->RotZ(z);
+    m_head->RotX(x);
+    m_head->RotY(y);
+    m_head->RotZ(z);
+    m_ring->RotX(x);
+    m_ring->RotY(y);
+    m_ring->RotZ(z);
+    m_thuraster->RotX(x);
+    m_thuraster->RotY(y);
+    m_thuraster->RotZ(z);
 }

@@ -23,7 +23,7 @@ void GameView::Init(AquaEngine::Command &command)
     );
     m_camera = std::make_shared<AquaEngine::Camera>(m_rc);
     m_camera
-        ->Init({0.0f, 7.0f, -14.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 2.0f, 1.0f});
+        ->Init({0.0f, 5.0f, -10.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 2.0f, 1.0f});
     m_camera->AddManager("main_game", std::move(camera_range));
 
     auto model_input_element = m_playerModel1.GetInputElementDescs();
@@ -127,8 +127,10 @@ void GameView::CreateModels(
     m_playerModel2.SetTextureSegments(texture_segment, 1);
     m_playerModel2.SetMaterialSegments(material_segment, 1);
 
-    //m_playerModel1.Move(-10.0f, 0.0f, 0.0f);
-    m_playerModel2.Move(10.0f, 0.0f, 0.0f);
+    m_playerModel1.Scale(0.001f, 0.001f, 0.001f);
+    m_playerModel2.Scale(0.001f, 0.001f, 0.001f);
+    m_playerModel1.Move(-1.0f, 0.0f, 0.0f);
+    m_playerModel2.Move(1.0f, 0.0f, 0.0f);
 }
 
 void GameView::CreateSkyBox(AquaEngine::Command &command)
@@ -162,8 +164,7 @@ void GameView::CreateSkyBox(AquaEngine::Command &command)
 
 void GameView::Render(AquaEngine::Command &command)
 {
-    angle += 0.01f;
-    m_playerModel1.Rot(0.0f, angle, 0.0f);
+    m_playerModel1.Rot(0.0f, 0.01f, 0.0f);
 
     m_skyBox->Render(command);
 
