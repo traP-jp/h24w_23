@@ -61,6 +61,8 @@ private:
         AquaEngine::DescriptorHeapSegmentManager& manager
     );
     void CreateSkyBox(AquaEngine::Command& command);
+
+    float angle = 0.0f;
 };
 
 #endif  // GAMEVIEW_H

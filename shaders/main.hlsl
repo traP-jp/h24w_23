@@ -41,7 +41,7 @@ SamplerState sam : register(s0);
 
 float4 ps(Type input) : SV_TARGET
 {
-	float3 light = normalize(float3(-1.0, -1.0, -1.0));
+	float3 light = normalize(float3(0.0, -1.0, -1.0));
 	float brightness = dot(input.normal.xyz, light);
 
 	return float4(brightness, brightness, brightness, 1.0) * tex.Sample(sam, input.uv) + 0.2f;

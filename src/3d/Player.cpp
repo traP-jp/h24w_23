@@ -152,6 +152,8 @@ void Player::Timer() const
     m_head->Timer();
     m_ring->Timer();
     m_thuraster->Timer();
+
+    DirectX::XMVECTOR dr = 
 }
 
 void Player::Scale(float x, float y, float z) const
@@ -164,4 +166,16 @@ void Player::Scale(float x, float y, float z) const
     m_head->Scale(x, y, z);
     m_ring->Scale(x, y, z);
     m_thuraster->Scale(x, y, z);
+}
+
+void Player::Rot(float x, float y, float z) const
+{
+    m_arm->SetRot(x, y, z);
+    m_body->SetRot(x, y, z);
+    m_buster->SetRot(x, y, z);
+    m_eye->SetRot(x, y, z);
+    m_gun->SetRot(x, y, z);
+    m_head->SetRot(x, y, z);
+    m_ring->SetRot(x, y, z);
+    m_thuraster->SetRot(x, y, z);
 }
