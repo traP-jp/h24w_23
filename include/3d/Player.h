@@ -53,18 +53,14 @@ public:
 
     void RotRight()
     {
-        m_yAngle += 0.1f;
-
-        m_direction = DirectX::XMVector3Transform(
-            DirectX::XMVector3Transform(
-                DirectX::XMVector3Transform(
-                    m_direction,
-                    DirectX::XMMatrixRotationX(-m_xAngle)
-                ),
+        m_direction = XMVector3Transform(
+            XMVector3Transform(
+                DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f),
                 DirectX::XMMatrixRotationY(0.1f)
             ),
-            DirectX::XMMatrixRotationX(m_xAngle)
+            m_models[0]->GetTransformMatrix()
         );
+        m_direction = DirectX::XMVector3Normalize(m_direction);
 
         for (int i = 0; i < m_models.size(); ++i)
         {
@@ -74,18 +70,14 @@ public:
 
     void RotLeft()
     {
-        m_yAngle -= 0.1f;
-
-        m_direction = DirectX::XMVector3Transform(
-            DirectX::XMVector3Transform(
-                DirectX::XMVector3Transform(
-                    m_direction,
-                    DirectX::XMMatrixRotationX(-m_xAngle)
-                ),
+        m_direction = XMVector3Transform(
+            XMVector3Transform(
+                DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f),
                 DirectX::XMMatrixRotationY(-0.1f)
             ),
-            DirectX::XMMatrixRotationX(m_xAngle)
+            m_models[0]->GetTransformMatrix()
         );
+        m_direction = DirectX::XMVector3Normalize(m_direction);
 
         for (int i = 0; i < m_models.size(); ++i)
         {
@@ -95,18 +87,14 @@ public:
 
     void RotUp()
     {
-        m_xAngle -= 0.1f;
-
-        m_direction = DirectX::XMVector3Transform(
-            DirectX::XMVector3Transform(
-                DirectX::XMVector3Transform(
-                    m_direction,
-                    DirectX::XMMatrixRotationY(-m_yAngle)
-                ),
-                DirectX::XMMatrixRotationX(-0.1f)
+        m_direction = XMVector3Transform(
+            XMVector3Transform(
+                DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f),
+                DirectX::XMMatrixRotationY(-m_yAngle)
             ),
-            DirectX::XMMatrixRotationY(m_yAngle)
+            m_models[0]->GetTransformMatrix()
         );
+        m_direction = DirectX::XMVector3Normalize(m_direction);
 
         for (int i = 0; i < m_models.size(); ++i)
         {
@@ -116,18 +104,14 @@ public:
 
     void RotDown()
     {
-        m_xAngle += 0.1f;
-
-        m_direction = DirectX::XMVector3Transform(
-            DirectX::XMVector3Transform(
-                DirectX::XMVector3Transform(
-                    m_direction,
-                    DirectX::XMMatrixRotationY(-m_yAngle)
-                ),
-                DirectX::XMMatrixRotationX(0.1f)
+        m_direction = XMVector3Transform(
+            XMVector3Transform(
+                DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f),
+                DirectX::XMMatrixRotationY(-m_yAngle)
             ),
-            DirectX::XMMatrixRotationY(m_yAngle)
+            m_models[0]->GetTransformMatrix()
         );
+        m_direction = DirectX::XMVector3Normalize(m_direction);
 
         for (int i = 0; i < m_models.size(); ++i)
         {
