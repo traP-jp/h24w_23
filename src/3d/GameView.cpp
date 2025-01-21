@@ -172,7 +172,7 @@ void GameView::Render(AquaEngine::Command &command)
 
     m_camera->Render(command, "main_game");
     m_playerModel1.Render(command);
-    m_playerModel2.Render(command);
+    // m_playerModel2.Render(command);
 }
 
 void GameView::Timer(int id) const

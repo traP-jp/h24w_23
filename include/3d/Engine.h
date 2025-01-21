@@ -58,6 +58,16 @@ public:
         m_gameView->Decel();
     }
 
+    void RotRight()
+    {
+        m_gameView->RotRight();
+    }
+
+    void RotLeft()
+    {
+        m_gameView->RotLeft();
+    }
+
     [[nodiscard]] StartStatus GetStartStatus() const
     {
         return m_startStatus;

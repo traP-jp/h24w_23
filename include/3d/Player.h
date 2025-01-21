@@ -51,6 +51,30 @@ public:
         }
     }
 
+    void RotRight()
+    {
+        m_direction
+            = XMVector3Transform(m_direction, DirectX::XMMatrixRotationY(0.1f));
+
+        for (int i = 0; i < m_models.size(); ++i)
+        {
+            m_models[i]->RotY(0.1f);
+        }
+    }
+
+    void RotLeft()
+    {
+        m_direction = XMVector3Transform(
+            m_direction,
+            DirectX::XMMatrixRotationY(-0.1f)
+        );
+
+        for (int i = 0; i < m_models.size(); ++i)
+        {
+            m_models[i]->RotY(-0.1f);
+        }
+    }
+
     void SetMatrix(const DirectX::XMMATRIX& matrix) const;
 
     DirectX::XMMATRIX GetMatrix() const

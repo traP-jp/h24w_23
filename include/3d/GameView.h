@@ -51,6 +51,18 @@ public:
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
+    void RotRight()
+    {
+        (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotRight();
+        InvalidateRect(m_hwnd, &m_rc, FALSE);
+    }
+
+    void RotLeft()
+    {
+        (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotLeft();
+        InvalidateRect(m_hwnd, &m_rc, FALSE);
+    }
+
     DirectX::XMMATRIX GetMatrix() const
     {
         return (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetMatrix();

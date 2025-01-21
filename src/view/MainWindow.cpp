@@ -84,6 +84,22 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
                     case VK_SPACE:
                         m_isDecel = true;
                         break;
+
+                    case 'W':
+                        m_onW = true;
+                        break;
+
+                    case 'A':
+                        m_onA = true;
+                        break;
+
+                    case 'S':
+                        m_onS = true;
+                        break;
+
+                    case 'D':
+                        m_onD = true;
+                        break;
                 }
             }
             return 0;
@@ -100,6 +116,22 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 case VK_SPACE:
                     m_isDecel = false;
                     break;
+
+                case 'W':
+                    m_onW = false;
+                    break;
+
+                case 'A':
+                    m_onA = false;
+                    break;
+
+                case 'S':
+                    m_onS = false;
+                    break;
+
+                case 'D':
+                    m_onD = false;
+                    break;
             }
         }
 
@@ -114,6 +146,16 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 else if (m_isAccel)
                 {
                     m_engine->Accel();
+                }
+
+                if (m_onA)
+                {
+                    m_engine->RotLeft();
+                }
+
+                if (m_onD)
+                {
+                    m_engine->RotRight();
                 }
             }
             m_engine->Timer(wParam);

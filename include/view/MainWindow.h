@@ -41,6 +41,11 @@ private:
     bool m_isAccel = false;
     bool m_isDecel = false;
 
+    bool m_onW = false;
+    bool m_onA = false;
+    bool m_onS = false;
+    bool m_onD = false;
+
     LPCSTR ClassName() const override
     {
         return "MainWindow";
