@@ -148,9 +148,19 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
                     m_engine->Accel();
                 }
 
+                if (m_onW)
+                {
+                    m_engine->RotUp();
+                }
+
                 if (m_onA)
                 {
                     m_engine->RotLeft();
+                }
+
+                if (m_onS)
+                {
+                    m_engine->RotDown();
                 }
 
                 if (m_onD)

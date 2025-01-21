@@ -68,6 +68,16 @@ public:
         m_gameView->RotLeft();
     }
 
+    void RotUp()
+    {
+        m_gameView->RotUp();
+    }
+
+    void RotDown()
+    {
+        m_gameView->RotDown();
+    }
+
     [[nodiscard]] StartStatus GetStartStatus() const
     {
         return m_startStatus;

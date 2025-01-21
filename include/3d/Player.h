@@ -53,8 +53,18 @@ public:
 
     void RotRight()
     {
-        m_direction
-            = XMVector3Transform(m_direction, DirectX::XMMatrixRotationY(0.1f));
+        m_yAngle += 0.1f;
+
+        m_direction = DirectX::XMVector3Transform(
+            DirectX::XMVector3Transform(
+                DirectX::XMVector3Transform(
+                    m_direction,
+                    DirectX::XMMatrixRotationX(-m_xAngle)
+                ),
+                DirectX::XMMatrixRotationY(0.1f)
+            ),
+            DirectX::XMMatrixRotationX(m_xAngle)
+        );
 
         for (int i = 0; i < m_models.size(); ++i)
         {
@@ -64,14 +74,64 @@ public:
 
     void RotLeft()
     {
-        m_direction = XMVector3Transform(
-            m_direction,
-            DirectX::XMMatrixRotationY(-0.1f)
+        m_yAngle -= 0.1f;
+
+        m_direction = DirectX::XMVector3Transform(
+            DirectX::XMVector3Transform(
+                DirectX::XMVector3Transform(
+                    m_direction,
+                    DirectX::XMMatrixRotationX(-m_xAngle)
+                ),
+                DirectX::XMMatrixRotationY(-0.1f)
+            ),
+            DirectX::XMMatrixRotationX(m_xAngle)
         );
 
         for (int i = 0; i < m_models.size(); ++i)
         {
             m_models[i]->RotY(-0.1f);
+        }
+    }
+
+    void RotUp()
+    {
+        m_xAngle -= 0.1f;
+
+        m_direction = DirectX::XMVector3Transform(
+            DirectX::XMVector3Transform(
+                DirectX::XMVector3Transform(
+                    m_direction,
+                    DirectX::XMMatrixRotationY(-m_yAngle)
+                ),
+                DirectX::XMMatrixRotationX(-0.1f)
+            ),
+            DirectX::XMMatrixRotationY(m_yAngle)
+        );
+
+        for (int i = 0; i < m_models.size(); ++i)
+        {
+            m_models[i]->RotX(-0.1f);
+        }
+    }
+
+    void RotDown()
+    {
+        m_xAngle += 0.1f;
+
+        m_direction = DirectX::XMVector3Transform(
+            DirectX::XMVector3Transform(
+                DirectX::XMVector3Transform(
+                    m_direction,
+                    DirectX::XMMatrixRotationY(-m_yAngle)
+                ),
+                DirectX::XMMatrixRotationX(0.1f)
+            ),
+            DirectX::XMMatrixRotationY(m_yAngle)
+        );
+
+        for (int i = 0; i < m_models.size(); ++i)
+        {
+            m_models[i]->RotX(0.1f);
         }
     }
 
@@ -98,6 +158,8 @@ private:
     DirectX::XMVECTOR m_direction
         = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
     float m_velocity = 0.0f;
+    float m_yAngle = 0.0f;
+    float m_xAngle = 0.0f;
 
     static constexpr float acceleration = 0.025f;
     static constexpr float deceleration = -0.025f;
