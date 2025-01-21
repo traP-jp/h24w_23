@@ -9,7 +9,7 @@ class Player
 {
 public:
     void Init(AquaEngine::Command& command);
-    void Render(AquaEngine::Command& command);
+    void Render(AquaEngine::Command& command) const;
     void SetMatrixSegments(
         const std::shared_ptr<AquaEngine::DescriptorHeapSegment>& segment,
         int index
@@ -22,6 +22,21 @@ public:
         const std::shared_ptr<AquaEngine::DescriptorHeapSegment>& segment,
         int index
     ) const;  // this is player index
+
+    void Move(float dx, float dy, float dz) const;
+    void Scale(float x, float y, float z) const;
+    void Timer() const;
+    void SetMatrix(const DirectX::XMMATRIX& matrix) const;
+
+    DirectX::XMMATRIX GetMatrix() const
+    {
+        return m_body->GetMatrix();
+    }
+
+    std::vector<D3D12_INPUT_ELEMENT_DESC> GetInputElementDescs() const
+    {
+        return m_body->GetInputElementDescs();
+    }
 
 private:
     std::unique_ptr<AquaEngine::FBXModel> m_arm;

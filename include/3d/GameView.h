@@ -8,6 +8,8 @@
 
 #include <memory>
 
+#include "Player.h"
+
 class GameView
 {
 public:
@@ -26,26 +28,26 @@ public:
 
     void TransformPartner(const DirectX::XMMATRIX& transform) const
     {
-        (m_isPlayer1 ? m_model2 : m_model1)->SetMatrix(transform);
+        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).SetMatrix(transform);
     }
 
     void MoveModel(float dx, float dy, float dz) const
     {
-        (m_isPlayer1 ? m_model1 : m_model2)->Move(dx, dy, dz);
+        (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Move(dx, dy, dz);
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
     DirectX::XMMATRIX GetMatrix() const
     {
-        return (m_isPlayer1 ? m_model1 : m_model2)->GetMatrix();
+        return (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetMatrix();
     }
 
 private:
     HWND m_hwnd;
     RECT m_rc;
 
-    std::unique_ptr<AquaEngine::FBXModel> m_model1;
-    std::unique_ptr<AquaEngine::FBXModel> m_model2;
+    Player m_playerModel1;
+    Player m_playerModel2;
     std::unique_ptr<AquaEngine::SkyBox> m_skyBox;
     std::shared_ptr<AquaEngine::Camera> m_camera;
 

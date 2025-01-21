@@ -10,7 +10,7 @@ void GameView::Init(AquaEngine::Command &command)
     auto &manager
         = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
             "main_game",
-            10,
+            100,
             D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
         );
 
@@ -22,10 +22,11 @@ void GameView::Init(AquaEngine::Command &command)
         D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
     );
     m_camera = std::make_shared<AquaEngine::Camera>(m_rc);
-    m_camera->Init({0.0f, 1.0f, -2.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 2.0f, 1.0f});
+    m_camera
+        ->Init({0.0f, 10.0f, -20.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 2.0f, 1.0f});
     m_camera->AddManager("main_game", std::move(camera_range));
 
-    auto model_input_element = m_model1->GetInputElementDescs();
+    auto model_input_element = m_playerModel1.GetInputElementDescs();
 
     CreateModels(command, manager);
     CreateSkyBox(command);
@@ -58,23 +59,6 @@ void GameView::Init(AquaEngine::Command &command)
         std::println("failed to create pipeline state");
         exit(-1);
     }
-
-    m_model1->PlayAnimation(
-        "metarig|hasirimotion",
-        AquaEngine::FBXModel::AnimationMode::LOOP
-    );
-
-    m_model1->RotX(-DirectX::XM_PIDIV2);
-    m_model1->Move(0.0f, -1.0f, 0.0f);
-
-    m_model2->PlayAnimation(
-        "metarig|hasirimotion",
-        AquaEngine::FBXModel::AnimationMode::LOOP
-    );
-
-    m_model2->RotX(-DirectX::XM_PIDIV2);
-    m_model2->RotY(DirectX::XM_PI);
-    m_model2->Move(0.0f, -1.0f, 1.0f);
 }
 
 void GameView::CreateModels(
@@ -83,7 +67,7 @@ void GameView::CreateModels(
 )
 {
     auto matrix_segment = std::make_shared<AquaEngine::DescriptorHeapSegment>(
-        manager.Allocate(2)
+        manager.Allocate(16)
     );
     auto matrix_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
         D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
@@ -100,7 +84,7 @@ void GameView::CreateModels(
     );
 
     auto texture_segment = std::make_shared<AquaEngine::DescriptorHeapSegment>(
-        manager.Allocate(2)
+        manager.Allocate(14)
     );
     auto texture_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
         D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
@@ -117,7 +101,7 @@ void GameView::CreateModels(
     );
 
     auto material_segment = std::make_shared<AquaEngine::DescriptorHeapSegment>(
-        manager.Allocate(2)
+        manager.Allocate(16)
     );
     auto material_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
         D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
@@ -133,25 +117,18 @@ void GameView::CreateModels(
         1
     );
 
-    m_model1 = std::make_unique<AquaEngine::FBXModel>(
-        "resources/models/ninja.fbx",
-        "resources/models/ninja.png",
-        command
-    );
-    m_model1->Create();
-    m_model1->CreateMatrixBuffer(matrix_segment, 0);
-    m_model1->SetTexture(texture_segment, 0);
-    m_model1->CreateMaterialBufferView(material_segment, 0);
+    m_playerModel1.Init(command);
+    m_playerModel1.SetMatrixSegments(matrix_segment, 0);
+    m_playerModel1.SetTextureSegments(texture_segment, 0);
+    m_playerModel1.SetMaterialSegments(material_segment, 0);
 
-    m_model2 = std::make_unique<AquaEngine::FBXModel>(
-        "resources/models/ninja.fbx",
-        "resources/models/ninja.png",
-        command
-    );
-    m_model2->Create();
-    m_model2->CreateMatrixBuffer(matrix_segment, 1);
-    m_model2->SetTexture(texture_segment, 1);
-    m_model2->CreateMaterialBufferView(material_segment, 1);
+    m_playerModel2.Init(command);
+    m_playerModel2.SetMatrixSegments(matrix_segment, 1);
+    m_playerModel2.SetTextureSegments(texture_segment, 1);
+    m_playerModel2.SetMaterialSegments(material_segment, 1);
+
+    m_playerModel1.Move(-10.0f, 0.0f, 0.0f);
+    m_playerModel2.Move(10.0f, 0.0f, 0.0f);
 }
 
 void GameView::CreateSkyBox(AquaEngine::Command &command)
@@ -191,8 +168,8 @@ void GameView::Render(AquaEngine::Command &command)
     m_pipelineState.SetToCommand(command);
 
     m_camera->Render(command, "main_game");
-    m_model1->Render(command);
-    m_model2->Render(command);
+    m_playerModel1.Render(command);
+    m_playerModel2.Render(command);
 }
 
 void GameView::Timer(int id) const
@@ -200,11 +177,11 @@ void GameView::Timer(int id) const
     switch (id)
     {
         case TIMER_MODEL1:
-            m_model1->Timer();
+            m_playerModel1.Timer();
             break;
 
         case TIMER_MODEL2:
-            m_model2->Timer();
+            m_playerModel2.Timer();
             break;
 
         default:
@@ -214,6 +191,6 @@ void GameView::Timer(int id) const
 
 void GameView::StartAnimation()
 {
-    SetTimer(m_hwnd, TIMER_MODEL1, m_model1->GetFrameCount(), nullptr);
-    SetTimer(m_hwnd, TIMER_MODEL2, m_model2->GetFrameCount(), nullptr);
+    // SetTimer(m_hwnd, TIMER_MODEL1, m_playerModel1->GetFrameCount(), nullptr);
+    // SetTimer(m_hwnd, TIMER_MODEL2, m_playerModel2->GetFrameCount(), nullptr);
 }
