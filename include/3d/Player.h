@@ -33,24 +33,28 @@ public:
     void Timer() const;
     void Frame() const;
 
-    void Accel()
+    DirectX::XMVECTOR Accel()
     {
         m_velocity += acceleration;
 
         if (m_velocity > max_velocity)
         {
             m_velocity = max_velocity;
+            return {0.0f, 0.0f, 0.0f, 0.0f};
         }
+        return m_direction * -acceleration * 2;
     }
 
-    void Decel()
+    DirectX::XMVECTOR Decel()
     {
         m_velocity += deceleration;
 
         if (m_velocity < 0.0f)
         {
             m_velocity = 0.0f;
+            return {0.0f, 0.0f, 0.0f, 0.0f};
         }
+        return m_direction * -deceleration * 2;
     }
 
     void RotRight()
@@ -123,6 +127,11 @@ public:
 
     void SetMatrix(const DirectX::XMMATRIX& matrix) const;
 
+    float GetVelocity() const
+    {
+        return m_velocity;
+    }
+
     DirectX::XMMATRIX GetTransformMatrix() const
     {
         return m_models[0]->GetTransformMatrix();
@@ -143,9 +152,14 @@ public:
         return m_models[2]->GetFrameCount();
     }
 
-    DirectX::XMVECTOR GetDr() const
+    DirectX::XMVECTOR GetDrForCamera() const
     {
         return m_direction * m_velocity;
+    }
+
+    DirectX::XMVECTOR GetDirection() const
+    {
+        return m_direction;
     }
 
 private:
@@ -157,8 +171,8 @@ private:
     float m_yAngle = 0.0f;
     float m_xAngle = 0.0f;
 
-    static constexpr float acceleration = 0.025f;
-    static constexpr float deceleration = -0.025f;
+    static constexpr float acceleration = 0.05f;
+    static constexpr float deceleration = -0.15f;
     static constexpr float max_velocity = 10.0f;
 
     void ImportModel(AquaEngine::Command& command);

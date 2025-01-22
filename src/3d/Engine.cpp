@@ -25,10 +25,6 @@ Engine::~Engine()
 
 void Engine::Init()
 {
-#ifdef DEBUG
-    m_startStatus = StartStatus::RUNNING;
-#endif
-
     HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
     if (FAILED(hr))
     {
@@ -177,10 +173,12 @@ void Engine::Render()
                 std::println("Failed to execute command");
                 return;
             }
-
+#ifndef DEBUG
             m_d2dEngine->RenderTitleText(m_display->GetCurrentBackBufferIndex()
             );
-
+#else
+            std::cout << "press any button to start" << std::endl;
+#endif
             m_display->Present();
             break;
         }
@@ -189,9 +187,11 @@ void Engine::Render()
             if (m_elapsedTime < 1.0f)
             {
                 float weight = 1.0f - m_elapsedTime;
+#ifndef DEBUG
                 m_d2dEngine->SetTitleBackgroundColor(
                     D2D1::ColorF(weight, weight, weight, 1.0f)
                 );
+#endif
                 m_display->BeginRender();
                 m_display->SetViewports();
 
@@ -201,11 +201,11 @@ void Engine::Render()
                     std::println("Failed to execute command");
                     return;
                 }
-
+#ifndef DEBUG
                 m_d2dEngine->RenderTitleText(
                     m_display->GetCurrentBackBufferIndex()
                 );
-
+#endif
                 m_display->Present();
             }
             else if (m_elapsedTime < 2.0f)

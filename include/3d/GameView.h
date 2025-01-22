@@ -41,13 +41,25 @@ public:
 
     void Accel()
     {
-        (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Accel();
+        DirectX::XMVECTOR delta
+            = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Accel();
+        m_camera->Move(
+            DirectX::XMVectorGetX(delta),
+            DirectX::XMVectorGetY(delta),
+            DirectX::XMVectorGetZ(delta)
+        );
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
     void Decel()
     {
-        (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Decel();
+        DirectX::XMVECTOR delta
+            = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Decel();
+        m_camera->Move(
+            DirectX::XMVectorGetX(delta),
+            DirectX::XMVectorGetY(delta),
+            DirectX::XMVectorGetZ(delta)
+        );
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
@@ -119,10 +131,11 @@ private:
     static constexpr DirectX::XMFLOAT3 PLAYER2_DEFAULT_POTISION
         = {-1.0f, 0.0f, 0.0f};
 
+    static constexpr float DEFAULT_CAMERA_Z_DISTANCE = -1.5f;
     static constexpr DirectX::XMFLOAT3 PLAYER1_DEFAULT_CAMERA
-        = {1.0f, 2.0f, -4.0f};
+        = {1.0f, -DEFAULT_CAMERA_Z_DISTANCE, DEFAULT_CAMERA_Z_DISTANCE * 2};
     static constexpr DirectX::XMFLOAT3 PLAYER2_DEFAULT_CAMERA
-        = {-1.0f, 2.0f, -4.0f};
+        = {-1.0f, -DEFAULT_CAMERA_Z_DISTANCE, DEFAULT_CAMERA_Z_DISTANCE * 2};
 
     static constexpr float DEFAULT_SCALE = 0.002f;
 };

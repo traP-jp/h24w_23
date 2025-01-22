@@ -205,7 +205,8 @@ void GameView::Timer(int id) const
             m_playerModel2.Frame();
 
             DirectX::XMVECTOR dr
-                = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDr();
+                = (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
+                      .GetDrForCamera();
             m_camera->Move(
                 DirectX::XMVectorGetX(dr),
                 DirectX::XMVectorGetY(dr),
