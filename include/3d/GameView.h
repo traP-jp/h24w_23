@@ -9,6 +9,7 @@
 
 #include <memory>
 
+#include "Camera.h"
 #include "Player.h"
 
 class GameView
@@ -43,11 +44,7 @@ public:
     {
         DirectX::XMVECTOR delta
             = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Accel();
-        m_camera->Move(
-            DirectX::XMVectorGetX(delta),
-            DirectX::XMVectorGetY(delta),
-            DirectX::XMVectorGetZ(delta)
-        );
+        m_camera->Accel(delta);
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
@@ -55,18 +52,14 @@ public:
     {
         DirectX::XMVECTOR delta
             = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Decel();
-        m_camera->Move(
-            DirectX::XMVectorGetX(delta),
-            DirectX::XMVectorGetY(delta),
-            DirectX::XMVectorGetZ(delta)
-        );
+        m_camera->Decel(delta);
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
     void RotRight()
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotRight();
-        m_camera->Rot(
+        m_camera->RotRight(
             (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix()
         );
         InvalidateRect(m_hwnd, &m_rc, FALSE);
@@ -75,7 +68,7 @@ public:
     void RotLeft()
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotLeft();
-        m_camera->Rot(
+        m_camera->RotLeft(
             (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix()
         );
         InvalidateRect(m_hwnd, &m_rc, FALSE);
@@ -84,7 +77,7 @@ public:
     void RotUp()
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotUp();
-        m_camera->Rot(
+        m_camera->RotUp(
             (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix()
         );
         InvalidateRect(m_hwnd, &m_rc, FALSE);
@@ -93,7 +86,7 @@ public:
     void RotDown()
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotDown();
-        m_camera->Rot(
+        m_camera->RotDown(
             (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix()
         );
         InvalidateRect(m_hwnd, &m_rc, FALSE);
@@ -111,7 +104,7 @@ private:
     Player m_playerModel1;
     Player m_playerModel2;
     std::unique_ptr<AquaEngine::SkyBox> m_skyBox;
-    std::shared_ptr<AquaEngine::Camera> m_camera;
+    std::shared_ptr<Camera> m_camera;
 
     AquaEngine::PipelineState m_pipelineState;
     AquaEngine::RootSignature m_rootSignature;
@@ -126,9 +119,9 @@ private:
 
     float angle = 0.0f;
 
-    static constexpr DirectX::XMFLOAT3 PLAYER1_DEFAULT_POTISION
+    static constexpr DirectX::XMFLOAT3 PLAYER1_DEFAULT_POSITION
         = {1.0f, 0.0f, 0.0f};
-    static constexpr DirectX::XMFLOAT3 PLAYER2_DEFAULT_POTISION
+    static constexpr DirectX::XMFLOAT3 PLAYER2_DEFAULT_POSITION
         = {-1.0f, 0.0f, 0.0f};
 
     static constexpr float DEFAULT_CAMERA_Z_DISTANCE = -1.5f;

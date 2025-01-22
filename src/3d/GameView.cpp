@@ -21,13 +21,8 @@ void GameView::Init(AquaEngine::Command &command)
         0,
         D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
     );
-    m_camera = std::make_shared<AquaEngine::Camera>(m_rc);
-    m_camera->Init(
-        m_isPlayer1 ? PLAYER1_DEFAULT_CAMERA : PLAYER2_DEFAULT_CAMERA,
-        m_isPlayer1 ? PLAYER1_DEFAULT_POTISION : PLAYER2_DEFAULT_POTISION,
-        {0.0f, 2.0f, 1.0f}
-    );
-    m_camera->AddManager("main_game", std::move(camera_range));
+    m_camera = std::make_shared<Camera>(m_rc, m_isPlayer1);
+    m_camera->Init();
 
     auto model_input_element = m_playerModel1.GetInputElementDescs();
 
@@ -133,14 +128,14 @@ void GameView::CreateModels(
     m_playerModel1.Scale(DEFAULT_SCALE, DEFAULT_SCALE, DEFAULT_SCALE);
     m_playerModel2.Scale(DEFAULT_SCALE, DEFAULT_SCALE, DEFAULT_SCALE);
     m_playerModel1.Move(
-        PLAYER1_DEFAULT_POTISION.x,
-        PLAYER1_DEFAULT_POTISION.y,
-        PLAYER1_DEFAULT_POTISION.z
+        PLAYER1_DEFAULT_POSITION.x,
+        PLAYER1_DEFAULT_POSITION.y,
+        PLAYER1_DEFAULT_POSITION.z
     );
     m_playerModel2.Move(
-        PLAYER2_DEFAULT_POTISION.x,
-        PLAYER2_DEFAULT_POTISION.y,
-        PLAYER2_DEFAULT_POTISION.z
+        PLAYER2_DEFAULT_POSITION.x,
+        PLAYER2_DEFAULT_POSITION.y,
+        PLAYER2_DEFAULT_POSITION.z
     );
 }
 
@@ -155,6 +150,7 @@ void GameView::CreateSkyBox(AquaEngine::Command &command)
 
     m_skyBox = std::make_unique<AquaEngine::SkyBox>(
         "resources/textures/space.hdr",
+        //"resources/textures/sample1.hdr",
         command,
         skybox_manager
     );
@@ -167,10 +163,10 @@ void GameView::CreateSkyBox(AquaEngine::Command &command)
     );
     m_skyBox->CreateMatrixBuffer(std::move(world_range), skybox_manager);
     m_skyBox->Create();
-    m_skyBox->SetCamera(m_camera);
+    m_skyBox->SetCamera(m_camera->GetCamera());
     m_skyBox->ConvertHDRIToCubeMap(command);
     m_skyBox->CreateCubeMapPipelineState();
-    m_skyBox->Scale(1000.0f, 1000.0f, 1000.0f);
+    m_skyBox->Scale(100000.0f, 100000.0f, 100000.0f);
 }
 
 void GameView::Render(AquaEngine::Command &command)
@@ -182,7 +178,7 @@ void GameView::Render(AquaEngine::Command &command)
     m_rootSignature.SetToCommand(command);
     m_pipelineState.SetToCommand(command);
 
-    m_camera->Render(command, "main_game");
+    m_camera->Render(command);
     m_playerModel1.Render(command);
     m_playerModel2.Render(command);
 }
@@ -207,11 +203,7 @@ void GameView::Timer(int id) const
             DirectX::XMVECTOR dr
                 = (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
                       .GetDrForCamera();
-            m_camera->Move(
-                DirectX::XMVectorGetX(dr),
-                DirectX::XMVectorGetY(dr),
-                DirectX::XMVectorGetZ(dr)
-            );
+            m_camera->Move(dr);
             break;
         }
 

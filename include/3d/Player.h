@@ -35,26 +35,26 @@ public:
 
     DirectX::XMVECTOR Accel()
     {
-        m_velocity += acceleration;
+        m_velocity += ACCELERATION;
 
-        if (m_velocity > max_velocity)
+        if (m_velocity > MAX_VELOCITY)
         {
-            m_velocity = max_velocity;
+            m_velocity = MAX_VELOCITY;
             return {0.0f, 0.0f, 0.0f, 0.0f};
         }
-        return m_direction * -acceleration * 2;
+        return m_direction * -ACCELERATION * 2;
     }
 
     DirectX::XMVECTOR Decel()
     {
-        m_velocity += deceleration;
+        m_velocity += DECELERATION;
 
         if (m_velocity < 0.0f)
         {
             m_velocity = 0.0f;
             return {0.0f, 0.0f, 0.0f, 0.0f};
         }
-        return m_direction * -deceleration * 2;
+        return m_direction * -DECELERATION * 2;
     }
 
     void RotRight()
@@ -171,9 +171,9 @@ private:
     float m_yAngle = 0.0f;
     float m_xAngle = 0.0f;
 
-    static constexpr float acceleration = 0.05f;
-    static constexpr float deceleration = -0.15f;
-    static constexpr float max_velocity = 10.0f;
+    static constexpr float ACCELERATION = 0.05f;
+    static constexpr float DECELERATION = -0.15f;
+    static constexpr float MAX_VELOCITY = 10.0f;
 
     void ImportModel(AquaEngine::Command& command);
 };

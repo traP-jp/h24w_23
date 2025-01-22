@@ -25,7 +25,8 @@ VS_OUTPUT vs(VS_INPUT input)
 {
     VS_OUTPUT output;
     output.position = mul(float4(input.position, 1.0f), world);
-    output.position = mul(output.position, view);
+    output.position = mul(mul(projection, view), output.position).xyww;
+    output.position.z = 1.0f;
     output.direction = input.position;
     return output;
 }
@@ -69,4 +70,6 @@ float4 ps(VS_OUTPUT input) : SV_TARGET
     float4 finalColor = float4(color * (toneMappedluminance / luminance), 1.0f);
 
     return finalColor * 12.0f;
+    // float4 tex = cubeTexture.Sample(cubeSampler, normalize(input.direction));
+    // return float4(tex.xyz, 1.0f);
 }

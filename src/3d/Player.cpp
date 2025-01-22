@@ -25,6 +25,7 @@ void Player::ImportModel(AquaEngine::Command& command)
         //"resources/models/player_tex.png",
         command
     );
+    //m_models[0] = std::make_unique<AquaEngine::FBXModel>("resources/models/arm.fbx");
     m_models[0]->Create();
 
     m_models[1] = std::make_unique<AquaEngine::FBXModel>(
@@ -33,6 +34,7 @@ void Player::ImportModel(AquaEngine::Command& command)
         //"resources/models/player_tex.png",
         command
     );
+    //m_models[1] = std::make_unique<AquaEngine::FBXModel>("resources/models/body.fbx");
     m_models[1]->Create();
 
     m_models[2] = std::make_unique<AquaEngine::FBXModel>(
@@ -41,6 +43,7 @@ void Player::ImportModel(AquaEngine::Command& command)
         //"resources/models/player_tex.png",
         command
     );
+    //m_models[2] = std::make_unique<AquaEngine::FBXModel>("resources/models/buster.fbx");
     m_models[2]->Create();
 
     m_models[3]
@@ -53,6 +56,7 @@ void Player::ImportModel(AquaEngine::Command& command)
         //"resources/models/player_tex.png",
         command
     );
+    //m_models[4] = std::make_unique<AquaEngine::FBXModel>("resources/models/gun.fbx");
     m_models[4]->Create();
 
     m_models[5] = std::make_unique<AquaEngine::FBXModel>(
@@ -61,6 +65,7 @@ void Player::ImportModel(AquaEngine::Command& command)
         //"resources/models/player_tex.png",
         command
     );
+    //m_models[5] = std::make_unique<AquaEngine::FBXModel>("resources/models/head.fbx");
     m_models[5]->Create();
 
     m_models[6] = std::make_unique<AquaEngine::FBXModel>(
@@ -69,6 +74,7 @@ void Player::ImportModel(AquaEngine::Command& command)
         //"resources/models/player_tex.png",
         command
     );
+    //m_models[6] = std::make_unique<AquaEngine::FBXModel>("resources/models/ring.fbx");
     m_models[6]->Create();
 
     m_models[7] = std::make_unique<AquaEngine::FBXModel>(
@@ -77,6 +83,7 @@ void Player::ImportModel(AquaEngine::Command& command)
         //"resources/models/player_tex.png",
         command
     );
+    //m_models[7] = std::make_unique<AquaEngine::FBXModel>("resources/models/thuraster.fbx");
     m_models[7]->Create();
 }
 

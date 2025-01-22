@@ -60,6 +60,7 @@ set(src_files
         src/3d/Engine.cpp
         src/3d/GameView.cpp
         src/3d/Player.cpp
+        src/3d/Camera.cpp
         src/2d/D2DEngine.cpp
         src/2d/Title.cpp
         src/network/Network.cpp
@@ -72,6 +73,7 @@ set(include_files
         include/3d/Engine.h
         include/3d/GameView.h
         include/3d/Player.h
+        include/3d/Camera.h
         include/2d/D2DEngine.h
         include/2d/Title.h
         include/network/Network.h
@@ -109,7 +111,7 @@ set(resources
         resources/models/player_texture/hanten/buster_diff_tex_lrud.png
         resources/models/player_texture/hanten/head_diff_tex2.png
         resources/textures/space.hdr
-        #resources/textures/sample1.hdr
+        resources/textures/sample1.hdr
         shaders/main.hlsl
         shaders/renderTarget.hlsl
         shaders/skybox.hlsl
