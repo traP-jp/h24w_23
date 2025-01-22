@@ -17,15 +17,15 @@ public:
     void SetMatrixSegments(
         const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
         int index
-    ) const; // this is player index
+    ) const;  // this is player index
     void SetTextureSegments(
         const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
         int index
-    ) const; // this is player index
+    ) const;  // this is player index
     void SetMaterialSegments(
         const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
         int index
-    ) const; // this is player index
+    ) const;  // this is player index
 
     void Move(float dx, float dy, float dz) const;
 
@@ -40,6 +40,8 @@ public:
     void Timer() const;
 
     void Frame() const;
+
+    void Shoot();
 
     DirectX::XMVECTOR Accel()
     {
@@ -171,18 +173,22 @@ public:
     }
 
 private:
+    static constexpr float ACCELERATION = 0.5f;
+    static constexpr float DECELERATION = -1.5f;
+    static constexpr float MAX_VELOCITY = 100.0f;
+    static constexpr float ROTATION = 0.1f;
+
+    static constexpr int BULLET_COUNT = 10;
+
     std::array<std::unique_ptr<AquaEngine::FBXModel>, 8> m_models;
+    std::array<std::unique_ptr<AquaEngine::FBXModel>, BULLET_COUNT> m_bullets;
+    std::array<std::pair<bool, DirectX::XMVECTOR>, BULLET_COUNT> m_bulletStatus;
 
     DirectX::XMVECTOR m_direction
         = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
     float m_velocity = 0.0f;
     float m_yAngle = 0.0f;
     float m_xAngle = 0.0f;
-
-    static constexpr float ACCELERATION = 0.5f;
-    static constexpr float DECELERATION = -1.5f;
-    static constexpr float MAX_VELOCITY = 100.0f;
-    static constexpr float ROTATION = 0.1f;
 
     void ImportModel(AquaEngine::Command &command);
 };

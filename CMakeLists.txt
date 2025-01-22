@@ -115,6 +115,7 @@ set(resources
         resources/models/asteroid_model/asteroid_patern1.fbx
         resources/models/asteroid_model/asteroid_patern2.fbx
         resources/models/asteroid_tex/asteroid_patern1_diff_tex.png
+        resources/models/cube.fbx
         resources/textures/space.hdr
         resources/textures/sample1.hdr
         shaders/main.hlsl
