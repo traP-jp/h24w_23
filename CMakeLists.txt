@@ -49,7 +49,8 @@ macro(create_executable files)
     target_link_libraries(h24w_23 PUBLIC $ENV{FBXSDK_DIR}/lib/x64/debug/libxml2-md.lib)
     target_link_libraries(h24w_23 PUBLIC $ENV{FBXSDK_DIR}/lib/x64/debug/zlib-md.lib)
 
-    target_compile_definitions(h24w_23 PRIVATE DEBUG)
+    #target_compile_definitions(h24w_23 PRIVATE DEBUG)  # for nsight, d3d11on12 is not supported
+    #target_compile_definitions(h24w_23 PRIVATE NSIGHT)
 endmacro()
 
 set(src_files
@@ -108,6 +109,7 @@ set(resources
         resources/models/player_texture/hanten/buster_diff_tex_lrud.png
         resources/models/player_texture/hanten/head_diff_tex2.png
         resources/textures/space.hdr
+        #resources/textures/sample1.hdr
         shaders/main.hlsl
         shaders/renderTarget.hlsl
         shaders/skybox.hlsl

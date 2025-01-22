@@ -4,7 +4,11 @@
 
 Engine::Engine(HWND hwnd, RECT wr) : m_hwnd(hwnd), m_wr(wr)
 {
+#ifdef NSIGHT
+    AquaEngine::Factory::Init(false);
+#else
     AquaEngine::Factory::Init(true);
+#endif
     AquaEngine::Device::GetAdaptors();
     AquaEngine::Device::Init(0);
     AquaEngine::GlobalDescriptorHeapManager::Init();

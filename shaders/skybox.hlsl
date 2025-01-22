@@ -16,24 +16,16 @@ cbuffer CameraMat : register(b0)
     float3 eye;
 };
 
-cbuffer ObjectMat :
-
-register (b1)
+cbuffer ObjectMat : register (b1)
 {
     matrix world;
 };
 
 VS_OUTPUT vs(VS_INPUT input)
 {
-    matrix viewMat = view;
-    viewMat._41 = 0.0f;
-    viewMat._42 = 0.0f;
-    viewMat._43 = 0.0f;
-    viewMat._44 = 1.0f;
-
     VS_OUTPUT output;
     output.position = mul(float4(input.position, 1.0f), world);
-    output.position = mul(output.position, viewMat);
+    output.position = mul(output.position, view);
     output.direction = input.position;
     return output;
 }
