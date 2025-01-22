@@ -2,14 +2,12 @@
 
 #include <iostream>
 
-// TODO? for statement?????
-
-void Player::Init(AquaEngine::Command& command)
+void Player::Init(AquaEngine::Command &command)
 {
     ImportModel(command);
 }
 
-void Player::Render(AquaEngine::Command& command) const
+void Player::Render(AquaEngine::Command &command) const
 {
     for (int i = 0; i < m_models.size(); ++i)
     {
@@ -17,7 +15,7 @@ void Player::Render(AquaEngine::Command& command) const
     }
 }
 
-void Player::ImportModel(AquaEngine::Command& command)
+void Player::ImportModel(AquaEngine::Command &command)
 {
     m_models[0] = std::make_unique<AquaEngine::FBXModel>(
         "resources/models/arm.fbx",
@@ -88,7 +86,7 @@ void Player::ImportModel(AquaEngine::Command& command)
 }
 
 void Player::SetMatrixSegments(
-    const std::shared_ptr<AquaEngine::DescriptorHeapSegment>& segment,
+    const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
     const int index
 ) const
 {
@@ -99,7 +97,7 @@ void Player::SetMatrixSegments(
 }
 
 void Player::SetTextureSegments(
-    const std::shared_ptr<AquaEngine::DescriptorHeapSegment>& segment,
+    const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
     const int index
 ) const
 {
@@ -115,7 +113,7 @@ void Player::SetTextureSegments(
 }
 
 void Player::SetMaterialSegments(
-    const std::shared_ptr<AquaEngine::DescriptorHeapSegment>& segment,
+    const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
     const int index
 ) const
 {
@@ -133,7 +131,7 @@ void Player::Move(float dx, float dy, float dz) const
     }
 }
 
-void Player::SetMatrix(const DirectX::XMMATRIX& matrix) const
+void Player::SetMatrix(const DirectX::XMMATRIX &matrix) const
 {
     for (int i = 0; i < m_models.size(); ++i)
     {

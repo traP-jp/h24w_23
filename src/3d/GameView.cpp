@@ -1,7 +1,11 @@
 #include "3d/GameView.h"
 
+#include <random>
+
 GameView::GameView(HWND hwnd, RECT rc)
-    : m_hwnd(hwnd), m_rc(rc), m_isPlayer1(false)
+    : m_hwnd(hwnd)
+    , m_rc(rc)
+    , m_isPlayer1(false)
 {
 }
 
@@ -10,7 +14,7 @@ void GameView::Init(AquaEngine::Command &command)
     auto &manager
         = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
             "main_game",
-            100,
+            1000,
             D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
         );
 
@@ -65,7 +69,7 @@ void GameView::CreateModels(
 )
 {
     auto matrix_segment = std::make_shared<AquaEngine::DescriptorHeapSegment>(
-        manager.Allocate(16)
+        manager.Allocate(16 + m_asteroids.size())
     );
     auto matrix_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
         D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
@@ -82,7 +86,7 @@ void GameView::CreateModels(
     );
 
     auto texture_segment = std::make_shared<AquaEngine::DescriptorHeapSegment>(
-        manager.Allocate(14)
+        manager.Allocate(14 + m_asteroids.size())
     );
     auto texture_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
         D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
@@ -99,7 +103,7 @@ void GameView::CreateModels(
     );
 
     auto material_segment = std::make_shared<AquaEngine::DescriptorHeapSegment>(
-        manager.Allocate(16)
+        manager.Allocate(16 + m_asteroids.size())
     );
     auto material_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
         D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
@@ -137,13 +141,35 @@ void GameView::CreateModels(
         PLAYER2_DEFAULT_POSITION.y,
         PLAYER2_DEFAULT_POSITION.z
     );
+
+    std::mt19937 mt(std::random_device{}());
+    std::gamma_distribution<> x_dist(2.0f, 3.1f);
+    std::gamma_distribution<> y_dist(2.0f, 2.9f);
+    std::gamma_distribution<> z_dist(1.8f, 7.0f);
+    std::gamma_distribution<> scale_dist(2.0f, 0.3f);
+    for (int i = 0; i < m_asteroids.size(); ++i)
+    {
+        m_asteroids[i].Init(command, i % 2 == 0);
+        m_asteroids[i].SetMatrixSegments(matrix_segment, i + 16);
+        m_asteroids[i].SetTextureSegments(texture_segment, i + 14);
+        m_asteroids[i].SetMaterialSegments(material_segment, i + 16);
+        m_asteroids[i].Scale(DEFAULT_SCALE, DEFAULT_SCALE, DEFAULT_SCALE);
+        float scale = scale_dist(mt) * 60.0f;
+        m_asteroids[i].Scale(scale, scale, scale);
+        m_asteroids[i].Move(
+            x_dist(mt) * 50.0f - 250.0f,
+            y_dist(mt) * 50.0f - 250.0f,
+            z_dist(mt) * 50.0f - 250.0f
+        );
+    }
 }
 
 void GameView::CreateSkyBox(AquaEngine::Command &command)
 {
     auto &skybox_manager
         = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
-            "skybox",  // DONT CHANGE !!!!!
+            "skybox",
+            // DONT CHANGE !!!!!
             10,
             D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
         );
@@ -181,34 +207,39 @@ void GameView::Render(AquaEngine::Command &command)
     m_camera->Render(command);
     m_playerModel1.Render(command);
     m_playerModel2.Render(command);
+
+    for (int i = 0; i < m_asteroids.size(); ++i)
+    {
+        m_asteroids[i].Render(command);
+    }
 }
 
 void GameView::Timer(int id) const
 {
     switch (id)
     {
-        case TIMER_MODEL1:
-            m_playerModel1.Timer();
-            break;
+    case TIMER_MODEL1:
+        m_playerModel1.Timer();
+        break;
 
-        case TIMER_MODEL2:
-            m_playerModel2.Timer();
-            break;
+    case TIMER_MODEL2:
+        m_playerModel2.Timer();
+        break;
 
-        case TIMER_FRAME:
-        {
-            m_playerModel1.Frame();
-            m_playerModel2.Frame();
+    case TIMER_FRAME:
+    {
+        m_playerModel1.Frame();
+        m_playerModel2.Frame();
 
-            DirectX::XMVECTOR dr
-                = (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
-                      .GetDrForCamera();
-            m_camera->Move(dr);
-            break;
-        }
+        DirectX::XMVECTOR dr
+            = (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
+            .GetDrForCamera();
+        m_camera->Move(dr);
+        break;
+    }
 
-        default:
-            break;
+    default:
+        break;
     }
 }
 

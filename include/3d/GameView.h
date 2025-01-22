@@ -9,6 +9,7 @@
 
 #include <memory>
 
+#include "Asteroid.h"
 #include "Camera.h"
 #include "Player.h"
 
@@ -16,12 +17,17 @@ class GameView
 {
 public:
     GameView(HWND hwnd, RECT rc);
+
     ~GameView() = default;
 
-    void Init(AquaEngine::Command& command);
-    void Render(AquaEngine::Command& command);
+    void Init(AquaEngine::Command &command);
+
+    void Render(AquaEngine::Command &command);
+
     void Timer(int id) const;
+
     void StartAnimation();
+
     void Start();
 
     void SetIsPlayer1(bool is_player1)
@@ -29,7 +35,7 @@ public:
         m_isPlayer1 = is_player1;
     }
 
-    void TransformPartner(const DirectX::XMMATRIX& transform) const
+    void TransformPartner(const DirectX::XMMATRIX &transform) const
     {
         (m_isPlayer1 ? m_playerModel2 : m_playerModel1).SetMatrix(transform);
     }
@@ -105,6 +111,7 @@ private:
     Player m_playerModel2;
     std::unique_ptr<AquaEngine::SkyBox> m_skyBox;
     std::shared_ptr<Camera> m_camera;
+    std::array<Asteroid, 100> m_asteroids;
 
     AquaEngine::PipelineState m_pipelineState;
     AquaEngine::RootSignature m_rootSignature;
@@ -112,10 +119,11 @@ private:
     bool m_isPlayer1;
 
     void CreateModels(
-        AquaEngine::Command& command,
-        AquaEngine::DescriptorHeapSegmentManager& manager
+        AquaEngine::Command &command,
+        AquaEngine::DescriptorHeapSegmentManager &manager
     );
-    void CreateSkyBox(AquaEngine::Command& command);
+
+    void CreateSkyBox(AquaEngine::Command &command);
 
     float angle = 0.0f;
 
@@ -127,13 +135,17 @@ private:
     static constexpr float DEFAULT_CAMERA_Z_DISTANCE = -2.2f;
     static constexpr float CAMERA_ASPECT = 0.8f;
     static constexpr DirectX::XMFLOAT3 PLAYER1_DEFAULT_CAMERA
-        = {1.0f,
-           -DEFAULT_CAMERA_Z_DISTANCE,
-           DEFAULT_CAMERA_Z_DISTANCE* CAMERA_ASPECT};
+        = {
+            1.0f,
+            -DEFAULT_CAMERA_Z_DISTANCE,
+            DEFAULT_CAMERA_Z_DISTANCE * CAMERA_ASPECT
+        };
     static constexpr DirectX::XMFLOAT3 PLAYER2_DEFAULT_CAMERA
-        = {-1.0f,
-           -DEFAULT_CAMERA_Z_DISTANCE,
-           DEFAULT_CAMERA_Z_DISTANCE* CAMERA_ASPECT};
+        = {
+            -1.0f,
+            -DEFAULT_CAMERA_Z_DISTANCE,
+            DEFAULT_CAMERA_Z_DISTANCE * CAMERA_ASPECT
+        };
 
     static constexpr float DEFAULT_SCALE = 0.002f;
 };
