@@ -170,7 +170,9 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
             m_engine->Timer(wParam);
 
-            // Send();
+#ifndef DEBUG
+            Send();
+#endif
             return 0;
         }
 

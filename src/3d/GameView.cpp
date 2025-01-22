@@ -22,7 +22,11 @@ void GameView::Init(AquaEngine::Command &command)
         D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
     );
     m_camera = std::make_shared<AquaEngine::Camera>(m_rc);
-    m_camera->Init({0.0f, 0.5f, -1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 2.0f, 1.0f});
+    m_camera->Init(
+        m_isPlayer1 ? PLAYER1_DEFAULT_CAMERA : PLAYER2_DEFAULT_CAMERA,
+        m_isPlayer1 ? PLAYER1_DEFAULT_POTISION : PLAYER2_DEFAULT_POTISION,
+        {0.0f, 2.0f, 1.0f}
+    );
     m_camera->AddManager("main_game", std::move(camera_range));
 
     auto model_input_element = m_playerModel1.GetInputElementDescs();
@@ -126,10 +130,18 @@ void GameView::CreateModels(
     m_playerModel2.SetTextureSegments(texture_segment, 1);
     m_playerModel2.SetMaterialSegments(material_segment, 1);
 
-    m_playerModel1.Scale(0.002f, 0.002f, 0.002f);
-    m_playerModel2.Scale(0.002f, 0.002f, 0.002f);
-    m_playerModel1.Move(-1.0f, 0.0f, 0.0f);
-    m_playerModel2.Move(1.0f, 0.0f, 0.0f);
+    m_playerModel1.Scale(DEFAULT_SCALE, DEFAULT_SCALE, DEFAULT_SCALE);
+    m_playerModel2.Scale(DEFAULT_SCALE, DEFAULT_SCALE, DEFAULT_SCALE);
+    m_playerModel1.Move(
+        PLAYER1_DEFAULT_POTISION.x,
+        PLAYER1_DEFAULT_POTISION.y,
+        PLAYER1_DEFAULT_POTISION.z
+    );
+    m_playerModel2.Move(
+        PLAYER2_DEFAULT_POTISION.x,
+        PLAYER2_DEFAULT_POTISION.y,
+        PLAYER2_DEFAULT_POTISION.z
+    );
 }
 
 void GameView::CreateSkyBox(AquaEngine::Command &command)
@@ -172,7 +184,7 @@ void GameView::Render(AquaEngine::Command &command)
 
     m_camera->Render(command, "main_game");
     m_playerModel1.Render(command);
-    // m_playerModel2.Render(command);
+    m_playerModel2.Render(command);
 }
 
 void GameView::Timer(int id) const
@@ -188,9 +200,19 @@ void GameView::Timer(int id) const
             break;
 
         case TIMER_FRAME:
+        {
             m_playerModel1.Frame();
             m_playerModel2.Frame();
+
+            DirectX::XMVECTOR dr
+                = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDr();
+            m_camera->Move(
+                DirectX::XMVectorGetX(dr),
+                DirectX::XMVectorGetY(dr),
+                DirectX::XMVectorGetZ(dr)
+            );
             break;
+        }
 
         default:
             break;

@@ -54,24 +54,32 @@ public:
     void RotRight()
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotRight();
+        // m_camera->RotY((m_isPlayer1 ? m_playerModel1 :
+        // m_playerModel2).GetTransformMatrix(),0.1f);
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
     void RotLeft()
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotLeft();
+        // m_camera->RotY((m_isPlayer1 ? m_playerModel1 :
+        // m_playerModel2).GetTransformMatrix(),-0.1f);
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
     void RotUp()
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotUp();
+        // m_camera->RotX((m_isPlayer1 ? m_playerModel1 :
+        // m_playerModel2).GetTransformMatrix(),-0.1f);
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
     void RotDown()
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotDown();
+        // m_camera->RotX((m_isPlayer1 ? m_playerModel1 :
+        // m_playerModel2).GetTransformMatrix(),0.1f);
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
@@ -101,6 +109,18 @@ private:
     void CreateSkyBox(AquaEngine::Command& command);
 
     float angle = 0.0f;
+
+    static constexpr DirectX::XMFLOAT3 PLAYER1_DEFAULT_POTISION
+        = {1.0f, 0.0f, 0.0f};
+    static constexpr DirectX::XMFLOAT3 PLAYER2_DEFAULT_POTISION
+        = {-1.0f, 0.0f, 0.0f};
+
+    static constexpr DirectX::XMFLOAT3 PLAYER1_DEFAULT_CAMERA
+        = {0.0f, 1.0f, -2.0f};
+    static constexpr DirectX::XMFLOAT3 PLAYER2_DEFAULT_CAMERA
+        = {-0.0f, 1.0f, -2.0f};
+
+    static constexpr float DEFAULT_SCALE = 0.002f;
 };
 
 #endif  // GAMEVIEW_H

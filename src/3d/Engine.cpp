@@ -21,6 +21,10 @@ Engine::~Engine()
 
 void Engine::Init()
 {
+#ifdef DEBUG
+    m_startStatus = StartStatus::RUNNING;
+#endif
+
     HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
     if (FAILED(hr))
     {
@@ -34,14 +38,20 @@ void Engine::Init()
 
     InitRenderTargets();
 
+#ifndef DEBUG
     m_d2dEngine = std::make_unique<D2DEngine>(m_hwnd, m_wr, m_command.get());
     auto desc = m_display->GetSwapChainDesc();
     m_d2dEngine->Init(desc.BufferCount, m_display->GetBackBufferResouces());
+#endif
 
     m_gameView = std::make_unique<GameView>(m_hwnd, m_wr);
     m_gameView->Init(*m_command);
 
     std::cout << "Engine initialized" << std::endl;
+
+#ifdef DEBUG
+    m_gameView->Start();
+#endif
 }
 
 void Engine::InitRenderTargets()

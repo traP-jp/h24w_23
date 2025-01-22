@@ -4,8 +4,6 @@
 
 // TODO? for statement?????
 
-using DirectX::operator*;
-
 void Player::Init(AquaEngine::Command& command)
 {
     ImportModel(command);

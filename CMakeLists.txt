@@ -48,6 +48,8 @@ macro(create_executable files)
     target_link_libraries(h24w_23 PUBLIC $ENV{FBXSDK_DIR}/lib/x64/debug/libfbxsdk-md.lib)
     target_link_libraries(h24w_23 PUBLIC $ENV{FBXSDK_DIR}/lib/x64/debug/libxml2-md.lib)
     target_link_libraries(h24w_23 PUBLIC $ENV{FBXSDK_DIR}/lib/x64/debug/zlib-md.lib)
+
+    target_compile_definitions(h24w_23 PRIVATE DEBUG)
 endmacro()
 
 set(src_files

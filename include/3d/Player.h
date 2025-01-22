@@ -5,6 +5,8 @@
 
 #include <memory>
 
+using DirectX::operator*;
+
 class Player
 {
 public:
@@ -121,6 +123,11 @@ public:
 
     void SetMatrix(const DirectX::XMMATRIX& matrix) const;
 
+    DirectX::XMMATRIX GetTransformMatrix() const
+    {
+        return m_models[0]->GetTransformMatrix();
+    }
+
     DirectX::XMMATRIX GetMatrix() const
     {
         return m_models[0]->GetMatrix();
@@ -134,6 +141,11 @@ public:
     UINT GetFrameCount() const
     {
         return m_models[2]->GetFrameCount();
+    }
+
+    DirectX::XMVECTOR GetDr() const
+    {
+        return m_direction * m_velocity;
     }
 
 private:

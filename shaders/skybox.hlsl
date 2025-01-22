@@ -29,6 +29,7 @@ VS_OUTPUT vs(VS_INPUT input)
     viewMat._41 = 0.0f;
     viewMat._42 = 0.0f;
     viewMat._43 = 0.0f;
+    viewMat._44 = 1.0f;
 
     VS_OUTPUT output;
     output.position = mul(float4(input.position, 1.0f), world);

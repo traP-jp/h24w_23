@@ -21,8 +21,8 @@ int WINAPI wWinMain(
     int nCmdShow
 )
 {
-    std::string ip_addr;
     bool is_player1 = false;
+#ifndef DEBUG
     std::thread t(
         []()
         {
@@ -36,6 +36,7 @@ int WINAPI wWinMain(
     );
 
     Network::InitWinsock();
+#endif
 
     MainWindow window;
     HRESULT hr = window.Create(
@@ -53,9 +54,10 @@ int WINAPI wWinMain(
         return -1;
     }
 
+#ifndef DEBUG
     t.join();
 
-    ip_addr = IPDialog::GetIPAddr();
+    std::string ip_addr = IPDialog::GetIPAddr();
     is_player1 = IPDialog::IsPlayer1();
 
     std::cout << "ip_addr: " << ip_addr << std::endl;
@@ -64,6 +66,7 @@ int WINAPI wWinMain(
     window.InitNetwork(ip_addr, is_player1);
 
     std::thread t2(&MainWindow::Listen, &window);
+#endif
 
     ShowWindow(window.Window(), nCmdShow);
 
@@ -75,7 +78,9 @@ int WINAPI wWinMain(
         DispatchMessage(&msg);
     }
 
+#ifndef DEBUG
     t2.join();
+#endif
 
     return 0;
 }
