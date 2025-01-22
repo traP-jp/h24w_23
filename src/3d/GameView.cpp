@@ -144,9 +144,11 @@ void GameView::CreateModels(
 
     std::mt19937 mt(std::random_device{}());
     std::gamma_distribution<> x_dist(2.0f, 3.1f);
-    std::gamma_distribution<> y_dist(2.0f, 2.9f);
-    std::gamma_distribution<> z_dist(1.8f, 7.0f);
-    std::gamma_distribution<> scale_dist(2.0f, 0.3f);
+    //std::gamma_distribution<> y_dist(2.0f, 2.9f);
+    //std::gamma_distribution<> z_dist(1.8f, 7.0f);
+    std::uniform_real_distribution<> y_dist(0.0f, 10.0f);
+    std::uniform_real_distribution<> z_dist(0.0f, 10.0f);
+    std::gamma_distribution<> scale_dist(1.0f, 3.0f);
     for (int i = 0; i < m_asteroids.size(); ++i)
     {
         m_asteroids[i].Init(command, i % 2 == 0);
@@ -154,12 +156,16 @@ void GameView::CreateModels(
         m_asteroids[i].SetTextureSegments(texture_segment, i + 14);
         m_asteroids[i].SetMaterialSegments(material_segment, i + 16);
         m_asteroids[i].Scale(DEFAULT_SCALE, DEFAULT_SCALE, DEFAULT_SCALE);
-        float scale = scale_dist(mt) * 60.0f;
+        float scale = scale_dist(mt) * 20.0f;
+        if (scale > 200.0f)
+        {
+            scale *= 3.0f;
+        }
         m_asteroids[i].Scale(scale, scale, scale);
         m_asteroids[i].Move(
-            x_dist(mt) * 50.0f - 250.0f,
-            y_dist(mt) * 50.0f - 250.0f,
-            z_dist(mt) * 50.0f - 250.0f
+            x_dist(mt) * 100.0f - 500.0f,
+            y_dist(mt) * 100.0f - 500.0f,
+            z_dist(mt) * 100.0f - 500.0f
         );
     }
 }

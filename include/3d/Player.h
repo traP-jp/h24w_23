@@ -10,27 +10,35 @@ using DirectX::operator*;
 class Player
 {
 public:
-    void Init(AquaEngine::Command& command);
-    void Render(AquaEngine::Command& command) const;
+    void Init(AquaEngine::Command &command);
+
+    void Render(AquaEngine::Command &command) const;
+
     void SetMatrixSegments(
-        const std::shared_ptr<AquaEngine::DescriptorHeapSegment>& segment,
+        const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
         int index
-    ) const;  // this is player index
+    ) const; // this is player index
     void SetTextureSegments(
-        const std::shared_ptr<AquaEngine::DescriptorHeapSegment>& segment,
+        const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
         int index
-    ) const;  // this is player index
+    ) const; // this is player index
     void SetMaterialSegments(
-        const std::shared_ptr<AquaEngine::DescriptorHeapSegment>& segment,
+        const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
         int index
-    ) const;  // this is player index
+    ) const; // this is player index
 
     void Move(float dx, float dy, float dz) const;
+
     void Scale(float x, float y, float z) const;
+
     void RotX(float angle) const;
+
     void RotY(float angle) const;
+
     void RotZ(float angle) const;
+
     void Timer() const;
+
     void Frame() const;
 
     DirectX::XMVECTOR Accel()
@@ -42,7 +50,7 @@ public:
             m_velocity = MAX_VELOCITY;
             return {0.0f, 0.0f, 0.0f, 0.0f};
         }
-        return m_direction * -ACCELERATION * 2;
+        return m_direction * -ACCELERATION * 0.2;
     }
 
     DirectX::XMVECTOR Decel()
@@ -54,7 +62,7 @@ public:
             m_velocity = 0.0f;
             return {0.0f, 0.0f, 0.0f, 0.0f};
         }
-        return m_direction * -DECELERATION * 2;
+        return m_direction * -DECELERATION * 0.2;
     }
 
     void RotRight()
@@ -62,7 +70,7 @@ public:
         m_direction = XMVector3Transform(
             XMVector3Transform(
                 DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f),
-                DirectX::XMMatrixRotationY(0.1f)
+                DirectX::XMMatrixRotationY(ROTATION)
             ),
             m_models[0]->GetTransformMatrix()
         );
@@ -70,7 +78,7 @@ public:
 
         for (int i = 0; i < m_models.size(); ++i)
         {
-            m_models[i]->RotY(0.1f);
+            m_models[i]->RotY(ROTATION);
         }
     }
 
@@ -79,7 +87,7 @@ public:
         m_direction = XMVector3Transform(
             XMVector3Transform(
                 DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f),
-                DirectX::XMMatrixRotationY(-0.1f)
+                DirectX::XMMatrixRotationY(-ROTATION)
             ),
             m_models[0]->GetTransformMatrix()
         );
@@ -87,7 +95,7 @@ public:
 
         for (int i = 0; i < m_models.size(); ++i)
         {
-            m_models[i]->RotY(-0.1f);
+            m_models[i]->RotY(-ROTATION);
         }
     }
 
@@ -104,7 +112,7 @@ public:
 
         for (int i = 0; i < m_models.size(); ++i)
         {
-            m_models[i]->RotX(-0.1f);
+            m_models[i]->RotX(-ROTATION);
         }
     }
 
@@ -121,11 +129,11 @@ public:
 
         for (int i = 0; i < m_models.size(); ++i)
         {
-            m_models[i]->RotX(0.1f);
+            m_models[i]->RotX(ROTATION);
         }
     }
 
-    void SetMatrix(const DirectX::XMMATRIX& matrix) const;
+    void SetMatrix(const DirectX::XMMATRIX &matrix) const;
 
     float GetVelocity() const
     {
@@ -171,11 +179,12 @@ private:
     float m_yAngle = 0.0f;
     float m_xAngle = 0.0f;
 
-    static constexpr float ACCELERATION = 0.05f;
-    static constexpr float DECELERATION = -0.15f;
-    static constexpr float MAX_VELOCITY = 10.0f;
+    static constexpr float ACCELERATION = 0.5f;
+    static constexpr float DECELERATION = -1.5f;
+    static constexpr float MAX_VELOCITY = 100.0f;
+    static constexpr float ROTATION = 0.1f;
 
-    void ImportModel(AquaEngine::Command& command);
+    void ImportModel(AquaEngine::Command &command);
 };
 
 #endif  // PLAYER_H
