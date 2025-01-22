@@ -124,11 +124,16 @@ private:
     static constexpr DirectX::XMFLOAT3 PLAYER2_DEFAULT_POSITION
         = {-1.0f, 0.0f, 0.0f};
 
-    static constexpr float DEFAULT_CAMERA_Z_DISTANCE = -1.5f;
+    static constexpr float DEFAULT_CAMERA_Z_DISTANCE = -2.2f;
+    static constexpr float CAMERA_ASPECT = 0.8f;
     static constexpr DirectX::XMFLOAT3 PLAYER1_DEFAULT_CAMERA
-        = {1.0f, -DEFAULT_CAMERA_Z_DISTANCE, DEFAULT_CAMERA_Z_DISTANCE * 2};
+        = {1.0f,
+           -DEFAULT_CAMERA_Z_DISTANCE,
+           DEFAULT_CAMERA_Z_DISTANCE* CAMERA_ASPECT};
     static constexpr DirectX::XMFLOAT3 PLAYER2_DEFAULT_CAMERA
-        = {-1.0f, -DEFAULT_CAMERA_Z_DISTANCE, DEFAULT_CAMERA_Z_DISTANCE * 2};
+        = {-1.0f,
+           -DEFAULT_CAMERA_Z_DISTANCE,
+           DEFAULT_CAMERA_Z_DISTANCE* CAMERA_ASPECT};
 
     static constexpr float DEFAULT_SCALE = 0.002f;
 };
