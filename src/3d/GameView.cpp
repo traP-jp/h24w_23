@@ -16,7 +16,7 @@ void GameView::Init(AquaEngine::Command &command)
             D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
         );
 
-    m_camera = std::make_shared<Camera>(m_rc, m_isPlayer1);
+    m_camera = std::make_unique<Camera>(m_rc, m_isPlayer1);
     m_camera->Init();  // init ni camera range
 
     auto model_input_element = m_playerModel1.GetInputElementDescs();
@@ -85,6 +85,9 @@ void GameView::Init(AquaEngine::Command &command)
         std::println("failed to create bullet pipeline state");
         exit(-1);
     }
+
+    m_effectManager.Init(command);
+    m_effectManager.SetCamera(m_camera->GetCamera());
 }
 
 void GameView::CreateModels(

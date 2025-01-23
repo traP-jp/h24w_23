@@ -11,6 +11,7 @@
 
 #include "Asteroid.h"
 #include "Camera.h"
+#include "EffectManager.h"
 #include "Player.h"
 
 class GameView
@@ -115,8 +116,9 @@ private:
     Player m_playerModel1;
     Player m_playerModel2;
     std::unique_ptr<AquaEngine::SkyBox> m_skyBox;
-    std::shared_ptr<Camera> m_camera;
+    std::unique_ptr<Camera> m_camera;
     std::array<Asteroid, 100> m_asteroids;
+    EffectManager m_effectManager;
 
     AquaEngine::PipelineState m_pipelineState;
     AquaEngine::RootSignature m_rootSignature;

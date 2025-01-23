@@ -4,6 +4,11 @@
 
 - [FBXSDK](https://aps.autodesk.com/developer/overview/fbx-sdk)
 - [Aqua-Engine](https://github.com/kavos113/aqua-engine)
+- [Effekseer](https://github.com/effekseer/Effekseer)
+
+```shell
+vcpkg install
+```
 
 ## run
 

@@ -34,6 +34,8 @@ macro(create_executable files)
     target_include_directories(h24w_23 PRIVATE include)
     target_include_directories(h24w_23 PRIVATE $ENV{aquaengine_dir}/include)
     target_include_directories(h24w_23 PRIVATE $ENV{FBXSDK_DIR}/include)
+    target_include_directories(h24w_23 PRIVATE $ENV{effekseer_dir}/include/Effekseer)
+    target_include_directories(h24w_23 PRIVATE $ENV{effekseer_dir}/include/EffekseerRendererDX12)
     target_link_libraries(h24w_23 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/aqua-engine-0.1.2/lib/aqua-engine.lib)
     target_link_libraries(h24w_23 PUBLIC d2d1.lib)
     target_link_libraries(h24w_23 PUBLIC dwrite.lib)
@@ -48,6 +50,11 @@ macro(create_executable files)
     target_link_libraries(h24w_23 PUBLIC $ENV{FBXSDK_DIR}/lib/x64/debug/libfbxsdk-md.lib)
     target_link_libraries(h24w_23 PUBLIC $ENV{FBXSDK_DIR}/lib/x64/debug/libxml2-md.lib)
     target_link_libraries(h24w_23 PUBLIC $ENV{FBXSDK_DIR}/lib/x64/debug/zlib-md.lib)
+    target_link_libraries(h24w_23 PUBLIC $ENV{effekseer_dir}/lib/Effekseerd.lib)
+    target_link_libraries(h24w_23 PUBLIC $ENV{effekseer_dir}/lib/EffekseerRendererDX12d.lib)
+    target_link_libraries(h24w_23 PUBLIC $ENV{effekseer_dir}/lib/LLGId.lib)
+
+    set_property(TARGET h24w_23 PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDebugDLL")
 
     target_compile_definitions(h24w_23 PRIVATE DEBUG)  # for nsight, d3d11on12 is not supported
     #target_compile_definitions(h24w_23 PRIVATE NSIGHT)
@@ -63,6 +70,7 @@ set(src_files
         src/3d/Camera.cpp
         src/3d/Asteroid.cpp
         src/3d/Bullet.cpp
+        src/3d/EffectManager.cpp
         src/2d/D2DEngine.cpp
         src/2d/Title.cpp
         src/network/Network.cpp
@@ -78,6 +86,7 @@ set(include_files
         include/3d/Camera.h
         include/3d/Asteroid.h
         include/3d/Bullet.h
+        include/3d/EffectManager.h
         include/2d/D2DEngine.h
         include/2d/Title.h
         include/network/Network.h
@@ -121,6 +130,7 @@ set(resources
         resources/models/cube.fbx
         resources/textures/space.hdr
         resources/textures/sample1.hdr
+        resources/effects/tyakudan.efkefc
         shaders/main.hlsl
         shaders/renderTarget.hlsl
         shaders/skybox.hlsl

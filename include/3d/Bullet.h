@@ -2,6 +2,7 @@
 #define BULLET_H
 
 #include <AquaEngine.h>
+#include <Effekseer.h>
 
 #include <memory>
 
@@ -9,6 +10,7 @@ class Bullet
 {
 public:
     void Init(AquaEngine::Command &command);
+    void CreateEffect(const Effekseer::ManagerRef &manager);
     void Render(AquaEngine::Command &command) const;
     void SetMatrixSegments(
         const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
@@ -62,6 +64,7 @@ public:
             = DirectX::XMVectorSubtract(m_model->GetPos(), position);
         float length
             = DirectX::XMVectorGetX(DirectX::XMVector3Length(distance));
+
         return length < radius;
     }
 
@@ -71,6 +74,9 @@ private:
 
     std::unique_ptr<AquaEngine::FBXModel> m_model;
     bool m_isActive = false;
+
+    Effekseer::EffectRef m_effect = nullptr;
+    Effekseer::Handle m_handle = 0;
 
     void ImportModel(AquaEngine::Command &command);
 };

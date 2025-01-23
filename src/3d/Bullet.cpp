@@ -39,3 +39,12 @@ void Bullet::ImportModel(AquaEngine::Command& command)
         = std::make_unique<AquaEngine::FBXModel>("resources/models/cube.fbx");
     m_model->Create();
 }
+
+void Bullet::CreateEffect(const Effekseer::ManagerRef& manager)
+{
+    m_effect = Effekseer::Effect::Create(manager, u"resources/effects/tyakudan.efkefc");
+    if (m_effect == nullptr)
+    {
+        std::cout << "effect is null" << std::endl;
+    }
+}
