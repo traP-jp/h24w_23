@@ -5,6 +5,11 @@
 void Player::Init(AquaEngine::Command &command)
 {
     ImportModel(command);
+
+    for (int i = 0; i < m_bullets.size(); ++i)
+    {
+        m_bullets[i].Init(command);
+    }
 }
 
 void Player::Render(AquaEngine::Command &command) const
@@ -12,6 +17,11 @@ void Player::Render(AquaEngine::Command &command) const
     for (int i = 0; i < m_models.size(); ++i)
     {
         m_models[i]->Render(command);
+    }
+
+    for (int i = 0; i < m_bullets.size(); ++i)
+    {
+        m_bullets[i].Render(command);
     }
 }
 
@@ -23,7 +33,8 @@ void Player::ImportModel(AquaEngine::Command &command)
         //"resources/models/player_tex.png",
         command
     );
-    //m_models[0] = std::make_unique<AquaEngine::FBXModel>("resources/models/arm.fbx");
+    // m_models[0] =
+    // std::make_unique<AquaEngine::FBXModel>("resources/models/arm.fbx");
     m_models[0]->Create();
 
     m_models[1] = std::make_unique<AquaEngine::FBXModel>(
@@ -32,7 +43,8 @@ void Player::ImportModel(AquaEngine::Command &command)
         //"resources/models/player_tex.png",
         command
     );
-    //m_models[1] = std::make_unique<AquaEngine::FBXModel>("resources/models/body.fbx");
+    // m_models[1] =
+    // std::make_unique<AquaEngine::FBXModel>("resources/models/body.fbx");
     m_models[1]->Create();
 
     m_models[2] = std::make_unique<AquaEngine::FBXModel>(
@@ -41,7 +53,8 @@ void Player::ImportModel(AquaEngine::Command &command)
         //"resources/models/player_tex.png",
         command
     );
-    //m_models[2] = std::make_unique<AquaEngine::FBXModel>("resources/models/buster.fbx");
+    // m_models[2] =
+    // std::make_unique<AquaEngine::FBXModel>("resources/models/buster.fbx");
     m_models[2]->Create();
 
     m_models[3]
@@ -54,7 +67,8 @@ void Player::ImportModel(AquaEngine::Command &command)
         //"resources/models/player_tex.png",
         command
     );
-    //m_models[4] = std::make_unique<AquaEngine::FBXModel>("resources/models/gun.fbx");
+    // m_models[4] =
+    // std::make_unique<AquaEngine::FBXModel>("resources/models/gun.fbx");
     m_models[4]->Create();
 
     m_models[5] = std::make_unique<AquaEngine::FBXModel>(
@@ -63,7 +77,8 @@ void Player::ImportModel(AquaEngine::Command &command)
         //"resources/models/player_tex.png",
         command
     );
-    //m_models[5] = std::make_unique<AquaEngine::FBXModel>("resources/models/head.fbx");
+    // m_models[5] =
+    // std::make_unique<AquaEngine::FBXModel>("resources/models/head.fbx");
     m_models[5]->Create();
 
     m_models[6] = std::make_unique<AquaEngine::FBXModel>(
@@ -72,7 +87,8 @@ void Player::ImportModel(AquaEngine::Command &command)
         //"resources/models/player_tex.png",
         command
     );
-    //m_models[6] = std::make_unique<AquaEngine::FBXModel>("resources/models/ring.fbx");
+    // m_models[6] =
+    // std::make_unique<AquaEngine::FBXModel>("resources/models/ring.fbx");
     m_models[6]->Create();
 
     m_models[7] = std::make_unique<AquaEngine::FBXModel>(
@@ -81,7 +97,8 @@ void Player::ImportModel(AquaEngine::Command &command)
         //"resources/models/player_tex.png",
         command
     );
-    //m_models[7] = std::make_unique<AquaEngine::FBXModel>("resources/models/thuraster.fbx");
+    // m_models[7] =
+    // std::make_unique<AquaEngine::FBXModel>("resources/models/thuraster.fbx");
     m_models[7]->Create();
 }
 
@@ -151,6 +168,11 @@ void Player::Frame() const
 {
     DirectX::XMVECTOR dr = m_direction * m_velocity;
     Move(dr.m128_f32[0], dr.m128_f32[1], dr.m128_f32[2]);
+
+    for (int i = 0; i < m_bullets.size(); ++i)
+    {
+        m_bullets[i].Frame(m_direction);
+    }
 }
 
 void Player::Scale(float x, float y, float z) const
@@ -183,4 +205,16 @@ void Player::RotZ(float angle) const
     {
         m_models[i]->RotZ(angle);
     }
+}
+
+void Player::Shoot()
+{
+    if (m_bulletIndex >= m_bullets.size())
+    {
+        std::cout << "No more bullets" << std::endl;
+        return;
+    }
+
+    m_bullets[m_bulletIndex].Shoot(m_models[4]->GetPos());
+    m_bulletIndex++;
 }

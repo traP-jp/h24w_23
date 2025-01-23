@@ -62,6 +62,7 @@ set(src_files
         src/3d/Player.cpp
         src/3d/Camera.cpp
         src/3d/Asteroid.cpp
+        src/3d/Bullet.cpp
         src/2d/D2DEngine.cpp
         src/2d/Title.cpp
         src/network/Network.cpp
@@ -76,6 +77,7 @@ set(include_files
         include/3d/Player.h
         include/3d/Camera.h
         include/3d/Asteroid.h
+        include/3d/Bullet.h
         include/2d/D2DEngine.h
         include/2d/Title.h
         include/network/Network.h

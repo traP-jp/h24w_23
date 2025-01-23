@@ -5,6 +5,8 @@
 
 #include <memory>
 
+#include "Bullet.h"
+
 using DirectX::operator*;
 
 class Player
@@ -162,12 +164,12 @@ public:
         return m_models[2]->GetFrameCount();
     }
 
-    DirectX::XMVECTOR GetDrForCamera() const
+    [[nodiscard]] DirectX::XMVECTOR GetDrForCamera() const
     {
         return m_direction * m_velocity;
     }
 
-    DirectX::XMVECTOR GetDirection() const
+    [[nodiscard]] DirectX::XMVECTOR GetDirection() const
     {
         return m_direction;
     }
@@ -181,8 +183,8 @@ private:
     static constexpr int BULLET_COUNT = 10;
 
     std::array<std::unique_ptr<AquaEngine::FBXModel>, 8> m_models;
-    std::array<std::unique_ptr<AquaEngine::FBXModel>, BULLET_COUNT> m_bullets;
-    std::array<std::pair<bool, DirectX::XMVECTOR>, BULLET_COUNT> m_bulletStatus;
+    std::array<Bullet, BULLET_COUNT> m_bullets;
+    int m_bulletIndex = 0;
 
     DirectX::XMVECTOR m_direction
         = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
