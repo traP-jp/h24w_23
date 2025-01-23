@@ -60,7 +60,7 @@ void GameView::Init(AquaEngine::Command &command)
             D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
             "bullet"
         );
-    m_bulletRootSignature.SetDescriptorHeapSegmentManager(&manager);
+    m_bulletRootSignature.SetDescriptorHeapSegmentManager(&bullet_manager);
     hr = m_bulletRootSignature.Create();
     if (FAILED(hr))
     {
@@ -201,8 +201,16 @@ void GameView::CreateModels(
     m_playerModel2.SetBulletMatrixSegments(bullet_matrix_segment, 1);
     m_playerModel2.SetBulletMaterialSegments(bullet_material_segment, 1);
 
-    m_playerModel1.Scale(DEFAULT_SCALE, DEFAULT_SCALE, DEFAULT_SCALE);
-    m_playerModel2.Scale(DEFAULT_SCALE, DEFAULT_SCALE, DEFAULT_SCALE);
+    m_playerModel1.Scale(
+        Player::DEFAULT_SCALE,
+        Player::DEFAULT_SCALE,
+        Player::DEFAULT_SCALE
+    );
+    m_playerModel2.Scale(
+        Player::DEFAULT_SCALE,
+        Player::DEFAULT_SCALE,
+        Player::DEFAULT_SCALE
+    );
     m_playerModel1.Move(
         PLAYER1_DEFAULT_POSITION.x,
         PLAYER1_DEFAULT_POSITION.y,
@@ -227,7 +235,11 @@ void GameView::CreateModels(
         m_asteroids[i].SetMatrixSegments(matrix_segment, i + 16);
         m_asteroids[i].SetTextureSegments(texture_segment, i + 14);
         m_asteroids[i].SetMaterialSegments(material_segment, i + 16);
-        m_asteroids[i].Scale(DEFAULT_SCALE, DEFAULT_SCALE, DEFAULT_SCALE);
+        m_asteroids[i].Scale(
+            Player::DEFAULT_SCALE,
+            Player::DEFAULT_SCALE,
+            Player::DEFAULT_SCALE
+        );
         float scale = scale_dist(mt) * 20.0f;
         if (scale > 200.0f)
         {
@@ -322,6 +334,17 @@ void GameView::Timer(int id) const
                 = (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
                       .GetDrForCamera();
             m_camera->Move(dr);
+
+            DirectX::XMMATRIX partner_transform
+                = (m_isPlayer1 ? m_playerModel2 : m_playerModel1)
+                      .GetTransformMatrix();
+            DirectX::XMVECTOR partner_position = partner_transform.r[3];
+            bool hit = (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
+                           .IsHit(partner_position);
+            if (hit)
+            {
+                std::cout << "hit" << std::endl;
+            }
             break;
         }
 

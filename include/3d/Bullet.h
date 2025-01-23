@@ -40,11 +40,11 @@ public:
             DirectX::XMVectorGetY(direction) * VELOCITY,
             DirectX::XMVectorGetZ(direction) * VELOCITY
         );
-
-        std::cout << "bullet position: "
-                  << DirectX::XMVectorGetX(m_model->GetPos()) << ", "
-                  << DirectX::XMVectorGetY(m_model->GetPos()) << ", "
-                  << DirectX::XMVectorGetZ(m_model->GetPos()) << std::endl;
+        //
+        // std::cout << "bullet position: "
+        //           << DirectX::XMVectorGetX(m_model->GetPos()) << ", "
+        //           << DirectX::XMVectorGetY(m_model->GetPos()) << ", "
+        //           << DirectX::XMVectorGetZ(m_model->GetPos()) << std::endl;
     }
 
     void Move(float dx, float dy, float dz) const
@@ -52,9 +52,22 @@ public:
         m_model->Move(dx, dy, dz);
     }
 
+    bool IsHit(DirectX::XMVECTOR position, float radius) const
+    {
+        if (!m_isActive)
+        {
+            return false;
+        }
+        DirectX::XMVECTOR distance
+            = DirectX::XMVectorSubtract(m_model->GetPos(), position);
+        float length
+            = DirectX::XMVectorGetX(DirectX::XMVector3Length(distance));
+        return length < radius;
+    }
+
 private:
-    static constexpr float VELOCITY = 0.1f;
-    static constexpr float DEFAULT_SCALE = 3.0f;
+    static constexpr float VELOCITY = 1.0f;
+    static constexpr float DEFAULT_SCALE = 0.5f;
 
     std::unique_ptr<AquaEngine::FBXModel> m_model;
     bool m_isActive = false;

@@ -150,6 +150,19 @@ public:
 
     void SetMatrix(const DirectX::XMMATRIX &matrix) const;
 
+    bool IsHit(DirectX::XMVECTOR position) const
+    {
+        for (int i = 0; i < m_bullets.size(); ++i)
+        {
+            if (m_bullets[i].IsHit(position, RADIUS))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     float GetVelocity() const
     {
         return m_velocity;
@@ -194,12 +207,14 @@ public:
     }
 
     static constexpr int BULLET_COUNT = 10;
+    static constexpr float DEFAULT_SCALE = 0.002f;
 
 private:
     static constexpr float ACCELERATION = 0.5f;
     static constexpr float DECELERATION = -1.5f;
     static constexpr float MAX_VELOCITY = 100.0f;
     static constexpr float ROTATION = 0.1f;
+    static constexpr float RADIUS = DEFAULT_SCALE * 1201.28f;
 
     std::array<std::unique_ptr<AquaEngine::FBXModel>, 8> m_models;
     std::array<Bullet, BULLET_COUNT> m_bullets;

@@ -9,7 +9,7 @@ void Bullet::Render(AquaEngine::Command& command) const
 {
     if (!m_isActive)
     {
-        // return;
+        return;
     }
     m_model->Render(command);
 }

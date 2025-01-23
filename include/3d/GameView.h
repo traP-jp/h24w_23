@@ -151,8 +151,6 @@ private:
         = {-1.0f,
            -DEFAULT_CAMERA_Z_DISTANCE,
            DEFAULT_CAMERA_Z_DISTANCE *CAMERA_ASPECT};
-
-    static constexpr float DEFAULT_SCALE = 0.002f;
 };
 
 #endif  // GAMEVIEW_H
