@@ -159,7 +159,7 @@ void GameView::CreateModels(
         float scale = scale_dist(mt) * 20.0f;
         if (scale > 200.0f)
         {
-            scale *= 3.0f;
+            scale = max(scale * 3, 1000.0f);
         }
         m_asteroids[i].Scale(scale, scale, scale);
         m_asteroids[i].Move(
