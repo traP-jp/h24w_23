@@ -9,15 +9,17 @@ class Camera
 {
 public:
     Camera(const RECT &rc, bool is_player1)
-        : m_camera(nullptr)
-        , m_isPlayer1(is_player1)
-        , m_rc(rc)
+        : m_camera(nullptr), m_isPlayer1(is_player1), m_rc(rc)
     {
     }
 
     void Init();
 
+    void InitBullet();
+
     void Render(AquaEngine::Command &command) const;
+
+    void RenderBullet(AquaEngine::Command &command) const;
 
     void Accel(DirectX::XMVECTOR delta);
 
@@ -42,27 +44,24 @@ private:
     std::shared_ptr<AquaEngine::Camera> m_camera;
     bool m_isPlayer1;
     RECT m_rc;
-    DirectX::XMVECTOR m_delta; // distance from default camera position
+    DirectX::XMVECTOR m_delta;  // distance from default camera position
 
+    // GameView.hも一緒に変える
     static constexpr DirectX::XMFLOAT3 PLAYER1_DEFAULT_POSITION
         = {1.0f, 0.0f, 0.0f};
     static constexpr DirectX::XMFLOAT3 PLAYER2_DEFAULT_POSITION
         = {-1.0f, 0.0f, 0.0f};
 
-    static constexpr float DEFAULT_CAMERA_Z_DISTANCE = -2.2f;
-    static constexpr float CAMERA_ASPECT = 0.8f;
+    static constexpr float DEFAULT_CAMERA_Z_DISTANCE = -4.2f;
+    static constexpr float CAMERA_ASPECT = 1.2f;
     static constexpr DirectX::XMFLOAT3 PLAYER1_DEFAULT_CAMERA
-        = {
-            1.0f,
-            -DEFAULT_CAMERA_Z_DISTANCE,
-            DEFAULT_CAMERA_Z_DISTANCE * CAMERA_ASPECT
-        };
+        = {1.0f,
+           -DEFAULT_CAMERA_Z_DISTANCE,
+           DEFAULT_CAMERA_Z_DISTANCE *CAMERA_ASPECT};
     static constexpr DirectX::XMFLOAT3 PLAYER2_DEFAULT_CAMERA
-        = {
-            -1.0f,
-            -DEFAULT_CAMERA_Z_DISTANCE,
-            DEFAULT_CAMERA_Z_DISTANCE * CAMERA_ASPECT
-        };
+        = {-1.0f,
+           -DEFAULT_CAMERA_Z_DISTANCE,
+           DEFAULT_CAMERA_Z_DISTANCE *CAMERA_ASPECT};
 
     // static constexpr std::array<float, 10> START_ACCELERATION
     //     = {0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.072, 0.064, 0.056, 0.048};

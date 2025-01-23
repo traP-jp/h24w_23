@@ -78,6 +78,11 @@ public:
         m_gameView->RotDown();
     }
 
+    void Shoot()
+    {
+        m_gameView->Shoot();
+    }
+
     [[nodiscard]] StartStatus GetStartStatus() const
     {
         return m_startStatus;

@@ -99,6 +99,7 @@ set(resources
         resources/models/player_model/head.fbx
         resources/models/player_model/ring.fbx
         resources/models/player_model/thuraster.fbx
+        resources/models/player_model/thuraster_noanim.fbx
         resources/models/player_texture/arm_diff_tex.png
         resources/models/player_texture/body_diff_tex.png
         resources/models/player_texture/buster_diff_tex.png
@@ -124,6 +125,7 @@ set(resources
         shaders/renderTarget.hlsl
         shaders/skybox.hlsl
         shaders/cubemap.hlsl
+        shaders/bullet.hlsl
 )
 
 create_executable(${src_files} ${include_files} ${resources})

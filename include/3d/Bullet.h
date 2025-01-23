@@ -40,6 +40,11 @@ public:
             DirectX::XMVectorGetY(direction) * VELOCITY,
             DirectX::XMVectorGetZ(direction) * VELOCITY
         );
+
+        std::cout << "bullet position: "
+                  << DirectX::XMVectorGetX(m_model->GetPos()) << ", "
+                  << DirectX::XMVectorGetY(m_model->GetPos()) << ", "
+                  << DirectX::XMVectorGetZ(m_model->GetPos()) << std::endl;
     }
 
     void Move(float dx, float dy, float dz) const
@@ -48,8 +53,8 @@ public:
     }
 
 private:
-    static constexpr float VELOCITY = 100.0f;
-    static constexpr float DEFAULT_SCALE = 0.2f;
+    static constexpr float VELOCITY = 0.1f;
+    static constexpr float DEFAULT_SCALE = 3.0f;
 
     std::unique_ptr<AquaEngine::FBXModel> m_model;
     bool m_isActive = false;

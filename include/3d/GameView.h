@@ -98,6 +98,11 @@ public:
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
+    void Shoot()
+    {
+        (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Shoot();
+    }
+
     DirectX::XMMATRIX GetMatrix() const
     {
         return (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetMatrix();
@@ -116,6 +121,9 @@ private:
     AquaEngine::PipelineState m_pipelineState;
     AquaEngine::RootSignature m_rootSignature;
 
+    AquaEngine::PipelineState m_bulletPipelineState;
+    AquaEngine::RootSignature m_bulletRootSignature;
+
     bool m_isPlayer1;
 
     void CreateModels(
@@ -127,25 +135,22 @@ private:
 
     float angle = 0.0f;
 
+    // Camera.hも一緒に変える
     static constexpr DirectX::XMFLOAT3 PLAYER1_DEFAULT_POSITION
         = {1.0f, 0.0f, 0.0f};
     static constexpr DirectX::XMFLOAT3 PLAYER2_DEFAULT_POSITION
         = {-1.0f, 0.0f, 0.0f};
 
-    static constexpr float DEFAULT_CAMERA_Z_DISTANCE = -2.2f;
-    static constexpr float CAMERA_ASPECT = 0.8f;
+    static constexpr float DEFAULT_CAMERA_Z_DISTANCE = -4.2f;
+    static constexpr float CAMERA_ASPECT = 1.2f;
     static constexpr DirectX::XMFLOAT3 PLAYER1_DEFAULT_CAMERA
-        = {
-            1.0f,
-            -DEFAULT_CAMERA_Z_DISTANCE,
-            DEFAULT_CAMERA_Z_DISTANCE * CAMERA_ASPECT
-        };
+        = {1.0f,
+           -DEFAULT_CAMERA_Z_DISTANCE,
+           DEFAULT_CAMERA_Z_DISTANCE *CAMERA_ASPECT};
     static constexpr DirectX::XMFLOAT3 PLAYER2_DEFAULT_CAMERA
-        = {
-            -1.0f,
-            -DEFAULT_CAMERA_Z_DISTANCE,
-            DEFAULT_CAMERA_Z_DISTANCE * CAMERA_ASPECT
-        };
+        = {-1.0f,
+           -DEFAULT_CAMERA_Z_DISTANCE,
+           DEFAULT_CAMERA_Z_DISTANCE *CAMERA_ASPECT};
 
     static constexpr float DEFAULT_SCALE = 0.002f;
 };

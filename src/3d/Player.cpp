@@ -18,7 +18,10 @@ void Player::Render(AquaEngine::Command &command) const
     {
         m_models[i]->Render(command);
     }
+}
 
+void Player::RenderBullet(AquaEngine::Command &command) const
+{
     for (int i = 0; i < m_bullets.size(); ++i)
     {
         m_bullets[i].Render(command);
@@ -92,7 +95,8 @@ void Player::ImportModel(AquaEngine::Command &command)
     m_models[6]->Create();
 
     m_models[7] = std::make_unique<AquaEngine::FBXModel>(
-        "resources/models/thuraster.fbx",
+        //"resources/models/thuraster.fbx",
+        "resources/models/thuraster_noanim.fbx",
         "resources/models/thuraster_diff_tex.png",
         //"resources/models/player_tex.png",
         command
@@ -137,6 +141,28 @@ void Player::SetMaterialSegments(
     for (int i = 0; i < m_models.size(); ++i)
     {
         m_models[i]->CreateMaterialBufferView(segment, 8 * index + i);
+    }
+}
+
+void Player::SetBulletMatrixSegments(
+    const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
+    int index
+)
+{
+    for (int i = 0; i < m_bullets.size(); ++i)
+    {
+        m_bullets[i].SetMatrixSegments(segment, BULLET_COUNT * index + i);
+    }
+}
+
+void Player::SetBulletMaterialSegments(
+    const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
+    int index
+)
+{
+    for (int i = 0; i < m_bullets.size(); ++i)
+    {
+        m_bullets[i].SetMaterialSegments(segment, BULLET_COUNT * index + i);
     }
 }
 

@@ -181,6 +181,11 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             m_engine->TranslatePartner(data.transform);
             return 0;
 
+        case WM_LBUTTONDOWN:
+            std::cout << "shoot" << std::endl;
+            m_engine->Shoot();
+            return 0;
+
         default:
             return DefWindowProc(m_hwnd, uMsg, wParam, lParam);
     }

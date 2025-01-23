@@ -9,7 +9,7 @@ void Bullet::Render(AquaEngine::Command& command) const
 {
     if (!m_isActive)
     {
-        return;
+        // return;
     }
     m_model->Render(command);
 }
@@ -20,6 +20,9 @@ void Bullet::SetMatrixSegments(
 ) const
 {
     m_model->CreateMatrixBuffer(segment, index);
+
+    m_model->Scale(DEFAULT_SCALE, DEFAULT_SCALE, DEFAULT_SCALE);
+    m_model->SetMatrix(DirectX::XMMatrixIdentity());
 }
 
 void Bullet::SetMaterialSegments(

@@ -16,6 +16,8 @@ public:
 
     void Render(AquaEngine::Command &command) const;
 
+    void RenderBullet(AquaEngine::Command &command) const;
+
     void SetMatrixSegments(
         const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
         int index
@@ -28,6 +30,15 @@ public:
         const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
         int index
     ) const;  // this is player index
+
+    void SetBulletMatrixSegments(
+        const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
+        int index  // this is bullet index
+    );
+    void SetBulletMaterialSegments(
+        const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
+        int index  // this is bullet index
+    );
 
     void Move(float dx, float dy, float dz) const;
 
@@ -174,13 +185,21 @@ public:
         return m_direction;
     }
 
+    void PlayThurasterAction() const
+    {
+        m_models[7]->PlayAnimation(
+            "THURASTER_bone|THURASTER_bone|THURASTER_bone|action2",
+            AquaEngine::FBXModel::AnimationMode::LOOP
+        );
+    }
+
+    static constexpr int BULLET_COUNT = 10;
+
 private:
     static constexpr float ACCELERATION = 0.5f;
     static constexpr float DECELERATION = -1.5f;
     static constexpr float MAX_VELOCITY = 100.0f;
     static constexpr float ROTATION = 0.1f;
-
-    static constexpr int BULLET_COUNT = 10;
 
     std::array<std::unique_ptr<AquaEngine::FBXModel>, 8> m_models;
     std::array<Bullet, BULLET_COUNT> m_bullets;

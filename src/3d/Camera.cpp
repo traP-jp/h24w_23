@@ -20,9 +20,26 @@ void Camera::Init()
     m_delta = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
+void Camera::InitBullet()
+{
+    auto camera_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
+        D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
+        1,
+        0,
+        0,
+        D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
+    );
+    m_camera->AddManager("bullet", std::move(camera_range));
+}
+
 void Camera::Render(AquaEngine::Command &command) const
 {
     m_camera->Render(command, "main_game");
+}
+
+void Camera::RenderBullet(AquaEngine::Command &command) const
+{
+    m_camera->Render(command, "bullet");
 }
 
 void Camera::Accel(DirectX::XMVECTOR delta)
@@ -49,30 +66,62 @@ void Camera::Decel(DirectX::XMVECTOR delta)
 
 void Camera::RotRight(const DirectX::XMMATRIX &transform)
 {
-    m_camera->Move(-DirectX::XMVectorGetX(m_delta), -DirectX::XMVectorGetY(m_delta), -DirectX::XMVectorGetZ(m_delta));
+    m_camera->Move(
+        -DirectX::XMVectorGetX(m_delta),
+        -DirectX::XMVectorGetY(m_delta),
+        -DirectX::XMVectorGetZ(m_delta)
+    );
     m_camera->Rot(transform);
-    m_camera->Move(DirectX::XMVectorGetX(m_delta), DirectX::XMVectorGetY(m_delta), DirectX::XMVectorGetZ(m_delta));
+    m_camera->Move(
+        DirectX::XMVectorGetX(m_delta),
+        DirectX::XMVectorGetY(m_delta),
+        DirectX::XMVectorGetZ(m_delta)
+    );
 }
 
 void Camera::RotLeft(const DirectX::XMMATRIX &transform)
 {
-    m_camera->Move(-DirectX::XMVectorGetX(m_delta), -DirectX::XMVectorGetY(m_delta), -DirectX::XMVectorGetZ(m_delta));
+    m_camera->Move(
+        -DirectX::XMVectorGetX(m_delta),
+        -DirectX::XMVectorGetY(m_delta),
+        -DirectX::XMVectorGetZ(m_delta)
+    );
     m_camera->Rot(transform);
-    m_camera->Move(DirectX::XMVectorGetX(m_delta), DirectX::XMVectorGetY(m_delta), DirectX::XMVectorGetZ(m_delta));
+    m_camera->Move(
+        DirectX::XMVectorGetX(m_delta),
+        DirectX::XMVectorGetY(m_delta),
+        DirectX::XMVectorGetZ(m_delta)
+    );
 }
 
 void Camera::RotUp(const DirectX::XMMATRIX &transform)
 {
-    m_camera->Move(-DirectX::XMVectorGetX(m_delta), -DirectX::XMVectorGetY(m_delta), -DirectX::XMVectorGetZ(m_delta));
+    m_camera->Move(
+        -DirectX::XMVectorGetX(m_delta),
+        -DirectX::XMVectorGetY(m_delta),
+        -DirectX::XMVectorGetZ(m_delta)
+    );
     m_camera->Rot(transform);
-    m_camera->Move(DirectX::XMVectorGetX(m_delta), DirectX::XMVectorGetY(m_delta), DirectX::XMVectorGetZ(m_delta));
+    m_camera->Move(
+        DirectX::XMVectorGetX(m_delta),
+        DirectX::XMVectorGetY(m_delta),
+        DirectX::XMVectorGetZ(m_delta)
+    );
 }
 
 void Camera::RotDown(const DirectX::XMMATRIX &transform)
 {
-    m_camera->Move(-DirectX::XMVectorGetX(m_delta), -DirectX::XMVectorGetY(m_delta), -DirectX::XMVectorGetZ(m_delta));
+    m_camera->Move(
+        -DirectX::XMVectorGetX(m_delta),
+        -DirectX::XMVectorGetY(m_delta),
+        -DirectX::XMVectorGetZ(m_delta)
+    );
     m_camera->Rot(transform);
-    m_camera->Move(DirectX::XMVectorGetX(m_delta), DirectX::XMVectorGetY(m_delta), DirectX::XMVectorGetZ(m_delta));
+    m_camera->Move(
+        DirectX::XMVectorGetX(m_delta),
+        DirectX::XMVectorGetY(m_delta),
+        DirectX::XMVectorGetZ(m_delta)
+    );
 }
 
 void Camera::Move(DirectX::XMVECTOR dr)

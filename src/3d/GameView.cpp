@@ -16,20 +16,15 @@ void GameView::Init(AquaEngine::Command &command)
             D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
         );
 
-    auto camera_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
-        D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
-        1,
-        0,
-        0,
-        D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
-    );
     m_camera = std::make_shared<Camera>(m_rc, m_isPlayer1);
-    m_camera->Init();
+    m_camera->Init();  // init ni camera range
 
     auto model_input_element = m_playerModel1.GetInputElementDescs();
 
     CreateModels(command, manager);
     CreateSkyBox(command);
+
+    m_camera->InitBullet();  // init ni camera range
 
     m_rootSignature.AddStaticSampler(
         AquaEngine::RootSignature::DefaultStaticSampler()
@@ -57,6 +52,37 @@ void GameView::Init(AquaEngine::Command &command)
     if (FAILED(hr))
     {
         std::println("failed to create pipeline state");
+        exit(-1);
+    }
+
+    auto &bullet_manager
+        = AquaEngine::GlobalDescriptorHeapManager::GetShaderHeapManager(
+            D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+            "bullet"
+        );
+    m_bulletRootSignature.SetDescriptorHeapSegmentManager(&manager);
+    hr = m_bulletRootSignature.Create();
+    if (FAILED(hr))
+    {
+        std::println("failed to create bullet root signature");
+        exit(-1);
+    }
+
+    AquaEngine::ShaderObject bullet_vs, bullet_ps;
+    bullet_vs.Load(L"shaders/bullet.hlsl", "vs", "vs_5_0");
+    bullet_ps.Load(L"shaders/bullet.hlsl", "ps", "ps_5_0");
+
+    m_bulletPipelineState.SetRootSignature(&m_bulletRootSignature);
+    m_bulletPipelineState.SetVertexShader(&bullet_vs);
+    m_bulletPipelineState.SetPixelShader(&bullet_ps);
+    m_bulletPipelineState.SetInputLayout(
+        model_input_element.data(),
+        model_input_element.size()
+    );
+    hr = m_bulletPipelineState.Create();
+    if (FAILED(hr))
+    {
+        std::println("failed to create bullet pipeline state");
         exit(-1);
     }
 }
@@ -127,6 +153,54 @@ void GameView::CreateModels(
     m_playerModel2.SetTextureSegments(texture_segment, 1);
     m_playerModel2.SetMaterialSegments(material_segment, 1);
 
+    auto &bullet_manager
+        = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
+            "bullet",
+            5 * Player::BULLET_COUNT,
+            D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
+        );
+
+    auto bullet_matrix_segment
+        = std::make_shared<AquaEngine::DescriptorHeapSegment>(
+            bullet_manager.Allocate(Player::BULLET_COUNT * 2)
+        );
+    auto bullet_matrix_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
+        D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
+        1,
+        1,
+        0,
+        D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
+    );
+    bullet_matrix_segment->SetRootParameter(
+        D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
+        D3D12_SHADER_VISIBILITY_ALL,
+        std::move(bullet_matrix_range),
+        1
+    );
+
+    auto bullet_material_segment
+        = std::make_shared<AquaEngine::DescriptorHeapSegment>(
+            bullet_manager.Allocate(Player::BULLET_COUNT * 2)
+        );
+    auto bullet_material_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
+        D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
+        1,
+        2,
+        0,
+        D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
+    );
+    bullet_material_segment->SetRootParameter(
+        D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
+        D3D12_SHADER_VISIBILITY_ALL,
+        std::move(bullet_material_range),
+        1
+    );
+
+    m_playerModel1.SetBulletMatrixSegments(bullet_matrix_segment, 0);
+    m_playerModel1.SetBulletMaterialSegments(bullet_material_segment, 0);
+    m_playerModel2.SetBulletMatrixSegments(bullet_matrix_segment, 1);
+    m_playerModel2.SetBulletMaterialSegments(bullet_material_segment, 1);
+
     m_playerModel1.Scale(DEFAULT_SCALE, DEFAULT_SCALE, DEFAULT_SCALE);
     m_playerModel2.Scale(DEFAULT_SCALE, DEFAULT_SCALE, DEFAULT_SCALE);
     m_playerModel1.Move(
@@ -166,6 +240,9 @@ void GameView::CreateModels(
             z_dist(mt) * 100.0f - 500.0f
         );
     }
+
+    // m_playerModel1.PlayThurasterAction();
+    // SetTimer(m_hwnd, TIMER_MODEL1, m_playerModel1.GetFrameCount(), nullptr);
 }
 
 void GameView::CreateSkyBox(AquaEngine::Command &command)
@@ -214,8 +291,14 @@ void GameView::Render(AquaEngine::Command &command)
 
     for (int i = 0; i < m_asteroids.size(); ++i)
     {
-        m_asteroids[i].Render(command);
+        // m_asteroids[i].Render(command);
     }
+
+    m_bulletRootSignature.SetToCommand(command);
+    m_bulletPipelineState.SetToCommand(command);
+    m_camera->RenderBullet(command);
+    m_playerModel1.RenderBullet(command);
+    m_playerModel2.RenderBullet(command);
 }
 
 void GameView::Timer(int id) const
