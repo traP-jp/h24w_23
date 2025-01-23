@@ -3,9 +3,7 @@
 #include <random>
 
 GameView::GameView(HWND hwnd, RECT rc)
-    : m_hwnd(hwnd)
-    , m_rc(rc)
-    , m_isPlayer1(false)
+    : m_hwnd(hwnd), m_rc(rc), m_isPlayer1(false)
 {
 }
 
@@ -144,8 +142,8 @@ void GameView::CreateModels(
 
     std::mt19937 mt(std::random_device{}());
     std::gamma_distribution<> x_dist(2.0f, 3.1f);
-    //std::gamma_distribution<> y_dist(2.0f, 2.9f);
-    //std::gamma_distribution<> z_dist(1.8f, 7.0f);
+    // std::gamma_distribution<> y_dist(2.0f, 2.9f);
+    // std::gamma_distribution<> z_dist(1.8f, 7.0f);
     std::uniform_real_distribution<> y_dist(0.0f, 10.0f);
     std::uniform_real_distribution<> z_dist(0.0f, 10.0f);
     std::gamma_distribution<> scale_dist(1.0f, 3.0f);
@@ -224,28 +222,28 @@ void GameView::Timer(int id) const
 {
     switch (id)
     {
-    case TIMER_MODEL1:
-        m_playerModel1.Timer();
-        break;
+        case TIMER_MODEL1:
+            m_playerModel1.Timer();
+            break;
 
-    case TIMER_MODEL2:
-        m_playerModel2.Timer();
-        break;
+        case TIMER_MODEL2:
+            m_playerModel2.Timer();
+            break;
 
-    case TIMER_FRAME:
-    {
-        m_playerModel1.Frame();
-        m_playerModel2.Frame();
+        case TIMER_FRAME:
+        {
+            m_playerModel1.Frame();
+            m_playerModel2.Frame();
 
-        DirectX::XMVECTOR dr
-            = (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
-            .GetDrForCamera();
-        m_camera->Move(dr);
-        break;
-    }
+            DirectX::XMVECTOR dr
+                = (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
+                      .GetDrForCamera();
+            m_camera->Move(dr);
+            break;
+        }
 
-    default:
-        break;
+        default:
+            break;
     }
 }
 
