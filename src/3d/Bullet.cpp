@@ -42,7 +42,10 @@ void Bullet::ImportModel(AquaEngine::Command& command)
 
 void Bullet::CreateEffect(const Effekseer::ManagerRef& manager)
 {
-    m_effect = Effekseer::Effect::Create(manager, u"resources/effects/tyakudan.efkefc");
+    m_effect = Effekseer::Effect::Create(
+        manager,
+        u"resources/effects/tyakudan.efkefc"
+    );
     if (m_effect == nullptr)
     {
         std::cout << "effect is null" << std::endl;
