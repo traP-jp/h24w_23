@@ -25,7 +25,7 @@ public:
 
     void Render(AquaEngine::Command &command);
 
-    void Timer(int id) const;
+    void Timer(int id);
 
     void StartAnimation();
 

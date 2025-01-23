@@ -40,6 +40,14 @@ public:
         int index  // this is bullet index
     );
 
+    void CreateEffect(const Effekseer::ManagerRef &manager)
+    {
+        for (int i = 0; i < m_bullets.size(); ++i)
+        {
+            m_bullets[i].CreateEffect(manager);
+        }
+    }
+
     void Move(float dx, float dy, float dz) const;
 
     void Scale(float x, float y, float z) const;
@@ -150,11 +158,11 @@ public:
 
     void SetMatrix(const DirectX::XMMATRIX &matrix) const;
 
-    bool IsHit(DirectX::XMVECTOR position) const
+    bool IsHit(DirectX::XMVECTOR position, const Effekseer::ManagerRef &manager)
     {
         for (int i = 0; i < m_bullets.size(); ++i)
         {
-            if (m_bullets[i].IsHit(position, RADIUS))
+            if (m_bullets[i].IsHit(position, RADIUS, manager))
             {
                 return true;
             }

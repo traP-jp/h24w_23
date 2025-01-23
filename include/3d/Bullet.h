@@ -54,7 +54,11 @@ public:
         m_model->Move(dx, dy, dz);
     }
 
-    bool IsHit(DirectX::XMVECTOR position, float radius) const
+    bool IsHit(
+        DirectX::XMVECTOR position,
+        float radius,
+        const Effekseer::ManagerRef &manager
+    )
     {
         if (!m_isActive)
         {
@@ -65,15 +69,44 @@ public:
         float length
             = DirectX::XMVectorGetX(DirectX::XMVector3Length(distance));
 
+        if (length < radius)
+        {
+            PlayEffect(manager);
+            m_isActive = false;
+        }
+
         return length < radius;
+    }
+
+    void PlayEffect(const Effekseer::ManagerRef &manager)
+    {
+        if (!m_isActive || m_isEffectActive)
+        {
+            return;
+        }
+        DirectX::XMVECTOR position = m_model->GetPos();
+        m_handle = manager->Play(m_effect, 0, 0, 0);
+        manager->SetLocation(
+            m_handle,
+            DirectX::XMVectorGetX(position),
+            DirectX::XMVectorGetY(position),
+            DirectX::XMVectorGetZ(position)
+        );
+        manager->SetScale(m_handle, EFFECT_SCALE, EFFECT_SCALE, EFFECT_SCALE);
+
+        m_isEffectActive = true;
+
+        std::cout << "play effect" << std::endl;
     }
 
 private:
     static constexpr float VELOCITY = 1.0f;
     static constexpr float DEFAULT_SCALE = 0.5f;
+    static constexpr float EFFECT_SCALE = 0.25f;
 
     std::unique_ptr<AquaEngine::FBXModel> m_model;
     bool m_isActive = false;
+    bool m_isEffectActive = false;
 
     Effekseer::EffectRef m_effect = nullptr;
     Effekseer::Handle m_handle = 0;

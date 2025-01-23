@@ -45,6 +45,7 @@ void Bullet::CreateEffect(const Effekseer::ManagerRef& manager)
     m_effect = Effekseer::Effect::Create(
         manager,
         u"resources/effects/tyakudan.efkefc"
+        // u"resources/effects/Laser01.efkefc"
     );
     if (m_effect == nullptr)
     {

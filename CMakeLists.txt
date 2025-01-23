@@ -16,7 +16,9 @@ macro(create_executable files)
             file(COPY ${src} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shaders)
         endif ()
         if (LOCAL_BUILD)
-            if (src MATCHES ".*\\.(fbx|png)$")
+            if (src MATCHES ".*Texture.*\\.png$")
+                file(COPY ${src} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/effects/Texture)
+            elseif (src MATCHES ".*\\.(fbx|png)$")
                 file(COPY ${src} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/models)
             endif ()
             if (src MATCHES ".*\\.hdr$")
@@ -131,6 +133,9 @@ set(resources
         resources/textures/space.hdr
         resources/textures/sample1.hdr
         resources/effects/tyakudan.efkefc
+        resources/effects/Texture/ef_common_flashlight01_t.png
+        resources/effects/Texture/Star.png
+        resources/effects/Texture/tex_eff_light02.png
         shaders/main.hlsl
         shaders/renderTarget.hlsl
         shaders/skybox.hlsl

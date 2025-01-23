@@ -9,14 +9,18 @@ class EffectManager
 {
 public:
     void Init(AquaEngine::Command &command);
-    void SetCamera(std::shared_ptr<AquaEngine::Camera> camera);
+    void SetCamera(const std::shared_ptr<AquaEngine::Camera> &camera);
+    void Render(
+        AquaEngine::Command &command,
+        const std::shared_ptr<AquaEngine::Camera> &camera
+    );
 
     Effekseer::ManagerRef GetManager() const
     {
         return m_manager;
     }
 
-    void UpdateCamera(std::shared_ptr<AquaEngine::Camera> camera);
+    void UpdateCamera(const std::shared_ptr<AquaEngine::Camera> &camera);
 
 private:
     EffekseerRenderer::RendererRef m_renderer = nullptr;

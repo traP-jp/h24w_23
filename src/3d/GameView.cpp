@@ -88,6 +88,9 @@ void GameView::Init(AquaEngine::Command &command)
 
     m_effectManager.Init(command);
     m_effectManager.SetCamera(m_camera->GetCamera());
+
+    m_playerModel1.CreateEffect(m_effectManager.GetManager());
+    m_playerModel2.CreateEffect(m_effectManager.GetManager());
 }
 
 void GameView::CreateModels(
@@ -314,9 +317,11 @@ void GameView::Render(AquaEngine::Command &command)
     m_camera->RenderBullet(command);
     m_playerModel1.RenderBullet(command);
     m_playerModel2.RenderBullet(command);
+
+    m_effectManager.Render(command, m_camera->GetCamera());
 }
 
-void GameView::Timer(int id) const
+void GameView::Timer(int id)
 {
     switch (id)
     {
@@ -342,8 +347,9 @@ void GameView::Timer(int id) const
                 = (m_isPlayer1 ? m_playerModel2 : m_playerModel1)
                       .GetTransformMatrix();
             DirectX::XMVECTOR partner_position = partner_transform.r[3];
-            bool hit = (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
-                           .IsHit(partner_position);
+            bool hit
+                = (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
+                      .IsHit(partner_position, m_effectManager.GetManager());
             if (hit)
             {
                 std::cout << "hit" << std::endl;
