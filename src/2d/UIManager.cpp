@@ -39,7 +39,9 @@ void UIManager::Init(AquaEngine::Command& command)
 
     m_guide = std::make_unique<UIComponent>();
     m_guide->Init(texture_segment, 0, matrix_segment, 0, "resources/models/UI1.png", command);
-    m_guide->SetAlpha(0.1f);
+    m_guide->SetAlpha(0.4f);
+    m_guide->SetScale(0.6f, 1.0f);
+    m_guide->SetColor(0.8f, 0.8f, 0.8f);
 
     m_pointer = std::make_unique<UIComponent>();
     m_pointer->Init(texture_segment, 1, matrix_segment, 1, "resources/models/UI3.png", command);
@@ -47,8 +49,8 @@ void UIManager::Init(AquaEngine::Command& command)
 
     m_target = std::make_unique<UIComponent>();
     m_target->Init(texture_segment, 2, matrix_segment, 2, "resources/models/UI4.png", command);
-    m_target->SetScale(0.25f, 0.4f);
-    m_target->SetColor(1.0f, 0.0f, 0.0f);
+    m_target->SetScale(0.20f, 0.32f);
+    m_target->SetColor(0.0f, 0.0f, 1.0f);
 
     m_rootSignature.AddStaticSampler(AquaEngine::RootSignature::DefaultStaticSampler());
     m_rootSignature.SetDescriptorHeapSegmentManager(&manager);

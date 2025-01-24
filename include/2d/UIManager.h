@@ -21,6 +21,21 @@ public:
         m_target->SetPosition(x, y);
     }
 
+    void SetTargetRotation(float angle)
+    {
+        m_target->Rotate(angle);
+    }
+
+    void SetTargetRotateAndSinScale(float angle)
+    {
+        m_target->RotateAndSinScale(angle);
+    }
+
+    void SetTargetColor(float r, float g, float b)
+    {
+        m_target->SetColor(r, g, b);
+    }
+
 private:
     AquaEngine::RootSignature m_rootSignature;
     AquaEngine::PipelineState m_pipelineState;

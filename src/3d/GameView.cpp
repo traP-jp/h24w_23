@@ -334,6 +334,7 @@ void GameView::Timer(int id)
             camera_y = DirectX::XMVector3Normalize(camera_y);
             camera_z = DirectX::XMVector3Normalize(camera_z);
             DirectX::XMVECTOR camera_x = DirectX::XMVector3Cross(camera_y, camera_z);
+            camera_x = DirectX::XMVector3Normalize(camera_x);
             DirectX::XMMATRIX camera_translate = DirectX::XMMatrixIdentity();
             camera_translate.r[0].m128_f32[0] = DirectX::XMVectorGetX(camera_x);
             camera_translate.r[1].m128_f32[0] = DirectX::XMVectorGetY(camera_x);
@@ -345,46 +346,91 @@ void GameView::Timer(int id)
             camera_translate.r[1].m128_f32[2] = DirectX::XMVectorGetY(camera_z);
             camera_translate.r[2].m128_f32[2] = DirectX::XMVectorGetZ(camera_z);
 
-            DirectX::XMVECTOR v = DirectX::XMVector3Transform(
-                DirectX::XMVector3Transform(
+            DirectX::XMVECTOR v = XMVector3Transform(
+                XMVector3Transform(
                     (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection(),
                     camera_translate
                 ),
                 m_camera->GetCamera()->GetProjection()
             );
-            DirectX::XMVECTOR v0 = DirectX::XMVector3Transform(
-                DirectX::XMVector3Transform(
-                    DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f),
-                    camera_translate
-                ),
+            DirectX::XMVECTOR v0 = XMVector3Transform(
+                XMVector3Transform(DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f), camera_translate),
                 m_camera->GetCamera()->GetProjection()
             );
             DirectX::XMVECTOR pos_def
                 = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetMatrix().r[3];
             DirectX::XMFLOAT3 camera_pos = m_camera->GetCamera()->GetEye();
-            DirectX::XMVECTOR pos = DirectX::XMVector3Transform(
-                DirectX::XMVector3Transform(
-                    pos_def - DirectX::XMLoadFloat3(&camera_pos),
-                    camera_translate
-                ),
+            DirectX::XMVECTOR pos = XMVector3Transform(
+                XMVector3Transform(pos_def - XMLoadFloat3(&camera_pos), camera_translate),
                 m_camera->GetCamera()->GetProjection()
             );
 
-            std::cout << "v - v0 : "
-                      << DirectX::XMVectorGetX(v) / DirectX::XMVectorGetW(v)
-                             - DirectX::XMVectorGetX(v0)
-                      << ", "
-                      << DirectX::XMVectorGetY(v) / DirectX::XMVectorGetW(v)
-                             - DirectX::XMVectorGetY(v0)
-                      << std::endl;
-            std::cout << "pos: " << DirectX::XMVectorGetX(pos) / DirectX::XMVectorGetW(pos) << ", "
-                      << DirectX::XMVectorGetY(pos) / DirectX::XMVectorGetW(pos) << std::endl;
+            // std::cout << "v - v0 : "
+            //           << DirectX::XMVectorGetX(v) / DirectX::XMVectorGetW(v)
+            //                  - DirectX::XMVectorGetX(v0)
+            //           << ", "
+            //           << DirectX::XMVectorGetY(v) / DirectX::XMVectorGetW(v)
+            //                  - DirectX::XMVectorGetY(v0)
+            //           << std::endl;
+            // std::cout << "pos: " << DirectX::XMVectorGetX(pos) / DirectX::XMVectorGetW(pos) << ",
+            // "
+            //           << DirectX::XMVectorGetY(pos) / DirectX::XMVectorGetW(pos) << std::endl;
             m_uiManager.SetPointerPosition(
-                (DirectX::XMVectorGetX(v) / DirectX::XMVectorGetW(v) - DirectX::XMVectorGetX(v0)
-                 + DirectX::XMVectorGetX(pos) / DirectX::XMVectorGetW(pos)),
-                (DirectX::XMVectorGetY(v) / DirectX::XMVectorGetW(v) - DirectX::XMVectorGetY(v0)
-                 + DirectX::XMVectorGetY(pos) / DirectX::XMVectorGetW(pos))
+                DirectX::XMVectorGetX(v) / DirectX::XMVectorGetW(v) - DirectX::XMVectorGetX(v0)
+                    + DirectX::XMVectorGetX(pos) / DirectX::XMVectorGetW(pos),
+                DirectX::XMVectorGetY(v) / DirectX::XMVectorGetW(v) - DirectX::XMVectorGetY(v0)
+                    + DirectX::XMVectorGetY(pos) / DirectX::XMVectorGetW(pos)
             );
+
+            DirectX::XMVECTOR pertner_pos = XMVector3Transform(
+                XMVector3Transform(partner_position - XMLoadFloat3(&camera_pos), camera_translate),
+                // m_camera->GetCamera()->GetProjection()
+                DirectX::XMMatrixIdentity()
+            );
+            DirectX::XMVECTOR pertner_vp = XMVector3Transform(
+                DirectX::XMVector3Transform(partner_position, m_camera->GetCamera()->GetView()),
+                m_camera->GetCamera()->GetProjection()
+            );
+            // std::cout << " partner pos: "
+            //           << DirectX::XMVectorGetX(pertner_pos) / DirectX::XMVectorGetW(pertner_pos)
+            //           << ", "
+            //           << DirectX::XMVectorGetY(pertner_pos) / DirectX::XMVectorGetW(pertner_pos)
+            //           //          << std::endl;
+            //           // std::cout
+            //           << " pertner position: "
+            //           << DirectX::XMVectorGetX(partner_position - XMLoadFloat3(&camera_pos)) <<
+            //           ", "
+            //           << DirectX::XMVectorGetY(partner_position - XMLoadFloat3(&camera_pos)) <<
+            //           ", "
+            //           << DirectX::XMVectorGetZ(partner_position - XMLoadFloat3(&camera_pos))
+            //           //           << std::endl;
+            //           // std::cout
+            //           << " camera pos: " << DirectX::XMVectorGetX(XMLoadFloat3(&camera_pos)) <<
+            //           ","
+            //           << DirectX::XMVectorGetY(XMLoadFloat3(&camera_pos)) << ", "
+            //           << DirectX::XMVectorGetZ(XMLoadFloat3(&camera_pos)) << std::endl;
+            // m_uiManager.SetTargetPosition(
+            //     DirectX::XMVectorGetX(pertner_pos) / DirectX::XMVectorGetW(pertner_pos) + 0.5f,
+            //     DirectX::XMVectorGetY(pertner_pos) / DirectX::XMVectorGetW(pertner_pos) + 0.5f
+            // );
+            float target_x
+                = DirectX::XMVectorGetX(pertner_pos) / DirectX::XMVectorGetW(pertner_pos) * 2.0f;
+            float target_y
+                = DirectX::XMVectorGetY(pertner_pos) / DirectX::XMVectorGetW(pertner_pos) * 3.0f
+                  + 3.9f;
+            if (abs(target_x) > 5.0f || abs(target_y) > 3.0f)
+            {
+                target_x /= max(abs(target_x) / 5.0f, abs(target_y) / 3.0f);
+                target_y /= max(abs(target_x) / 5.0f, abs(target_y) / 3.0f);
+                m_uiManager.SetTargetColor(1.0f, 0.0f, 0.0f);
+                m_uiManager.SetTargetRotation(0.1f);
+            }
+            else
+            {
+                m_uiManager.SetTargetColor(0.0f, 0.0f, 1.0f);
+                m_uiManager.SetTargetRotateAndSinScale(0.1f);
+            }
+            m_uiManager.SetTargetPosition(target_x, target_y);
 
             break;
         }

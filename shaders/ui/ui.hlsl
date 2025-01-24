@@ -7,7 +7,7 @@ struct PS_Input
 cbuffer Data : register(b0)
 {
     matrix transform;
-    float3 color;
+    float4 color;
 };
 
 PS_Input vs(float4 pos : POSITION, float2 uv : TEXCOORD)
@@ -23,5 +23,5 @@ SamplerState samp : register(s0);
 
 float4 ps(PS_Input psIn) : SV_TARGET
 {
-    return ui.Sample(samp, psIn.uv) * float4(color, 1.0f);
+    return ui.Sample(samp, psIn.uv) * float4(color);
 }

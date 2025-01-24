@@ -44,9 +44,9 @@ void UIComponent::Render(AquaEngine::Command& command)
 
 void UIComponent::SetPosition(float x, float y)
 {
-    m_data.matrix = DirectX::XMMatrixTranslation(x, y, 0.0f)
-                    * DirectX::XMMatrixScaling(m_scaleX, m_scaleY, 1.0f);
-    m_dataBuffer.GetMappedBuffer()->matrix = m_data.matrix;
+    m_x = x;
+    m_y = y;
+    UpdateMatrix();
 }
 
 void UIComponent::SetColor(float r, float g, float b)
@@ -59,6 +59,13 @@ void UIComponent::SetScale(float x, float y)
 {
     m_scaleX = x;
     m_scaleY = y;
-    m_data.matrix *= DirectX::XMMatrixScaling(x, y, 1.0f);
+    UpdateMatrix();
+}
+
+void UIComponent::UpdateMatrix()
+{
+    m_data.matrix
+        = DirectX::XMMatrixRotationZ(m_angle) * DirectX::XMMatrixTranslation(m_x, m_y, 0.0f)
+          * DirectX::XMMatrixScaling(m_scaleX * m_afterScale, m_scaleY * m_afterScale, 1.0f);
     m_dataBuffer.GetMappedBuffer()->matrix = m_data.matrix;
 }
