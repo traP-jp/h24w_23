@@ -91,6 +91,8 @@ void GameView::Init(AquaEngine::Command &command)
 
     m_playerModel1.CreateEffect(m_effectManager.GetManager());
     m_playerModel2.CreateEffect(m_effectManager.GetManager());
+
+    CreateUI(command);
 }
 
 void GameView::CreateModels(
@@ -294,6 +296,11 @@ void GameView::CreateSkyBox(AquaEngine::Command &command)
     m_skyBox->Scale(100000.0f, 100000.0f, 100000.0f);
 }
 
+void GameView::CreateUI(AquaEngine::Command &command)
+{
+    m_uiManager.Init(command);
+}
+
 void GameView::Render(AquaEngine::Command &command)
 {
     // m_playerModel1.RotY(0.01f);
@@ -319,6 +326,8 @@ void GameView::Render(AquaEngine::Command &command)
     m_playerModel2.RenderBullet(command);
 
     m_effectManager.Render(command, m_camera->GetCamera());
+
+    m_uiManager.Render(command);
 }
 
 void GameView::Timer(int id)
@@ -354,6 +363,46 @@ void GameView::Timer(int id)
             {
                 std::cout << "hit" << std::endl;
             }
+
+            DirectX::XMVECTOR v = DirectX::XMVector3Transform(
+                DirectX::XMVector3Transform(
+                    m_playerModel2.GetDirection(),
+                    m_camera->GetCamera()->GetView()
+                ),
+                m_camera->GetCamera()->GetProjection()
+                // DirectX::XMMatrixIdentity()
+            );
+            DirectX::XMVECTOR v0 = DirectX::XMVector3Transform(
+                DirectX::XMVector3Transform(
+                    DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f),
+                    m_camera->GetCamera()->GetView()
+                ),
+                m_camera->GetCamera()->GetProjection()
+                // DirectX::XMMatrixIdentity()
+            );
+            DirectX::XMVECTOR pos = DirectX::XMVector3Transform(
+                DirectX::XMVector3Transform(
+                    m_playerModel2.GetMatrix().r[3],
+                    m_camera->GetCamera()->GetView()
+                ),
+                m_camera->GetCamera()->GetProjection()
+                // DirectX::XMMatrixIdentity()
+            );
+            std::cout << "v - v0: "
+                      << DirectX::XMVectorGetX(v) / DirectX::XMVectorGetW(v)
+                             - DirectX::XMVectorGetX(v0)
+                                   / DirectX::XMVectorGetW(v0)
+                      << ", "
+                      << DirectX::XMVectorGetY(v) / DirectX::XMVectorGetW(v)
+                             - DirectX::XMVectorGetY(v0)
+                                   / DirectX::XMVectorGetW(v0)
+                      << std::endl;
+
+            std::cout << "pos: "
+                      << DirectX::XMVectorGetX(pos) / DirectX::XMVectorGetW(pos)
+                      << ", "
+                      << DirectX::XMVectorGetY(pos) / DirectX::XMVectorGetW(pos)
+                      << std::endl;
             break;
         }
 

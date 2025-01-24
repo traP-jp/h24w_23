@@ -9,6 +9,9 @@
 
 #include <memory>
 
+#include "2d/Guide.h"
+#include "2d/Pointer.h"
+#include "2d/UIManager.h"
 #include "Asteroid.h"
 #include "Camera.h"
 #include "EffectManager.h"
@@ -126,6 +129,8 @@ private:
     AquaEngine::PipelineState m_bulletPipelineState;
     AquaEngine::RootSignature m_bulletRootSignature;
 
+    UIManager m_uiManager;
+
     bool m_isPlayer1;
 
     void CreateModels(
@@ -134,6 +139,8 @@ private:
     );
 
     void CreateSkyBox(AquaEngine::Command &command);
+
+    void CreateUI(AquaEngine::Command &command);
 
     float angle = 0.0f;
 

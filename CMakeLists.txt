@@ -76,6 +76,8 @@ set(src_files
         src/2d/D2DEngine.cpp
         src/2d/Title.cpp
         src/2d/Guide.cpp
+        src/2d/Pointer.cpp
+        src/2d/UIManager.cpp
         src/network/Network.cpp
 )
 
@@ -93,6 +95,8 @@ set(include_files
         include/2d/D2DEngine.h
         include/2d/Title.h
         include/2d/Guide.h
+        include/2d/Pointer.h
+        include/2d/UIManager.h
         include/network/Network.h
 )
 
@@ -149,7 +153,7 @@ set(resources
         shaders/skybox.hlsl
         shaders/cubemap.hlsl
         shaders/bullet.hlsl
-        shaders/ui/ui1.hlsl
+        shaders/ui/ui.hlsl
 )
 
 create_executable(${src_files} ${include_files} ${resources})

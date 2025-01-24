@@ -7,14 +7,14 @@
 class Guide
 {
 public:
-    void Init(AquaEngine::Command &command);
+    void Init(
+        AquaEngine::Command &command,
+        AquaEngine::DescriptorHeapSegmentManager &manager
+    );
     void Render(AquaEngine::Command &command);
 
 private:
     std::unique_ptr<AquaEngine::RectangleTexture> m_rectangle;
-
-    AquaEngine::RootSignature m_rootSignature;
-    AquaEngine::PipelineState m_pipelineState;
 };
 
 #endif  // GUIDE_H
