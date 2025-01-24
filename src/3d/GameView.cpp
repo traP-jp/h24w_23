@@ -366,7 +366,8 @@ void GameView::Timer(int id)
 
             DirectX::XMVECTOR v = XMVector3Transform(
                 XMVector3Transform(
-                    (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection(),
+                    (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
+                        .GetDirection(),
                     m_camera->GetCamera()->GetView()
                 ),
                 m_camera->GetCamera()->GetProjection()
@@ -380,7 +381,9 @@ void GameView::Timer(int id)
             );
             DirectX::XMVECTOR pos = XMVector3Transform(
                 XMVector3Transform(
-                    (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetMatrix().r[3],
+                    (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
+                        .GetMatrix()
+                        .r[3],
                     m_camera->GetCamera()->GetView()
                 ),
                 m_camera->GetCamera()->GetProjection()
