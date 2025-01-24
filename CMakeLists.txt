@@ -75,6 +75,7 @@ set(src_files
         src/3d/EffectManager.cpp
         src/2d/D2DEngine.cpp
         src/2d/Title.cpp
+        src/2d/Guide.cpp
         src/network/Network.cpp
 )
 
@@ -91,6 +92,7 @@ set(include_files
         include/3d/EffectManager.h
         include/2d/D2DEngine.h
         include/2d/Title.h
+        include/2d/Guide.h
         include/network/Network.h
 )
 
@@ -136,11 +138,18 @@ set(resources
         resources/effects/Texture/ef_common_flashlight01_t.png
         resources/effects/Texture/Star.png
         resources/effects/Texture/tex_eff_light02.png
+        resources/UI/UI1.png
+        resources/UI/UI3.png
+        resources/UI/UI4.png
+        resources/UI/UI2/UI2_alpha1.png
+        resources/UI/UI2/UI2_alpha2.png
+        resources/UI/UI2/UI2_fbx.fbx
         shaders/main.hlsl
         shaders/renderTarget.hlsl
         shaders/skybox.hlsl
         shaders/cubemap.hlsl
         shaders/bullet.hlsl
+        shaders/ui/ui1.hlsl
 )
 
 create_executable(${src_files} ${include_files} ${resources})
