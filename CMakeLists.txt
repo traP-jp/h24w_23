@@ -75,9 +75,8 @@ set(src_files
         src/3d/EffectManager.cpp
         src/2d/D2DEngine.cpp
         src/2d/Title.cpp
-        src/2d/Guide.cpp
-        src/2d/Pointer.cpp
         src/2d/UIManager.cpp
+        src/2d/UIComponent.cpp
         src/network/Network.cpp
 )
 
@@ -94,9 +93,8 @@ set(include_files
         include/3d/EffectManager.h
         include/2d/D2DEngine.h
         include/2d/Title.h
-        include/2d/Guide.h
-        include/2d/Pointer.h
         include/2d/UIManager.h
+        include/2d/UIComponent.h
         include/network/Network.h
 )
 

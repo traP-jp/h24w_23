@@ -9,8 +9,6 @@
 
 #include <memory>
 
-#include "2d/Guide.h"
-#include "2d/Pointer.h"
 #include "2d/UIManager.h"
 #include "Asteroid.h"
 #include "Camera.h"
