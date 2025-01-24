@@ -62,6 +62,17 @@ void UIManager::Init(AquaEngine::Command& command)
     );
     m_pointer->SetColor(1.0f, 0.0f, 0.0f);
 
+    m_target = std::make_unique<UIComponent>();
+    m_target->Init(
+        texture_segment,
+        2,
+        matrix_segment,
+        2,
+        "resources/models/UI4.png",
+        command
+    );
+    m_target->SetScale(0.25f, 0.4f);
+
     m_rootSignature.AddStaticSampler(
         AquaEngine::RootSignature::DefaultStaticSampler()
     );
@@ -110,5 +121,6 @@ void UIManager::Render(AquaEngine::Command& command)
     m_rootSignature.SetToCommand(command);
 
     m_guide->Render(command);
+    m_target->Render(command);
     m_pointer->Render(command);
 }

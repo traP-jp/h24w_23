@@ -22,6 +22,7 @@ private:
 
     std::unique_ptr<UIComponent> m_guide;
     std::unique_ptr<UIComponent> m_pointer;
+    std::unique_ptr<UIComponent> m_target;
 };
 
 #endif  // UIMANAGER_H

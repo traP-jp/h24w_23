@@ -25,6 +25,7 @@ public:
 
     void SetPosition(float x, float y);
     void SetColor(float r, float g, float b);
+    void SetScale(float x, float y);
 
 private:
     struct Data
@@ -38,6 +39,8 @@ private:
     AquaEngine::ConstantBufferView m_dataCBV;
 
     Data m_data;
+    float m_scaleX;
+    float m_scaleY;
 };
 
 #endif  // UICOMPONENT_H

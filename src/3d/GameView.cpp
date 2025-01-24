@@ -396,7 +396,7 @@ void GameView::Timer(int id)
                 = DirectX::XMVectorGetY(v) / DirectX::XMVectorGetW(v) * 2.0f
                   - DirectX::XMVectorGetY(v0) / DirectX::XMVectorGetW(v0) * 2.0f
                   + DirectX::XMVectorGetY(pos) / DirectX::XMVectorGetW(pos);
-            m_uiManager.SetPointerPosition(pointer_x, pointer_y);
+            // m_uiManager.SetPointerPosition(pointer_x, pointer_y);
             break;
         }
 
