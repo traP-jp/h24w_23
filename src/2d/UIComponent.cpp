@@ -21,14 +21,13 @@ void UIComponent::Init(
 
     m_data.color = {1.0f, 1.0f, 1.0f};
     m_data.matrix = DirectX::XMMatrixIdentity();
+    m_data.alpha = 1.0f;
 
     m_dataBuffer.Create(BUFFER_DEFAULT(
-        AquaEngine::AlignmentSize(
-            sizeof(Data),
-            D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT
-        )
+        AquaEngine::AlignmentSize(sizeof(Data), D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT)
     ));
     m_dataBuffer.GetMappedBuffer()->color = m_data.color;
+    m_dataBuffer.GetMappedBuffer()->alpha = m_data.alpha;
     m_dataBuffer.GetMappedBuffer()->matrix = m_data.matrix;
 
     m_dataCBV.SetDescriptorHeapSegment(matrix_segment, matrix_offset);
@@ -61,4 +60,5 @@ void UIComponent::SetScale(float x, float y)
     m_scaleX = x;
     m_scaleY = y;
     m_data.matrix *= DirectX::XMMatrixScaling(x, y, 1.0f);
+    m_dataBuffer.GetMappedBuffer()->matrix = m_data.matrix;
 }

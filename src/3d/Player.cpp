@@ -95,8 +95,8 @@ void Player::ImportModel(AquaEngine::Command &command)
     m_models[6]->Create();
 
     m_models[7] = std::make_unique<AquaEngine::FBXModel>(
-        //"resources/models/thuraster.fbx",
-        "resources/models/thuraster_noanim.fbx",
+        "resources/models/thuraster.fbx",
+        //"resources/models/thuraster_noanim.fbx",
         "resources/models/thuraster_diff_tex.png",
         //"resources/models/player_tex.png",
         command

@@ -2,19 +2,19 @@
 
 #include <random>
 
-GameView::GameView(HWND hwnd, RECT rc)
-    : m_hwnd(hwnd), m_rc(rc), m_isPlayer1(false)
+using DirectX::operator-;
+
+GameView::GameView(HWND hwnd, RECT rc) : m_hwnd(hwnd), m_rc(rc), m_isPlayer1(false)
 {
 }
 
 void GameView::Init(AquaEngine::Command &command)
 {
-    auto &manager
-        = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
-            "main_game",
-            1000,
-            D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
-        );
+    auto &manager = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
+        "main_game",
+        1000,
+        D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
+    );
 
     m_camera = std::make_unique<Camera>(m_rc, m_isPlayer1);
     m_camera->Init();  // init ni camera range
@@ -26,9 +26,7 @@ void GameView::Init(AquaEngine::Command &command)
 
     m_camera->InitBullet();  // init ni camera range
 
-    m_rootSignature.AddStaticSampler(
-        AquaEngine::RootSignature::DefaultStaticSampler()
-    );
+    m_rootSignature.AddStaticSampler(AquaEngine::RootSignature::DefaultStaticSampler());
     m_rootSignature.SetDescriptorHeapSegmentManager(&manager);
     HRESULT hr = m_rootSignature.Create();
     if (FAILED(hr))
@@ -44,10 +42,7 @@ void GameView::Init(AquaEngine::Command &command)
     m_pipelineState.SetRootSignature(&m_rootSignature);
     m_pipelineState.SetVertexShader(&vs);
     m_pipelineState.SetPixelShader(&ps);
-    m_pipelineState.SetInputLayout(
-        model_input_element.data(),
-        model_input_element.size()
-    );
+    m_pipelineState.SetInputLayout(model_input_element.data(), model_input_element.size());
     hr = m_pipelineState.Create();
     if (FAILED(hr))
     {
@@ -55,11 +50,10 @@ void GameView::Init(AquaEngine::Command &command)
         exit(-1);
     }
 
-    auto &bullet_manager
-        = AquaEngine::GlobalDescriptorHeapManager::GetShaderHeapManager(
-            D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
-            "bullet"
-        );
+    auto &bullet_manager = AquaEngine::GlobalDescriptorHeapManager::GetShaderHeapManager(
+        D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+        "bullet"
+    );
     m_bulletRootSignature.SetDescriptorHeapSegmentManager(&bullet_manager);
     hr = m_bulletRootSignature.Create();
     if (FAILED(hr))
@@ -75,10 +69,7 @@ void GameView::Init(AquaEngine::Command &command)
     m_bulletPipelineState.SetRootSignature(&m_bulletRootSignature);
     m_bulletPipelineState.SetVertexShader(&bullet_vs);
     m_bulletPipelineState.SetPixelShader(&bullet_ps);
-    m_bulletPipelineState.SetInputLayout(
-        model_input_element.data(),
-        model_input_element.size()
-    );
+    m_bulletPipelineState.SetInputLayout(model_input_element.data(), model_input_element.size());
     hr = m_bulletPipelineState.Create();
     if (FAILED(hr))
     {
@@ -161,17 +152,15 @@ void GameView::CreateModels(
     m_playerModel2.SetTextureSegments(texture_segment, 1);
     m_playerModel2.SetMaterialSegments(material_segment, 1);
 
-    auto &bullet_manager
-        = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
-            "bullet",
-            5 * Player::BULLET_COUNT,
-            D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
-        );
+    auto &bullet_manager = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
+        "bullet",
+        5 * Player::BULLET_COUNT,
+        D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
+    );
 
-    auto bullet_matrix_segment
-        = std::make_shared<AquaEngine::DescriptorHeapSegment>(
-            bullet_manager.Allocate(Player::BULLET_COUNT * 2)
-        );
+    auto bullet_matrix_segment = std::make_shared<AquaEngine::DescriptorHeapSegment>(
+        bullet_manager.Allocate(Player::BULLET_COUNT * 2)
+    );
     auto bullet_matrix_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
         D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
         1,
@@ -186,10 +175,9 @@ void GameView::CreateModels(
         1
     );
 
-    auto bullet_material_segment
-        = std::make_shared<AquaEngine::DescriptorHeapSegment>(
-            bullet_manager.Allocate(Player::BULLET_COUNT * 2)
-        );
+    auto bullet_material_segment = std::make_shared<AquaEngine::DescriptorHeapSegment>(
+        bullet_manager.Allocate(Player::BULLET_COUNT * 2)
+    );
     auto bullet_material_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
         D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
         1,
@@ -209,26 +197,12 @@ void GameView::CreateModels(
     m_playerModel2.SetBulletMatrixSegments(bullet_matrix_segment, 1);
     m_playerModel2.SetBulletMaterialSegments(bullet_material_segment, 1);
 
-    m_playerModel1.Scale(
-        Player::DEFAULT_SCALE,
-        Player::DEFAULT_SCALE,
-        Player::DEFAULT_SCALE
-    );
-    m_playerModel2.Scale(
-        Player::DEFAULT_SCALE,
-        Player::DEFAULT_SCALE,
-        Player::DEFAULT_SCALE
-    );
-    m_playerModel1.Move(
-        PLAYER1_DEFAULT_POSITION.x,
-        PLAYER1_DEFAULT_POSITION.y,
-        PLAYER1_DEFAULT_POSITION.z
-    );
-    m_playerModel2.Move(
-        PLAYER2_DEFAULT_POSITION.x,
-        PLAYER2_DEFAULT_POSITION.y,
-        PLAYER2_DEFAULT_POSITION.z
-    );
+    m_playerModel1.Scale(Player::DEFAULT_SCALE, Player::DEFAULT_SCALE, Player::DEFAULT_SCALE);
+    m_playerModel2.Scale(Player::DEFAULT_SCALE, Player::DEFAULT_SCALE, Player::DEFAULT_SCALE);
+    m_playerModel1
+        .Move(PLAYER1_DEFAULT_POSITION.x, PLAYER1_DEFAULT_POSITION.y, PLAYER1_DEFAULT_POSITION.z);
+    m_playerModel2
+        .Move(PLAYER2_DEFAULT_POSITION.x, PLAYER2_DEFAULT_POSITION.y, PLAYER2_DEFAULT_POSITION.z);
 
     std::mt19937 mt(std::random_device{}());
     std::gamma_distribution<> x_dist(2.0f, 3.1f);
@@ -243,11 +217,7 @@ void GameView::CreateModels(
         m_asteroids[i].SetMatrixSegments(matrix_segment, i + 16);
         m_asteroids[i].SetTextureSegments(texture_segment, i + 14);
         m_asteroids[i].SetMaterialSegments(material_segment, i + 16);
-        m_asteroids[i].Scale(
-            Player::DEFAULT_SCALE,
-            Player::DEFAULT_SCALE,
-            Player::DEFAULT_SCALE
-        );
+        m_asteroids[i].Scale(Player::DEFAULT_SCALE, Player::DEFAULT_SCALE, Player::DEFAULT_SCALE);
         float scale = scale_dist(mt) * 20.0f;
         if (scale > 200.0f)
         {
@@ -267,13 +237,12 @@ void GameView::CreateModels(
 
 void GameView::CreateSkyBox(AquaEngine::Command &command)
 {
-    auto &skybox_manager
-        = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
-            "skybox",
-            // DONT CHANGE !!!!!
-            10,
-            D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
-        );
+    auto &skybox_manager = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
+        "skybox",
+        // DONT CHANGE !!!!!
+        10,
+        D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
+    );
 
     m_skyBox = std::make_unique<AquaEngine::SkyBox>(
         "resources/textures/space.hdr",
@@ -347,56 +316,76 @@ void GameView::Timer(int id)
             m_playerModel1.Frame();
             m_playerModel2.Frame();
 
-            DirectX::XMVECTOR dr
-                = (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
-                      .GetDrForCamera();
+            DirectX::XMVECTOR dr = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDrForCamera();
             m_camera->Move(dr);
 
             DirectX::XMMATRIX partner_transform
-                = (m_isPlayer1 ? m_playerModel2 : m_playerModel1)
-                      .GetTransformMatrix();
+                = (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetTransformMatrix();
             DirectX::XMVECTOR partner_position = partner_transform.r[3];
-            bool hit
-                = (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
-                      .IsHit(partner_position, m_effectManager.GetManager());
+            bool hit = (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
+                           .IsHit(partner_position, m_effectManager.GetManager());
             if (hit)
             {
                 std::cout << "hit" << std::endl;
             }
 
-            DirectX::XMVECTOR v = XMVector3Transform(
-                XMVector3Transform(
-                    (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
-                        .GetDirection(),
-                    m_camera->GetCamera()->GetView()
+            DirectX::XMVECTOR camera_y = m_camera->GetCamera()->GetUp();
+            DirectX::XMVECTOR camera_z = m_camera->GetCamera()->GetTarget();
+            camera_y = DirectX::XMVector3Normalize(camera_y);
+            camera_z = DirectX::XMVector3Normalize(camera_z);
+            DirectX::XMVECTOR camera_x = DirectX::XMVector3Cross(camera_y, camera_z);
+            DirectX::XMMATRIX camera_translate = DirectX::XMMatrixIdentity();
+            camera_translate.r[0].m128_f32[0] = DirectX::XMVectorGetX(camera_x);
+            camera_translate.r[1].m128_f32[0] = DirectX::XMVectorGetY(camera_x);
+            camera_translate.r[2].m128_f32[0] = DirectX::XMVectorGetZ(camera_x);
+            camera_translate.r[0].m128_f32[1] = DirectX::XMVectorGetX(camera_y);
+            camera_translate.r[1].m128_f32[1] = DirectX::XMVectorGetY(camera_y);
+            camera_translate.r[2].m128_f32[1] = DirectX::XMVectorGetZ(camera_y);
+            camera_translate.r[0].m128_f32[2] = DirectX::XMVectorGetX(camera_z);
+            camera_translate.r[1].m128_f32[2] = DirectX::XMVectorGetY(camera_z);
+            camera_translate.r[2].m128_f32[2] = DirectX::XMVectorGetZ(camera_z);
+
+            DirectX::XMVECTOR v = DirectX::XMVector3Transform(
+                DirectX::XMVector3Transform(
+                    (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection(),
+                    camera_translate
                 ),
                 m_camera->GetCamera()->GetProjection()
             );
-            DirectX::XMVECTOR v0 = XMVector3Transform(
-                XMVector3Transform(
-                    DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f),
-                    m_camera->GetCamera()->GetView()
+            DirectX::XMVECTOR v0 = DirectX::XMVector3Transform(
+                DirectX::XMVector3Transform(
+                    DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f),
+                    camera_translate
                 ),
                 m_camera->GetCamera()->GetProjection()
             );
-            DirectX::XMVECTOR pos = XMVector3Transform(
-                XMVector3Transform(
-                    (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
-                        .GetMatrix()
-                        .r[3],
-                    m_camera->GetCamera()->GetView()
+            DirectX::XMVECTOR pos_def
+                = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetMatrix().r[3];
+            DirectX::XMFLOAT3 camera_pos = m_camera->GetCamera()->GetEye();
+            DirectX::XMVECTOR pos = DirectX::XMVector3Transform(
+                DirectX::XMVector3Transform(
+                    pos_def - DirectX::XMLoadFloat3(&camera_pos),
+                    camera_translate
                 ),
                 m_camera->GetCamera()->GetProjection()
             );
-            float pointer_x
-                = DirectX::XMVectorGetX(v) / DirectX::XMVectorGetW(v) * 2.0f
-                  - DirectX::XMVectorGetX(v0) / DirectX::XMVectorGetW(v0) * 2.0f
-                  + DirectX::XMVectorGetX(pos) / DirectX::XMVectorGetW(pos);
-            float pointer_y
-                = DirectX::XMVectorGetY(v) / DirectX::XMVectorGetW(v) * 2.0f
-                  - DirectX::XMVectorGetY(v0) / DirectX::XMVectorGetW(v0) * 2.0f
-                  + DirectX::XMVectorGetY(pos) / DirectX::XMVectorGetW(pos);
-            // m_uiManager.SetPointerPosition(pointer_x, pointer_y);
+
+            std::cout << "v - v0 : "
+                      << DirectX::XMVectorGetX(v) / DirectX::XMVectorGetW(v)
+                             - DirectX::XMVectorGetX(v0)
+                      << ", "
+                      << DirectX::XMVectorGetY(v) / DirectX::XMVectorGetW(v)
+                             - DirectX::XMVectorGetY(v0)
+                      << std::endl;
+            std::cout << "pos: " << DirectX::XMVectorGetX(pos) / DirectX::XMVectorGetW(pos) << ", "
+                      << DirectX::XMVectorGetY(pos) / DirectX::XMVectorGetW(pos) << std::endl;
+            m_uiManager.SetPointerPosition(
+                (DirectX::XMVectorGetX(v) / DirectX::XMVectorGetW(v) - DirectX::XMVectorGetX(v0)
+                 + DirectX::XMVectorGetX(pos) / DirectX::XMVectorGetW(pos)),
+                (DirectX::XMVectorGetY(v) / DirectX::XMVectorGetW(v) - DirectX::XMVectorGetY(v0)
+                 + DirectX::XMVectorGetY(pos) / DirectX::XMVectorGetW(pos))
+            );
+
             break;
         }
 

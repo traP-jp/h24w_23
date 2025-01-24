@@ -16,6 +16,11 @@ public:
         m_pointer->SetPosition(x, y);
     }
 
+    void SetTargetPosition(float x, float y)
+    {
+        m_target->SetPosition(x, y);
+    }
+
 private:
     AquaEngine::RootSignature m_rootSignature;
     AquaEngine::PipelineState m_pipelineState;

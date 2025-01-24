@@ -2,15 +2,12 @@
 
 void UIManager::Init(AquaEngine::Command& command)
 {
-    auto& manager
-        = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
-            "ui",
-            20,
-            D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
-        );
-    auto texture_segment = std::make_shared<AquaEngine::DescriptorHeapSegment>(
-        manager.Allocate(3)
+    auto& manager = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
+        "ui",
+        20,
+        D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
     );
+    auto texture_segment = std::make_shared<AquaEngine::DescriptorHeapSegment>(manager.Allocate(3));
     auto texture_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
         D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
         1,
@@ -25,9 +22,7 @@ void UIManager::Init(AquaEngine::Command& command)
         1
     );
 
-    auto matrix_segment = std::make_shared<AquaEngine::DescriptorHeapSegment>(
-        manager.Allocate(3)
-    );
+    auto matrix_segment = std::make_shared<AquaEngine::DescriptorHeapSegment>(manager.Allocate(3));
     auto matrix_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
         D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
         1,
@@ -43,39 +38,19 @@ void UIManager::Init(AquaEngine::Command& command)
     );
 
     m_guide = std::make_unique<UIComponent>();
-    m_guide->Init(
-        texture_segment,
-        0,
-        matrix_segment,
-        0,
-        "resources/models/UI1.png",
-        command
-    );
+    m_guide->Init(texture_segment, 0, matrix_segment, 0, "resources/models/UI1.png", command);
+    m_guide->SetAlpha(0.1f);
+
     m_pointer = std::make_unique<UIComponent>();
-    m_pointer->Init(
-        texture_segment,
-        1,
-        matrix_segment,
-        1,
-        "resources/models/UI3.png",
-        command
-    );
+    m_pointer->Init(texture_segment, 1, matrix_segment, 1, "resources/models/UI3.png", command);
     m_pointer->SetColor(1.0f, 0.0f, 0.0f);
 
     m_target = std::make_unique<UIComponent>();
-    m_target->Init(
-        texture_segment,
-        2,
-        matrix_segment,
-        2,
-        "resources/models/UI4.png",
-        command
-    );
+    m_target->Init(texture_segment, 2, matrix_segment, 2, "resources/models/UI4.png", command);
     m_target->SetScale(0.25f, 0.4f);
+    m_target->SetColor(1.0f, 0.0f, 0.0f);
 
-    m_rootSignature.AddStaticSampler(
-        AquaEngine::RootSignature::DefaultStaticSampler()
-    );
+    m_rootSignature.AddStaticSampler(AquaEngine::RootSignature::DefaultStaticSampler());
     m_rootSignature.SetDescriptorHeapSegmentManager(&manager);
     HRESULT hr = m_rootSignature.Create();
     if (FAILED(hr))
