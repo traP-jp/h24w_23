@@ -25,6 +25,8 @@ void GameView::Init(AquaEngine::Command &command)
     CreateSkyBox(command);
 
     m_camera->InitBullet();  // init ni camera range
+    m_camera->InitSideUI();  // init ni camera range
+    m_sideUI.CreatePipelineState();
 
     m_rootSignature.AddStaticSampler(AquaEngine::RootSignature::DefaultStaticSampler());
     m_rootSignature.SetDescriptorHeapSegmentManager(&manager);
@@ -84,6 +86,11 @@ void GameView::Init(AquaEngine::Command &command)
     m_playerModel2.CreateEffect(m_effectManager.GetManager());
 
     CreateUI(command);
+
+    auto m = AquaEngine::GlobalDescriptorHeapManager::GetShaderHeapManager(
+        D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+        "side_ui"
+    );
 }
 
 void GameView::CreateModels(
@@ -233,6 +240,14 @@ void GameView::CreateModels(
 
     // m_playerModel1.PlayThurasterAction();
     // SetTimer(m_hwnd, TIMER_MODEL1, m_playerModel1.GetFrameCount(), nullptr);
+
+    m_sideUI.Init(command);
+    m_sideUI.Scale(Player::DEFAULT_SCALE, Player::DEFAULT_SCALE, Player::DEFAULT_SCALE);
+    m_sideUI.Move(
+        m_isPlayer1 ? PLAYER1_DEFAULT_POSITION.x : PLAYER2_DEFAULT_POSITION.x,
+        m_isPlayer1 ? PLAYER1_DEFAULT_POSITION.y : PLAYER2_DEFAULT_POSITION.y,
+        m_isPlayer1 ? PLAYER1_DEFAULT_POSITION.z : PLAYER2_DEFAULT_POSITION.z
+    );
 }
 
 void GameView::CreateSkyBox(AquaEngine::Command &command)
@@ -293,6 +308,9 @@ void GameView::Render(AquaEngine::Command &command)
     m_camera->RenderBullet(command);
     m_playerModel1.RenderBullet(command);
     m_playerModel2.RenderBullet(command);
+    m_sideUI.UseRootSignature(command);
+    m_camera->RenderSideUI(command);
+    m_sideUI.Render(command);
 
     m_effectManager.Render(command, m_camera->GetCamera());
 

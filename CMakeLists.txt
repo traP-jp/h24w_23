@@ -73,6 +73,7 @@ set(src_files
         src/3d/Asteroid.cpp
         src/3d/Bullet.cpp
         src/3d/EffectManager.cpp
+        src/3d/SideUI.cpp
         src/2d/D2DEngine.cpp
         src/2d/Title.cpp
         src/2d/UIManager.cpp
@@ -91,6 +92,7 @@ set(include_files
         include/3d/Asteroid.h
         include/3d/Bullet.h
         include/3d/EffectManager.h
+        include/3d/SideUI.h
         include/2d/D2DEngine.h
         include/2d/Title.h
         include/2d/UIManager.h
@@ -152,6 +154,7 @@ set(resources
         shaders/cubemap.hlsl
         shaders/bullet.hlsl
         shaders/ui/ui.hlsl
+        shaders/ui/side_ui.hlsl
 )
 
 create_executable(${src_files} ${include_files} ${resources})

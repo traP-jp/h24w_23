@@ -35,8 +35,7 @@ void Bullet::SetMaterialSegments(
 
 void Bullet::ImportModel(AquaEngine::Command& command)
 {
-    m_model
-        = std::make_unique<AquaEngine::FBXModel>("resources/models/cube.fbx");
+    m_model = std::make_unique<AquaEngine::FBXModel>("resources/models/cube.fbx");
     m_model->Create();
 }
 

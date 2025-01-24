@@ -32,6 +32,23 @@ void Camera::InitBullet()
     m_camera->AddManager("bullet", std::move(camera_range));
 }
 
+void Camera::InitSideUI()
+{
+    auto camera_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
+        D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
+        1,
+        2,
+        0,
+        D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
+    );
+    m_camera->AddManager("side_ui", std::move(camera_range));
+}
+
+void Camera::RenderSideUI(AquaEngine::Command &command) const
+{
+    m_camera->Render(command, "side_ui");
+}
+
 void Camera::Render(AquaEngine::Command &command) const
 {
     m_camera->Render(command, "main_game");
@@ -126,9 +143,5 @@ void Camera::RotDown(const DirectX::XMMATRIX &transform)
 
 void Camera::Move(DirectX::XMVECTOR dr)
 {
-    m_camera->Move(
-        DirectX::XMVectorGetX(dr),
-        DirectX::XMVectorGetY(dr),
-        DirectX::XMVectorGetZ(dr)
-    );
+    m_camera->Move(DirectX::XMVectorGetX(dr), DirectX::XMVectorGetY(dr), DirectX::XMVectorGetZ(dr));
 }

@@ -14,6 +14,7 @@
 #include "Camera.h"
 #include "EffectManager.h"
 #include "Player.h"
+#include "SideUI.h"
 
 class GameView
 {
@@ -50,16 +51,14 @@ public:
 
     void Accel()
     {
-        DirectX::XMVECTOR delta
-            = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Accel();
+        DirectX::XMVECTOR delta = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Accel();
         m_camera->Accel(delta);
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
     void Decel()
     {
-        DirectX::XMVECTOR delta
-            = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Decel();
+        DirectX::XMVECTOR delta = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Decel();
         m_camera->Decel(delta);
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
@@ -67,36 +66,28 @@ public:
     void RotRight()
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotRight();
-        m_camera->RotRight(
-            (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix()
-        );
+        m_camera->RotRight((m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix());
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
     void RotLeft()
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotLeft();
-        m_camera->RotLeft(
-            (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix()
-        );
+        m_camera->RotLeft((m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix());
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
     void RotUp()
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotUp();
-        m_camera->RotUp(
-            (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix()
-        );
+        m_camera->RotUp((m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix());
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
     void RotDown()
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotDown();
-        m_camera->RotDown(
-            (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix()
-        );
+        m_camera->RotDown((m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix());
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
@@ -128,6 +119,7 @@ private:
     AquaEngine::RootSignature m_bulletRootSignature;
 
     UIManager m_uiManager;
+    SideUI m_sideUI;
 
     bool m_isPlayer1;
 
@@ -143,21 +135,15 @@ private:
     float angle = 0.0f;
 
     // Camera.hも一緒に変える
-    static constexpr DirectX::XMFLOAT3 PLAYER1_DEFAULT_POSITION
-        = {1.0f, 0.0f, 0.0f};
-    static constexpr DirectX::XMFLOAT3 PLAYER2_DEFAULT_POSITION
-        = {-1.0f, 0.0f, 0.0f};
+    static constexpr DirectX::XMFLOAT3 PLAYER1_DEFAULT_POSITION = {1.0f, 0.0f, 0.0f};
+    static constexpr DirectX::XMFLOAT3 PLAYER2_DEFAULT_POSITION = {-1.0f, 0.0f, 0.0f};
 
     static constexpr float DEFAULT_CAMERA_Z_DISTANCE = -4.2f;
     static constexpr float CAMERA_ASPECT = 1.2f;
     static constexpr DirectX::XMFLOAT3 PLAYER1_DEFAULT_CAMERA
-        = {1.0f,
-           -DEFAULT_CAMERA_Z_DISTANCE,
-           DEFAULT_CAMERA_Z_DISTANCE *CAMERA_ASPECT};
+        = {1.0f, -DEFAULT_CAMERA_Z_DISTANCE, DEFAULT_CAMERA_Z_DISTANCE *CAMERA_ASPECT};
     static constexpr DirectX::XMFLOAT3 PLAYER2_DEFAULT_CAMERA
-        = {-1.0f,
-           -DEFAULT_CAMERA_Z_DISTANCE,
-           DEFAULT_CAMERA_Z_DISTANCE *CAMERA_ASPECT};
+        = {-1.0f, -DEFAULT_CAMERA_Z_DISTANCE, DEFAULT_CAMERA_Z_DISTANCE *CAMERA_ASPECT};
 };
 
 #endif  // GAMEVIEW_H
