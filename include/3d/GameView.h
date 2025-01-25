@@ -41,6 +41,7 @@ public:
     void TransformPartner(const DirectX::XMMATRIX &transform) const
     {
         (m_isPlayer1 ? m_playerModel2 : m_playerModel1).SetMatrix(transform);
+        InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
     void MoveModel(float dx, float dy, float dz) const
