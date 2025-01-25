@@ -364,8 +364,6 @@ void GameView::Render(AquaEngine::Command &command)
     m_camera->RenderSideUI(command);
     m_sideUI.Render(command);
 
-    m_effectManager.Render(command, m_camera->GetCamera());
-
     m_uiManager.Render(command);
 
     if (m_gameStatus == GameStatus::WIN)
@@ -376,6 +374,8 @@ void GameView::Render(AquaEngine::Command &command)
     {
         m_result.Render(command, false);
     }
+
+    m_effectManager.Render(command, m_camera->GetCamera());
 }
 
 void GameView::Timer(int id)

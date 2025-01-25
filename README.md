@@ -40,6 +40,8 @@ rename `<BUILD_DIR>` to your build directory
 - スイッチングハブ 1台
 - Visual Studio 2022
 
+### 手順
+
 - LANケーブルとスイッチングハブなどを用いて、2台のPCを接続します。
 - ファイアウォールなどの設定を確認し、通信が可能な状態にします。
 - 最初のダイアログで、どちらかがPlayer1、もう片方がPlayer2を選択します。
@@ -49,4 +51,6 @@ rename `<BUILD_DIR>` to your build directory
 
 ### 動作環境
 
-Windows、DirectX12対応が必要
+Windows11?、DirectX12対応が必要
+
+### 操作

@@ -3,7 +3,7 @@
 void EffectManager::Init(AquaEngine::Command& command)
 {
     auto format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    m_manager = Effekseer::Manager::Create(8000);
+    m_manager = Effekseer::Manager::Create(80000);
     m_renderer = EffekseerRendererDX12::Create(
         AquaEngine::Device::Get().Get(),
         command.Queue().Get(),
@@ -15,13 +15,9 @@ void EffectManager::Init(AquaEngine::Command& command)
         8000
     );
 
-    m_memoryPool = EffekseerRenderer::CreateSingleFrameMemoryPool(
-        m_renderer->GetGraphicsDevice()
-    );
-    m_commandList = EffekseerRenderer::CreateCommandList(
-        m_renderer->GetGraphicsDevice(),
-        m_memoryPool
-    );
+    m_memoryPool = EffekseerRenderer::CreateSingleFrameMemoryPool(m_renderer->GetGraphicsDevice());
+    m_commandList
+        = EffekseerRenderer::CreateCommandList(m_renderer->GetGraphicsDevice(), m_memoryPool);
 
     m_manager->SetCoordinateSystem(Effekseer::CoordinateSystem::LH);
 
@@ -57,9 +53,7 @@ void EffectManager::SetCamera(const std::shared_ptr<AquaEngine::Camera>& camera)
     m_renderer->SetCommandList(m_commandList);
 }
 
-void EffectManager::UpdateCamera(
-    const std::shared_ptr<AquaEngine::Camera>& camera
-)
+void EffectManager::UpdateCamera(const std::shared_ptr<AquaEngine::Camera>& camera)
 {
     Effekseer::Matrix44 cameraMatrix;
     Effekseer::Matrix44 projMatrix;
@@ -85,10 +79,7 @@ void EffectManager::Render(
 {
     m_memoryPool->NewFrame();
 
-    EffekseerRendererDX12::BeginCommandList(
-        m_commandList,
-        command.List().Get()
-    );
+    EffekseerRendererDX12::BeginCommandList(m_commandList, command.List().Get());
     m_renderer->SetCommandList(m_commandList);
 
     DirectX::XMFLOAT3 eye = camera->GetEye();
@@ -105,8 +96,7 @@ void EffectManager::Render(
     m_renderer->BeginRendering();
 
     Effekseer::Manager::DrawParameter draw_parameter;
-    draw_parameter.ViewProjectionMatrix
-        = m_renderer->GetCameraProjectionMatrix();
+    draw_parameter.ViewProjectionMatrix = m_renderer->GetCameraProjectionMatrix();
     m_manager->Draw(draw_parameter);
 
     m_renderer->EndRendering();
