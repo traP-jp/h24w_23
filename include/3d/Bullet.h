@@ -73,6 +73,11 @@ public:
         {
             PlayEffect(manager);
             m_isActive = false;
+
+            std::cout << "bullet position: "
+                      << DirectX::XMVectorGetX(m_model->GetPos()) << ", "
+                      << DirectX::XMVectorGetY(m_model->GetPos()) << ", "
+                      << DirectX::XMVectorGetZ(m_model->GetPos()) << std::endl;
         }
 
         return length < radius;
