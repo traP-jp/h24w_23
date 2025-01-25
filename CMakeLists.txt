@@ -54,6 +54,7 @@ macro(create_executable files)
     target_link_libraries(h24w_23 PUBLIC AdvAPI32.lib)
     target_link_libraries(h24w_23 PUBLIC winmm.lib)
     target_link_libraries(h24w_23 PUBLIC xaudio2.lib)
+    target_link_libraries(h24w_23 PUBLIC windowscodecs.lib)
     target_link_libraries(h24w_23 PUBLIC $ENV{FBXSDK_DIR}/lib/x64/debug/libfbxsdk-md.lib)
     target_link_libraries(h24w_23 PUBLIC $ENV{FBXSDK_DIR}/lib/x64/debug/libxml2-md.lib)
     target_link_libraries(h24w_23 PUBLIC $ENV{FBXSDK_DIR}/lib/x64/debug/zlib-md.lib)
@@ -84,6 +85,7 @@ set(src_files
         src/2d/UIManager.cpp
         src/2d/UIComponent.cpp
         src/2d/GameInfo.cpp
+        src/2d/TitleImage.cpp
         src/network/Network.cpp
         src/music/BGM.cpp
 )
@@ -105,18 +107,14 @@ set(include_files
         include/2d/UIManager.h
         include/2d/UIComponent.h
         include/2d/GameInfo.h
+        include/2d/TitleImage.h
         include/network/Network.h
         include/music/BGM.h
 )
 
-# TODO: delete isu, ninja
 set(resources
         include/view/resource.h
         include/view/IPDialog.rc
-        resources/models/isu.fbx
-        resources/models/isu.png
-        resources/models/ninja.png
-        resources/models/ninja.fbx
         resources/models/player_model/arm.fbx
         resources/models/player_model/body.fbx
         resources/models/player_model/buster.fbx
@@ -162,6 +160,8 @@ set(resources
         resources/UI/UI2/UI2_alpha1.png
         resources/UI/UI2/UI2_alpha2.png
         resources/UI/UI2/UI2_fbx.fbx
+        resources/UI/title3.png
+        resources/UI/titlelogo.png
         resources/music/hackathon3_r1.wav
         resources/music/hackathon3_r2.wav
         shaders/main.hlsl

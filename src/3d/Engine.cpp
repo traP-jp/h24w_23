@@ -167,7 +167,7 @@ void Engine::Render()
                 return;
             }
 #ifndef DEBUG
-            m_d2dEngine->RenderTitleText(m_display->GetCurrentBackBufferIndex());
+            m_d2dEngine->RenderTitle(m_display->GetCurrentBackBufferIndex());
 #else
             std::cout << "press any button to start" << std::endl;
 #endif
@@ -192,7 +192,7 @@ void Engine::Render()
                     return;
                 }
 #ifndef DEBUG
-                m_d2dEngine->RenderTitleText(m_display->GetCurrentBackBufferIndex());
+                m_d2dEngine->RenderTitle(m_display->GetCurrentBackBufferIndex());
 #endif
                 m_display->Present();
             }

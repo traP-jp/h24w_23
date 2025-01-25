@@ -13,6 +13,7 @@
 
 #include "GameInfo.h"
 #include "Title.h"
+#include "TitleImage.h"
 
 class D2DEngine
 {
@@ -20,7 +21,7 @@ public:
     D2DEngine(HWND hwnd, RECT wr, AquaEngine::Command* command);
 
     void Init(UINT back_buffer_count, const std::vector<ID3D12Resource*>& back_buffers);
-    void RenderTitleText(UINT back_buffer_index);
+    void RenderTitle(UINT back_buffer_index);
     void RenderTitleTextRenderTarget();
 
     void RenderGameInfo(UINT back_buffer_index);
@@ -80,6 +81,7 @@ private:
     Microsoft::WRL::ComPtr<IDWriteFactory> m_dwriteFactory;
 
     Title m_title;
+    TitleImage m_titleImage;
     D2D1::ColorF m_titleBackgroundColor = D2D1::ColorF::White;
 
     GameInfo m_gameInfo;

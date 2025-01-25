@@ -141,6 +141,12 @@ void D2DEngine::Init(UINT back_buffer_count, const std::vector<ID3D12Resource *>
         D2D1::RectF(0, m_wr.bottom - 500, m_wr.right - m_wr.left, m_wr.bottom)
     );
 
+    m_titleImage.Init(
+        m_d2dDeviceContext,
+        D2D1::RectF(0, 0, m_wr.right - m_wr.left, m_wr.bottom - m_wr.top),
+        D2D1::RectF(0, 100, m_wr.right - m_wr.left - 100, 600)
+    );
+
     m_gameInfo.Init(
         m_dwriteFactory,
         D2D1::RectF(50, 50, 700, 100),
@@ -179,11 +185,12 @@ void D2DEngine::EndRender(UINT back_buffer_index)
 }
 
 // clear the back buffer and render the title text
-void D2DEngine::RenderTitleText(UINT back_buffer_index)
+void D2DEngine::RenderTitle(UINT back_buffer_index)
 {
     BeginRender(back_buffer_index);
     m_d2dDeviceContext->Clear(m_titleBackgroundColor);
-    m_title.Render(m_d2dDeviceContext, m_d2dBlackBrush);
+    m_titleImage.Render(m_d2dDeviceContext);
+    m_title.Render(m_d2dDeviceContext, m_d2dWhiteBrush);
     EndRender(back_buffer_index);
 }
 
@@ -191,6 +198,7 @@ void D2DEngine::RenderTitleTextRenderTarget()
 {
     BeginRenderRenderTarget();
     m_d2dDeviceContext->Clear(m_titleBackgroundColor);
+    m_titleImage.Render(m_d2dDeviceContext);
     m_title.Render(m_d2dDeviceContext, m_d2dBlackBrush);
     EndRenderRenderTarget();
 }
