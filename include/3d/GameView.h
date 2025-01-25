@@ -17,6 +17,7 @@
 
 #include <memory>
 
+#include "2d/Result.h"
 #include "2d/UIManager.h"
 #include "Asteroid.h"
 #include "Camera.h"
@@ -173,6 +174,13 @@ public:
     }
 
 private:
+    enum class GameStatus
+    {
+        GAMING,
+        WIN,
+        LOSE
+    };
+
     HWND m_hwnd;
     RECT m_rc;
 
@@ -193,6 +201,9 @@ private:
 
     UIManager m_uiManager;
     SideUI m_sideUI;
+    Result m_result;
+
+    GameStatus m_gameStatus = GameStatus::GAMING;
 
     bool m_isPlayer1;
     int m_bullets = Player::BULLET_COUNT;

@@ -332,6 +332,7 @@ void GameView::CreateSkyBox(AquaEngine::Command &command)
 void GameView::CreateUI(AquaEngine::Command &command)
 {
     m_uiManager.Init(command);
+    m_result.Init(command);
 }
 
 void GameView::Render(AquaEngine::Command &command)
@@ -366,6 +367,15 @@ void GameView::Render(AquaEngine::Command &command)
     m_effectManager.Render(command, m_camera->GetCamera());
 
     m_uiManager.Render(command);
+
+    if (m_gameStatus == GameStatus::WIN)
+    {
+        m_result.Render(command, true);
+    }
+    else if (m_gameStatus == GameStatus::LOSE)
+    {
+        m_result.Render(command, false);
+    }
 }
 
 void GameView::Timer(int id)
@@ -401,6 +411,7 @@ void GameView::Timer(int id)
             if (hit)
             {
                 std::cout << "hit" << std::endl;
+                m_gameStatus = GameStatus::WIN;
             }
 
             DirectX::XMVECTOR my_position
@@ -410,6 +421,7 @@ void GameView::Timer(int id)
             if (my_hit)
             {
                 std::cout << "my hit" << std::endl;
+                m_gameStatus = GameStatus::LOSE;
             }
 
             DirectX::XMVECTOR camera_y = m_camera->GetCamera()->GetUp();
