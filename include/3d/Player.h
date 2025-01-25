@@ -108,7 +108,7 @@ public:
             m_models[i]->RotY(ROTATION);
         }
 
-        std::cout << "TransformMatrix: \n"
+        std::cout << "TransformMatrix Rot: \n"
                   << m_models[0]->GetTransformMatrix().r[0].m128_f32[0] << " "
                   << m_models[0]->GetTransformMatrix().r[0].m128_f32[1] << " "
                   << m_models[0]->GetTransformMatrix().r[0].m128_f32[2] << " "
@@ -143,7 +143,7 @@ public:
             m_models[i]->RotY(-ROTATION);
         }
 
-        std::cout << "TransformMatrix: \n"
+        std::cout << "TransformMatrix Rot: \n"
                   << m_models[0]->GetTransformMatrix().r[0].m128_f32[0] << " "
                   << m_models[0]->GetTransformMatrix().r[0].m128_f32[1] << " "
                   << m_models[0]->GetTransformMatrix().r[0].m128_f32[2] << " "
@@ -244,7 +244,7 @@ public:
 
     [[nodiscard]] DirectX::XMMATRIX GetTransformMatrix() const
     {
-        std::cout << "TransformMatrix: \n"
+        std::cout << "When Get TransformMatrix: \n"
                   << m_models[0]->GetTransformMatrix().r[0].m128_f32[0] << " "
                   << m_models[0]->GetTransformMatrix().r[0].m128_f32[1] << " "
                   << m_models[0]->GetTransformMatrix().r[0].m128_f32[2] << " "
