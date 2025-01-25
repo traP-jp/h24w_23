@@ -138,13 +138,13 @@ void D2DEngine::Init(UINT back_buffer_count, const std::vector<ID3D12Resource *>
 
     m_title.Init(
         m_dwriteFactory,
-        D2D1::RectF(0, m_wr.bottom - 500, m_wr.right - m_wr.left, m_wr.bottom)
+        D2D1::RectF(0, m_wr.bottom - 300, m_wr.right - m_wr.left, m_wr.bottom)
     );
 
     m_titleImage.Init(
         m_d2dDeviceContext,
         D2D1::RectF(0, 0, m_wr.right - m_wr.left, m_wr.bottom - m_wr.top),
-        D2D1::RectF(0, 100, m_wr.right - m_wr.left - 100, 600)
+        D2D1::RectF(0, 170, m_wr.right - m_wr.left - 100, 870)
     );
 
     m_gameInfo.Init(

@@ -126,7 +126,7 @@ public:
 private:
     static constexpr float VELOCITY = 1.0f;
     static constexpr float DEFAULT_SCALE = 0.5f;
-    static constexpr float EFFECT_SCALE = 0.25f;
+    static constexpr float EFFECT_SCALE = 1.0f;
 
     DirectX::XMVECTOR m_direction{};
 

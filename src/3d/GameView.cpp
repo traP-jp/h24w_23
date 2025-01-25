@@ -510,8 +510,8 @@ void GameView::Timer(int id)
             }
             else
             {
-                m_uiManager.SetTargetColor(0.0f, 0.0f, 1.0f);
-                m_uiManager.SetTargetRotateAndSinScale(0.1f);
+                m_uiManager.SetTargetColor(0.1f, 0.0f, 0.2f);
+                m_uiManager.SetTargetRotation(0.1f);
             }
             m_uiManager.SetTargetPosition(target_x, target_y);
 

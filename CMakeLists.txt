@@ -16,8 +16,14 @@ macro(create_executable files)
             file(COPY ${src} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shaders)
         endif ()
         if (LOCAL_BUILD)
-            if (src MATCHES ".*Texture.*\\.png$")
-                file(COPY ${src} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/effects/Texture)
+            if (src MATCHES ".*effects/Textures.*\\.png$")
+                file(COPY ${src} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/effects/Textures)
+            elseif (src MATCHES ".*effects/Meshes.*$")
+                file(COPY ${src} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/effects/Meshes)
+            elseif (src MATCHES ".*effects/Materials.*$")
+                file(COPY ${src} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/effects/Materials)
+            elseif (src MATCHES ".*effects.*$")
+                file(COPY ${src} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/effects)
             elseif (src MATCHES ".*\\.(fbx|png)$")
                 file(COPY ${src} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/models)
             endif ()
@@ -149,11 +155,150 @@ set(resources
         resources/textures/space.hdr
         resources/textures/sample1.hdr
         resources/effects/tyakudan.efkefc
-        resources/effects/Texture/ef_common_flashlight01_t.png
-        resources/effects/Texture/Star.png
-        resources/effects/Texture/tex_eff_light02.png
+        resources/effects/ef_common_flashlight01_t.png
+        resources/effects/Star.png
+        resources/effects/tex_eff_light02.png
         resources/effects/booster.efkefc
-        resources/effects/Texture/alpha.png
+        resources/effects/alpha.png
+        resources/effects/blackhall.efkmat
+        resources/effects/blackhall.efkmodel
+        resources/effects/blackhall.fbx
+        resources/effects/blackhall1.png
+        resources/effects/blackhall2.png
+        resources/effects/blackhall3.png
+        resources/effects/blackhall4.png
+        resources/effects/blackhall5.png
+        resources/effects/booster.efkefc
+        resources/effects/disk.efkmat
+        resources/effects/ef_common_flashlight01_t.png
+        resources/effects/hall.efkmat
+        resources/effects/hall.efkmodel
+        resources/effects/hall.fbx
+        resources/effects/hassya.efkefc
+        resources/effects/ms_lightning01.efkmodel
+        resources/effects/ms_lightning01.fbx
+        resources/effects/ef_lightning01.efkefc
+        resources/effects/Materials/mt_dissolve01.efkmat
+        resources/effects/Materials/mt_dissolve02.efkmat
+        resources/effects/Materials/mt_ice01.efkmat
+        resources/effects/Materials/mt_lightning01.efkmat
+        resources/effects/Materials/mt_lightning02.efkmat
+        resources/effects/Materials/mt_lightning03.efkmat
+        resources/effects/Materials/mt_slash01.efkmat
+        resources/effects/Materials/mt_toon_shockwave01.efkmat
+        resources/effects/Materials/mt_wind02.efkmat
+        resources/effects/Materials/mt_wind03_groundAura.efkmat
+        resources/effects/Materials/mt_wind03_groundCrack.efkmat
+        resources/effects/Materials/mt_wind03_slash01.efkmat
+        resources/effects/Materials/mt_wind03_tornado01.efkmat
+        resources/effects/Materials/mt_wind03_tornado01_test.efkmat
+        resources/effects/Meshes/ms_groundAura01.efkmodel
+        resources/effects/Meshes/ms_groundAura01.fbx
+        resources/effects/Meshes/ms_groundAura02.efkmodel
+        resources/effects/Meshes/ms_groundAura02.fbx
+        resources/effects/Meshes/ms_ice01.efkmodel
+        resources/effects/Meshes/ms_ice01.fbx
+        resources/effects/Meshes/ms_ice02.efkmodel
+        resources/effects/Meshes/ms_ice02.fbx
+        resources/effects/Meshes/ms_ice03.efkmodel
+        resources/effects/Meshes/ms_ice03.fbx
+        resources/effects/Meshes/ms_lightning01.efkmodel
+        resources/effects/Meshes/ms_lightning01.fbx
+        resources/effects/Meshes/ms_lightning02.efkmodel
+        resources/effects/Meshes/ms_lightning02.fbx
+        resources/effects/Meshes/ms_lightning03_01.efkmodel
+        resources/effects/Meshes/ms_lightning03_01.fbx
+        resources/effects/Meshes/ms_lightning03_02.efkmodel
+        resources/effects/Meshes/ms_lightning03_02.fbx
+        resources/effects/Meshes/ms_lightning03_03.efkmodel
+        resources/effects/Meshes/ms_lightning03_03.fbx
+        resources/effects/Meshes/ms_plane01.efkmodel
+        resources/effects/Meshes/ms_plane01.fbx
+        resources/effects/Meshes/ms_rock01.efkmodel
+        resources/effects/Meshes/ms_rock01.fbx
+        resources/effects/Meshes/ms_slash01.efkmodel
+        resources/effects/Meshes/ms_slash01.fbx
+        resources/effects/Meshes/ms_slash02.efkmodel
+        resources/effects/Meshes/ms_slash02.fbx
+        resources/effects/Meshes/ms_tornado01.efkmodel
+        resources/effects/Meshes/ms_tornado01.fbx
+        resources/effects/Meshes/ms_tornado02.efkmodel
+        resources/effects/Meshes/ms_tornado02.fbx
+        resources/effects/Meshes/ms_tornado03.efkmodel
+        resources/effects/Meshes/ms_tornado03.fbx
+        resources/effects/Meshes/ms_tornado04.efkmodel
+        resources/effects/Meshes/ms_tornado04.fbx
+        resources/effects/Meshes/ms_wind01.efkmodel
+        resources/effects/Meshes/ms_wind01.fbx
+        resources/effects/Meshes/ms_wind02.efkmodel
+        resources/effects/Meshes/ms_wind02.fbx
+        resources/effects/sphia.efkmodel
+        resources/effects/sphia.fbx
+        resources/effects/Textures/tx_aura01_256.png
+        resources/effects/Textures/tx_aura02_256.png
+        resources/effects/Textures/tx_aura03_256.png
+        resources/effects/Textures/tx_aura04_256.png
+        resources/effects/Textures/tx_aura05_256.png
+        resources/effects/Textures/tx_aura06_256.png
+        resources/effects/Textures/tx_aura07_256.png
+        resources/effects/Textures/tx_aura08_256.png
+        resources/effects/Textures/tx_aura09_256.png
+        resources/effects/Textures/tx_aura10_256.png
+        resources/effects/Textures/tx_aura11_256.png
+        resources/effects/Textures/tx_aura12_256.png
+        resources/effects/Textures/tx_aura13_256.png
+        resources/effects/Textures/tx_aura14_256.png
+        resources/effects/Textures/tx_aura15_256.png
+        resources/effects/Textures/tx_aura16_256.png
+        resources/effects/Textures/tx_crack01_256.png
+        resources/effects/Textures/tx_crack02_256.png
+        resources/effects/Textures/tx_crack03_256.png
+        resources/effects/Textures/tx_debris01_128.png
+        resources/effects/Textures/tx_directional_aura01_256.png
+        resources/effects/Textures/tx_directional_aura02_256.png
+        resources/effects/Textures/tx_fire_flipbook01_1024.png
+        resources/effects/Textures/tx_foam01.png
+        resources/effects/Textures/tx_glow01_128.png
+        resources/effects/Textures/tx_glow02_128.png
+        resources/effects/Textures/tx_glow03_128.png
+        resources/effects/Textures/tx_gradient01_256.png
+        resources/effects/Textures/tx_hit01_256.png
+        resources/effects/Textures/tx_ice01_256.png
+        resources/effects/Textures/tx_lightning01_256.png
+        resources/effects/Textures/tx_lightning04_128x256.png
+        resources/effects/Textures/tx_magiccircle01_512.png
+        resources/effects/Textures/tx_noise01_256.png
+        resources/effects/Textures/tx_noise03_256.png
+        resources/effects/Textures/tx_noise04_256.png
+        resources/effects/Textures/tx_noise05_256.png
+        resources/effects/Textures/tx_noise06_256.png
+        resources/effects/Textures/tx_noise07_256.png
+        resources/effects/Textures/tx_noise08_256.png
+        resources/effects/Textures/tx_normal01_256.png
+        resources/effects/Textures/tx_normal02_256.png
+        resources/effects/Textures/tx_normal03_256.png
+        resources/effects/Textures/tx_normal04_256.png
+        resources/effects/Textures/tx_normal05_256.png
+        resources/effects/Textures/tx_normal06_256.png
+        resources/effects/Textures/tx_prism_aura01.png
+        resources/effects/Textures/tx_ring01_256.png
+        resources/effects/Textures/tx_shape01_128.png
+        resources/effects/Textures/tx_shockring01_256.png
+        resources/effects/Textures/tx_shockring02_256.png
+        resources/effects/Textures/tx_shockring03_256.png
+        resources/effects/Textures/tx_slash01_256.png
+        resources/effects/Textures/tx_smoke01_256.png
+        resources/effects/Textures/tx_smoke02_256.png
+        resources/effects/Textures/tx_snow01_256.png
+        resources/effects/Textures/tx_star01_256.png
+        resources/effects/Textures/tx_star02_256.png
+        resources/effects/Textures/tx_trail01_256.png
+        resources/effects/Textures/tx_trail01_256_90.png
+        resources/effects/Textures/tx_trail02_256.png
+        resources/effects/Textures/tx_trail02_256_90.png
+        resources/effects/Textures/tx_trail03_256.png
+        resources/effects/Textures/tx_trail03_256_90.png
+        resources/effects/Textures/tx_white01_8.png
         resources/UI/UI1.png
         resources/UI/UI3.png
         resources/UI/UI4.png
