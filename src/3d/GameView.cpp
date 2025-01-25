@@ -242,12 +242,12 @@ void GameView::CreateModels(
     // SetTimer(m_hwnd, TIMER_MODEL1, m_playerModel1.GetFrameCount(), nullptr);
 
     m_sideUI.Init(command);
-    m_sideUI.Scale(Player::DEFAULT_SCALE, Player::DEFAULT_SCALE, Player::DEFAULT_SCALE);
-    m_sideUI.Move(
-        m_isPlayer1 ? PLAYER1_DEFAULT_POSITION.x : PLAYER2_DEFAULT_POSITION.x,
-        m_isPlayer1 ? PLAYER1_DEFAULT_POSITION.y : PLAYER2_DEFAULT_POSITION.y,
-        m_isPlayer1 ? PLAYER1_DEFAULT_POSITION.z : PLAYER2_DEFAULT_POSITION.z
-    );
+    m_sideUI.Scale(8.0f, 8.0f, 8.0f);
+    // m_sideUI.Move(
+    //     m_isPlayer1 ? PLAYER1_DEFAULT_POSITION.x : PLAYER2_DEFAULT_POSITION.x,
+    //     m_isPlayer1 ? PLAYER1_DEFAULT_POSITION.y : PLAYER2_DEFAULT_POSITION.y,
+    //     m_isPlayer1 ? PLAYER1_DEFAULT_POSITION.z : PLAYER2_DEFAULT_POSITION.z
+    // );
 }
 
 void GameView::CreateSkyBox(AquaEngine::Command &command)
@@ -310,10 +310,10 @@ void GameView::Render(AquaEngine::Command &command)
     m_playerModel2.RenderBullet(command);
     m_sideUI.UseRootSignature(command);
     m_camera->RenderSideUI(command);
-    m_sideUI.Render(command);
 
     m_effectManager.Render(command, m_camera->GetCamera());
 
+    m_sideUI.Render(command);
     m_uiManager.Render(command);
 }
 
@@ -449,6 +449,10 @@ void GameView::Timer(int id)
                 m_uiManager.SetTargetRotateAndSinScale(0.1f);
             }
             m_uiManager.SetTargetPosition(target_x, target_y);
+
+            m_sideUI.SetTransformMatrix((m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetMatrix()
+            );
+            m_sideUI.Frame();
 
             break;
         }

@@ -67,6 +67,32 @@ void SideUI::Init(AquaEngine::Command& command)
     );
     m_alpha2SRV.SetDescriptorHeapSegment(alpha2_segment, 0);
     m_alpha2SRV.Create(*m_alpha2Texture);
+
+    HRESULT hr = m_scrollBuffer.Create(BUFFER_DEFAULT(
+        AquaEngine::AlignmentSize(sizeof(Scroll), D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT)
+    ));
+    if (FAILED(hr))
+    {
+        std::cout << "failed to create scroll buffer" << std::endl;
+        exit(-1);
+    }
+    m_scrollBuffer.GetMappedBuffer()->scroll = m_scroll;
+    auto scroll_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
+        D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
+        1,
+        3,
+        0,
+        D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
+    );
+    auto scroll_segment = std::make_shared<AquaEngine::DescriptorHeapSegment>(manager.Allocate(1));
+    scroll_segment->SetRootParameter(
+        D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
+        D3D12_SHADER_VISIBILITY_ALL,
+        std::move(scroll_range),
+        1
+    );
+    m_scrollCBV.SetDescriptorHeapSegment(scroll_segment, 0);
+    m_scrollCBV.Create(m_scrollBuffer.GetBuffer());
 }
 
 void SideUI::CreatePipelineState()
@@ -94,6 +120,19 @@ void SideUI::CreatePipelineState()
     m_pipelineState.SetVertexShader(&vs);
     m_pipelineState.SetPixelShader(&ps);
     m_pipelineState.SetInputLayout(inputElement.data(), inputElement.size());
+    D3D12_BLEND_DESC blend
+        = {.AlphaToCoverageEnable = false,
+           .IndependentBlendEnable = false,
+           .RenderTarget
+           = {{.BlendEnable = true,
+               .SrcBlend = D3D12_BLEND_SRC_ALPHA,
+               .DestBlend = D3D12_BLEND_INV_SRC_ALPHA,
+               .BlendOp = D3D12_BLEND_OP_ADD,
+               .SrcBlendAlpha = D3D12_BLEND_ONE,
+               .DestBlendAlpha = D3D12_BLEND_ZERO,
+               .BlendOpAlpha = D3D12_BLEND_OP_ADD,
+               .RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL}}};
+    m_pipelineState.SetBlendState(blend);
     hr = m_pipelineState.Create();
     if (FAILED(hr))
     {
@@ -112,6 +151,7 @@ void SideUI::Render(AquaEngine::Command& command)
 {
     m_alpha1SRV.SetGraphicsRootDescriptorTable(&command);
     m_alpha2SRV.SetGraphicsRootDescriptorTable(&command);
+    m_scrollCBV.SetGraphicsRootDescriptorTable(&command);
     m_model->Render(command);
 }
 

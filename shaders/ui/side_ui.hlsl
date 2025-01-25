@@ -16,6 +16,11 @@ cbuffer CameraMatrix : register(b2)
     matrix projection;
 };
 
+cbuffer Scroll : register(b3)
+{
+    float scroll;
+};
+
 struct PS_Input
 {
     float4 pos : SV_POSITION;
@@ -45,9 +50,10 @@ float4 ps(PS_Input psIn) : SV_TARGET
     float3 light = normalize(float3(0.0, -1.0, -1.0));
     float brightness = dot(psIn.normal, light);
 
-    float4 alpha1 = alpha1_tex.Sample(sam, psIn.uv);
+    float4 alpha1 = alpha1_tex.Sample(sam, psIn.uv + float2(0.0, scroll));
     float4 alpha2 = alpha2_tex.Sample(sam, psIn.uv);
 
-    float4 color = alpha1 * brightness + alpha2 * (1.0 - brightness);
+    float4 color = alpha1 * alpha2;
+    color.a = color.r;
     return color;
 }
