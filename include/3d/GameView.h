@@ -122,10 +122,8 @@ public:
         (m_isPlayer1 ? m_playerModel2 : m_playerModel1).SetDirection(direction);
 
         DirectX::XMVECTOR pos = (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetPos();
-        std::cout << "partner position: "
-                  << DirectX::XMVectorGetX(pos) << ", "
-                  << DirectX::XMVectorGetY(pos) << ", "
-                  << DirectX::XMVectorGetZ(pos) << std::endl;
+        std::cout << "partner position: " << DirectX::XMVectorGetX(pos) << ", "
+                  << DirectX::XMVectorGetY(pos) << ", " << DirectX::XMVectorGetZ(pos) << std::endl;
     }
 
     DirectX::XMMATRIX GetPartnerTransformMatrix() const
