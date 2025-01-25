@@ -282,8 +282,13 @@ void GameView::CreateModels(
         );
     }
 
-    // m_playerModel1.PlayThurasterAction();
-    // SetTimer(m_hwnd, TIMER_MODEL1, m_playerModel1.GetFrameCount(), nullptr);
+    m_playerModel1.PlayThurasterAction();
+    m_playerModel1.PlayBusterAction();
+    SetTimer(m_hwnd, TIMER_MODEL1, m_playerModel1.GetFrameCount(), nullptr);
+
+    m_playerModel2.PlayThurasterAction();
+    m_playerModel2.PlayBusterAction();
+    SetTimer(m_hwnd, TIMER_MODEL2, m_playerModel2.GetFrameCount(), nullptr);
 
     m_sideUI.Init(command);
     m_sideUI.Scale(8.0f, 8.0f, 8.0f);

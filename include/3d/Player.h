@@ -213,7 +213,15 @@ public:
     void PlayThurasterAction() const
     {
         m_models[7]->PlayAnimation(
-            "THURASTER_bone|THURASTER_bone|THURASTER_bone|action2",
+            "THURASTER_bone|action3",
+            AquaEngine::FBXModel::AnimationMode::LOOP
+        );
+    }
+
+    void PlayBusterAction() const
+    {
+        m_models[2]->PlayAnimation(
+            "buster_bone|action3",
             AquaEngine::FBXModel::AnimationMode::LOOP
         );
     }
