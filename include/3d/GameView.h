@@ -101,6 +101,11 @@ public:
         return (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetMatrix();
     }
 
+    float GetPlayerVelocity() const
+    {
+        return (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetVelocity();
+    }
+
 private:
     HWND m_hwnd;
     RECT m_rc;

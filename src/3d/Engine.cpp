@@ -68,16 +68,14 @@ void Engine::InitRenderTargets()
         return;
     }
 
-    auto &render_target_manager
-        = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
-            "render_target",
-            10,
-            D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
-        );
-
-    auto game_segment = std::make_shared<AquaEngine::DescriptorHeapSegment>(
-        render_target_manager.Allocate(1)
+    auto &render_target_manager = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
+        "render_target",
+        10,
+        D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
     );
+
+    auto game_segment
+        = std::make_shared<AquaEngine::DescriptorHeapSegment>(render_target_manager.Allocate(1));
     auto game_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
         D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
         1,
@@ -99,15 +97,11 @@ void Engine::InitRenderTargets()
     }
 
     m_weightBuffer.Create(BUFFER_DEFAULT(
-        AquaEngine::AlignmentSize(
-            sizeof(Weight),
-            D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT
-        )
+        AquaEngine::AlignmentSize(sizeof(Weight), D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT)
     ));
     m_weightBuffer.GetMappedBuffer()->gameWeight = m_gameWeight;
-    auto weight_segment = std::make_shared<AquaEngine::DescriptorHeapSegment>(
-        render_target_manager.Allocate(1)
-    );
+    auto weight_segment
+        = std::make_shared<AquaEngine::DescriptorHeapSegment>(render_target_manager.Allocate(1));
     auto weight_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
         D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
         1,
@@ -124,9 +118,7 @@ void Engine::InitRenderTargets()
     m_weightCBV.SetDescriptorHeapSegment(weight_segment, 0);
     m_weightCBV.Create(m_weightBuffer.GetBuffer());
 
-    m_rootSignature.AddStaticSampler(
-        AquaEngine::RootSignature::DefaultStaticSampler()
-    );
+    m_rootSignature.AddStaticSampler(AquaEngine::RootSignature::DefaultStaticSampler());
     m_rootSignature.SetDescriptorHeapSegmentManager(&render_target_manager);
     hr = m_rootSignature.Create();
     if (FAILED(hr))
@@ -134,8 +126,7 @@ void Engine::InitRenderTargets()
         std::println("Failed to create root signature");
         return;
     }
-    auto render_targets_input_element
-        = AquaEngine::RenderTarget::GetInputElementDescs();
+    auto render_targets_input_element = AquaEngine::RenderTarget::GetInputElementDescs();
 
     AquaEngine::ShaderObject vs, ps;
     vs.Load(L"shaders/renderTarget.hlsl", "vs", "vs_5_0");
@@ -160,6 +151,8 @@ void Engine::Render()
 {
     AquaEngine::GlobalDescriptorHeapManager::SetToCommand(*m_command);
 
+    auto now = std::chrono::high_resolution_clock::now();
+
     switch (m_startStatus)
     {
         case StartStatus::TITLE:
@@ -174,8 +167,7 @@ void Engine::Render()
                 return;
             }
 #ifndef DEBUG
-            m_d2dEngine->RenderTitleText(m_display->GetCurrentBackBufferIndex()
-            );
+            m_d2dEngine->RenderTitleText(m_display->GetCurrentBackBufferIndex());
 #else
             std::cout << "press any button to start" << std::endl;
 #endif
@@ -188,9 +180,7 @@ void Engine::Render()
             {
                 float weight = 1.0f - m_elapsedTime;
 #ifndef DEBUG
-                m_d2dEngine->SetTitleBackgroundColor(
-                    D2D1::ColorF(weight, weight, weight, 1.0f)
-                );
+                m_d2dEngine->SetTitleBackgroundColor(D2D1::ColorF(weight, weight, weight, 1.0f));
 #endif
                 m_display->BeginRender();
                 m_display->SetViewports();
@@ -202,9 +192,7 @@ void Engine::Render()
                     return;
                 }
 #ifndef DEBUG
-                m_d2dEngine->RenderTitleText(
-                    m_display->GetCurrentBackBufferIndex()
-                );
+                m_d2dEngine->RenderTitleText(m_display->GetCurrentBackBufferIndex());
 #endif
                 m_display->Present();
             }
@@ -264,8 +252,6 @@ void Engine::Render()
 
             m_gameView->Render(*m_command);
 
-            m_display->EndRender();
-
             HRESULT hr = m_command->Execute();
             if (FAILED(hr))
             {
@@ -273,10 +259,16 @@ void Engine::Render()
                 return;
             }
 
+            m_d2dEngine->RenderGameInfo(m_display->GetCurrentBackBufferIndex());
+
             m_display->Present();
             break;
         }
     }
+
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - now).count();
+    m_d2dEngine->SetGameInfoFPS(1000.0f / elapsed);
 }
 
 void Engine::Timer(int id)
@@ -295,6 +287,11 @@ void Engine::Timer(int id)
 
         default:
             m_gameView->Timer(id);
+            if (id == TIMER_FRAME)
+            {
+                m_d2dEngine->GameInfoFrame();
+                m_d2dEngine->SetGameInfoVelocity(m_gameView->GetPlayerVelocity());
+            }
             return;
     }
 }

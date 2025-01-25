@@ -11,6 +11,7 @@
 
 #include <vector>
 
+#include "GameInfo.h"
 #include "Title.h"
 
 class D2DEngine
@@ -18,16 +19,30 @@ class D2DEngine
 public:
     D2DEngine(HWND hwnd, RECT wr, AquaEngine::Command* command);
 
-    void Init(
-        UINT back_buffer_count,
-        const std::vector<ID3D12Resource*>& back_buffers
-    );
+    void Init(UINT back_buffer_count, const std::vector<ID3D12Resource*>& back_buffers);
     void RenderTitleText(UINT back_buffer_index);
     void RenderTitleTextRenderTarget();
+
+    void RenderGameInfo(UINT back_buffer_index);
 
     void SetTitleBackgroundColor(const D2D1::ColorF& title_background_color)
     {
         m_titleBackgroundColor = title_background_color;
+    }
+
+    void GameInfoFrame()
+    {
+        m_gameInfo.Frame();
+    }
+
+    void SetGameInfoVelocity(float velocity)
+    {
+        m_gameInfo.SetVelocity(velocity);
+    }
+
+    void SetGameInfoFPS(float fps)
+    {
+        m_gameInfo.SetFPS(fps);
     }
 
 private:
@@ -53,14 +68,16 @@ private:
     Microsoft::WRL::ComPtr<ID2D1Device2> m_d2dDevice;
     Microsoft::WRL::ComPtr<ID2D1DeviceContext2> m_d2dDeviceContext;
     Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> m_d2dBlackBrush;
-    std::vector<Microsoft::WRL::ComPtr<ID2D1Bitmap1>>
-        m_d2dBackBufferRenderTargets;
+    Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> m_d2dWhiteBrush;
+    std::vector<Microsoft::WRL::ComPtr<ID2D1Bitmap1>> m_d2dBackBufferRenderTargets;
     Microsoft::WRL::ComPtr<ID2D1Bitmap1> m_d2dRenderTarget;
 
     Microsoft::WRL::ComPtr<IDWriteFactory> m_dwriteFactory;
 
     Title m_title;
     D2D1::ColorF m_titleBackgroundColor = D2D1::ColorF::White;
+
+    GameInfo m_gameInfo;
 };
 
 #endif  // D2DENGINE_H

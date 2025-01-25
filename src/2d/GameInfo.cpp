@@ -5,11 +5,13 @@
 void GameInfo::Init(
     const Microsoft::WRL::ComPtr<IDWriteFactory>& dwriteFactory,
     const D2D1_RECT_F& timeTextRect,
-    const D2D1_RECT_F& velocityTextRect
+    const D2D1_RECT_F& velocityTextRect,
+    const D2D1_RECT_F& fpsRect
 )
 {
     m_timeTextRect = timeTextRect;
     m_velocityTextRect = velocityTextRect;
+    m_fpsRect = fpsRect;
 
     HRESULT hr = dwriteFactory->CreateTextFormat(
         L"Arial",
@@ -48,7 +50,8 @@ void GameInfo::Render(
 ) const
 {
     std::wstring time = m_timeText + std::to_wstring(m_time);
-    std::wstring velocity = m_velocityText + std::to_wstring(m_velocity);
+    std::wstring velocity = m_velocityText + std::to_wstring(m_velocity) + L" km/h";
+    std::wstring fps = m_fpsText + std::to_wstring(m_fps);
 
     d2dDeviceContext
         ->DrawTextA(time.c_str(), time.length(), m_textFormat.Get(), m_timeTextRect, brush.Get());
@@ -60,4 +63,7 @@ void GameInfo::Render(
         m_velocityTextRect,
         brush.Get()
     );
+
+    d2dDeviceContext
+        ->DrawTextA(fps.c_str(), fps.length(), m_textFormat.Get(), m_fpsRect, brush.Get());
 }

@@ -7,10 +7,7 @@ D2DEngine::D2DEngine(HWND hwnd, RECT wr, AquaEngine::Command *command)
 {
 }
 
-void D2DEngine::Init(
-    UINT back_buffer_count,
-    const std::vector<ID3D12Resource *> &back_buffers
-)
+void D2DEngine::Init(UINT back_buffer_count, const std::vector<ID3D12Resource *> &back_buffers)
 {
     HRESULT hr = D3D11On12CreateDevice(
         AquaEngine::Device::Get().Get(),
@@ -63,10 +60,7 @@ void D2DEngine::Init(
         return;
     }
 
-    hr = m_d2dDevice->CreateDeviceContext(
-        D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
-        &m_d2dDeviceContext
-    );
+    hr = m_d2dDevice->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, &m_d2dDeviceContext);
     if (FAILED(hr))
     {
         std::println("Failed to create D2D device context");
@@ -132,9 +126,26 @@ void D2DEngine::Init(
         return;
     }
 
+    hr = m_d2dDeviceContext->CreateSolidColorBrush(
+        D2D1::ColorF(D2D1::ColorF::White),
+        &m_d2dWhiteBrush
+    );
+    if (FAILED(hr))
+    {
+        std::println("Failed to create D2D brush");
+        return;
+    }
+
     m_title.Init(
         m_dwriteFactory,
         D2D1::RectF(0, m_wr.bottom - 500, m_wr.right - m_wr.left, m_wr.bottom)
+    );
+
+    m_gameInfo.Init(
+        m_dwriteFactory,
+        D2D1::RectF(0, 50, 400, 100),
+        D2D1::RectF(0, 100, 400, 150),
+        D2D1::RectF(0, 150, 400, 200)
     );
 }
 
@@ -145,9 +156,7 @@ void D2DEngine::BeginRender(UINT back_buffer_index)
         1
     );
 
-    m_d2dDeviceContext->SetTarget(
-        m_d2dBackBufferRenderTargets[back_buffer_index].Get()
-    );
+    m_d2dDeviceContext->SetTarget(m_d2dBackBufferRenderTargets[back_buffer_index].Get());
     m_d2dDeviceContext->BeginDraw();
     m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
 }
@@ -185,12 +194,16 @@ void D2DEngine::RenderTitleTextRenderTarget()
     EndRenderRenderTarget();
 }
 
+void D2DEngine::RenderGameInfo(UINT back_buffer_index)
+{
+    BeginRender(back_buffer_index);
+    m_gameInfo.Render(m_d2dDeviceContext, m_d2dWhiteBrush);
+    EndRender(back_buffer_index);
+}
+
 void D2DEngine::BeginRenderRenderTarget()
 {
-    m_d3d11On12Device->AcquireWrappedResources(
-        m_wrappedRenderTarget.GetAddressOf(),
-        1
-    );
+    m_d3d11On12Device->AcquireWrappedResources(m_wrappedRenderTarget.GetAddressOf(), 1);
 
     m_d2dDeviceContext->SetTarget(m_d2dRenderTarget.Get());
     m_d2dDeviceContext->BeginDraw();
@@ -206,9 +219,6 @@ void D2DEngine::EndRenderRenderTarget()
         return;
     }
 
-    m_d3d11On12Device->ReleaseWrappedResources(
-        m_wrappedRenderTarget.GetAddressOf(),
-        1
-    );
+    m_d3d11On12Device->ReleaseWrappedResources(m_wrappedRenderTarget.GetAddressOf(), 1);
     m_d3d11DeviceContext->Flush();
 }

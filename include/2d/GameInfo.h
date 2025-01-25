@@ -14,7 +14,8 @@ public:
     void Init(
         const Microsoft::WRL::ComPtr<IDWriteFactory>& dwriteFactory,
         const D2D1_RECT_F& timeTextRect,
-        const D2D1_RECT_F& velocityTextRect
+        const D2D1_RECT_F& velocityTextRect,
+        const D2D1_RECT_F& fpsRect
     );
 
     void Render(
@@ -22,17 +23,35 @@ public:
         const Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>& brush
     ) const;
 
+    void Frame()
+    {
+        m_time -= 1;
+    }
+
+    void SetVelocity(float velocity)
+    {
+        m_velocity = velocity * 120.0f;
+    }
+
+    void SetFPS(float fps)
+    {
+        m_fps = fps;
+    }
+
 private:
     Microsoft::WRL::ComPtr<IDWriteTextFormat> m_textFormat;
 
     D2D1_RECT_F m_timeTextRect;
     D2D1_RECT_F m_velocityTextRect;
+    D2D1_RECT_F m_fpsRect;
 
-    std::wstring m_timeText = L"Time: ";
+    std::wstring m_timeText = L"Time Left: ";
     std::wstring m_velocityText = L"Velocity: ";
+    std::wstring m_fpsText = L"FPS: ";
 
-    int m_time = 300;
+    int m_time = 1200;
     float m_velocity = 0.0f;
+    float m_fps = 0.0f;
 };
 
 #endif  // GAMEINFO_H
