@@ -106,51 +106,35 @@ public:
         m_bullets--;
     }
 
-    void PartnerMove(float dx, float dy, float dz) const
-    {
-        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).Move(dx, dy, dz);
-        InvalidateRect(m_hwnd, &m_rc, FALSE);
-    }
-
-    void PartnerAccel()
-    {
-        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).Accel();
-        InvalidateRect(m_hwnd, &m_rc, FALSE);
-    }
-
-    void PartnerDecel()
-    {
-        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).Decel();
-        InvalidateRect(m_hwnd, &m_rc, FALSE);
-    }
-
-    void PartnerRotRight()
-    {
-        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).RotRight();
-        InvalidateRect(m_hwnd, &m_rc, FALSE);
-    }
-
-    void PartnerRotLeft()
-    {
-        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).RotLeft();
-        InvalidateRect(m_hwnd, &m_rc, FALSE);
-    }
-
-    void PartnerRotUp()
-    {
-        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).RotUp();
-        InvalidateRect(m_hwnd, &m_rc, FALSE);
-    }
-
-    void PartnerRotDown()
-    {
-        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).RotDown();
-        InvalidateRect(m_hwnd, &m_rc, FALSE);
-    }
-
     void PartnerShoot()
     {
         (m_isPlayer1 ? m_playerModel2 : m_playerModel1).Shoot();
+    }
+
+    void SetPartner(
+        const DirectX::XMMATRIX &transform,
+        const DirectX::XMMATRIX &coordinate,
+        DirectX::XMVECTOR direction
+    )
+    {
+        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).SetMatrix(transform);
+        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).SetCoordinateMatrix(coordinate);
+        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).SetDirection(direction);
+    }
+
+    DirectX::XMMATRIX GetPartnerTransformMatrix() const
+    {
+        return (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetTransformMatrix();
+    }
+
+    DirectX::XMMATRIX GetPartnerCoordinateMatrix() const
+    {
+        return (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetCoordinateMatrix();
+    }
+
+    DirectX::XMVECTOR GetPartnerDirection() const
+    {
+        return (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetDirection();
     }
 
     DirectX::XMMATRIX GetMatrix() const

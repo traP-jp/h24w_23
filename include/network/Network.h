@@ -14,7 +14,10 @@
 
 struct SendData
 {
-    WPARAM wParam;
+    DirectX::XMMATRIX transform_matrix;
+    DirectX::XMMATRIX coordinate_matrix;
+    DirectX::XMVECTOR direction;
+    bool is_shoot;
 };
 
 class Network

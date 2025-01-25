@@ -82,9 +82,16 @@ public:
             PlayEffect(manager);
             m_isActive = false;
 
-            // std::cout << "bullet position: " << DirectX::XMVectorGetX(m_model->GetPos()) << ", "
-            //           << DirectX::XMVectorGetY(m_model->GetPos()) << ", "
-            //           << DirectX::XMVectorGetZ(m_model->GetPos()) << std::endl;
+            std::cout << "bullet position: "
+                      << DirectX::XMVectorGetX(m_model->GetPos())
+                             + DirectX::XMVectorGetX(m_direction) * VELOCITY * 2
+                      << ", "
+                      << DirectX::XMVectorGetY(m_model->GetPos())
+                             + DirectX::XMVectorGetY(m_direction) * VELOCITY * 2
+                      << ", "
+                      << DirectX::XMVectorGetZ(m_model->GetPos())
+                             + DirectX::XMVectorGetZ(m_direction) * VELOCITY * 2
+                      << std::endl;
         }
 
         return length < radius;
@@ -97,7 +104,12 @@ public:
             return;
         }
         DirectX::XMVECTOR position = m_model->GetPos();
-        m_handle = manager->Play(m_effect, 0, 0, 0);
+        m_handle = manager->Play(
+            m_effect,
+            DirectX::XMVectorGetX(position) + DirectX::XMVectorGetX(m_direction) * VELOCITY * 2,
+            DirectX::XMVectorGetY(position) + DirectX::XMVectorGetY(m_direction) * VELOCITY * 2,
+            DirectX::XMVectorGetZ(position) + DirectX::XMVectorGetZ(m_direction) * VELOCITY * 2
+        );
         manager->SetLocation(
             m_handle,
             DirectX::XMVectorGetX(position) + DirectX::XMVectorGetX(m_direction) * VELOCITY * 2,

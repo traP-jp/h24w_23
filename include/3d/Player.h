@@ -162,6 +162,27 @@ public:
 
     void SetMatrix(const DirectX::XMMATRIX &matrix) const;
 
+    void SetTransformMatrix(const DirectX::XMMATRIX &matrix) const
+    {
+        for (int i = 0; i < m_models.size(); ++i)
+        {
+            m_models[i]->SetTransformMatrix(matrix);
+        }
+    }
+
+    void SetCoordinateMatrix(const DirectX::XMMATRIX &matrix) const
+    {
+        for (int i = 0; i < m_models.size(); ++i)
+        {
+            m_models[i]->SetCoordinateMatrix(matrix);
+        }
+    }
+
+    void SetDirection(DirectX::XMVECTOR direction)
+    {
+        m_direction = direction;
+    }
+
     bool IsHit(DirectX::XMVECTOR position, const Effekseer::ManagerRef &manager)
     {
         for (int i = 0; i < m_bullets.size(); ++i)
@@ -193,6 +214,11 @@ public:
     DirectX::XMMATRIX GetMappedMatrix() const
     {
         return m_models[0]->GetMappedMatrix();
+    }
+
+    DirectX::XMMATRIX GetCoordinateMatrix() const
+    {
+        return m_models[0]->GetCoordinate();
     }
 
     std::vector<D3D12_INPUT_ELEMENT_DESC> GetInputElementDescs() const

@@ -33,7 +33,19 @@ public:
         m_gameView->TransformPartner(transform);
     }
 
-    void ActionPartner(WPARAM flag);
+    void SetPartner(
+        const DirectX::XMMATRIX &transform,
+        const DirectX::XMMATRIX &coordinate,
+        DirectX::XMVECTOR direction
+    )
+    {
+        m_gameView->SetPartner(transform, coordinate, direction);
+    }
+
+    void PartnerShoot()
+    {
+        m_gameView->PartnerShoot();
+    }
 
     void MoveModel(float dx, float dy, float dz) const
     {
@@ -93,6 +105,21 @@ public:
     [[nodiscard]] DirectX::XMMATRIX GetMatrix() const
     {
         return m_gameView->GetMatrix();
+    }
+
+    DirectX::XMMATRIX GetPartnerTransformMatrix() const
+    {
+        return m_gameView->GetPartnerTransformMatrix();
+    }
+
+    DirectX::XMMATRIX GetPartnerCoordinateMatrix() const
+    {
+        return m_gameView->GetPartnerCoordinateMatrix();
+    }
+
+    DirectX::XMVECTOR GetPartnerDirection() const
+    {
+        return m_gameView->GetPartnerDirection();
     }
 
 private:
