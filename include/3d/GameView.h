@@ -138,6 +138,14 @@ public:
 
         direction = DirectX::XMVector3Normalize(direction);
 
+        if (velocity / DirectX::XMVector3Length((m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection()).m128_f32[0] < 0.6f)
+        {
+            float delta = (0.6f - velocity / DirectX::XMVector3Length((m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection()).m128_f32[0]) * 2;
+            direction = DirectX::XMVector3Normalize(
+                (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection() * delta + direction * 0.4f
+            );
+        }
+
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
             .Shoot(direction, velocity + Bullet::VELOCITY_CONST);
         m_bullets--;
@@ -176,6 +184,14 @@ public:
         }
 
         direction = DirectX::XMVector3Normalize(direction);
+
+        if (velocity / DirectX::XMVector3Length((m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetDirection()).m128_f32[0] < 0.6f)
+        {
+            float delta = (0.6f - velocity / DirectX::XMVector3Length((m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetDirection()).m128_f32[0]) * 2;
+            direction = DirectX::XMVector3Normalize(
+                (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetDirection() * delta + direction * 0.4f
+            );
+        }
 
         (m_isPlayer1 ? m_playerModel2 : m_playerModel1)
             .Shoot(direction, velocity + Bullet::VELOCITY_CONST);
