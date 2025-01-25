@@ -70,7 +70,7 @@ macro(create_executable files)
 
     set_property(TARGET h24w_23 PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDebugDLL")
 
-    target_compile_definitions(h24w_23 PRIVATE DEBUG)  # for nsight, d3d11on12 is not supported
+    #target_compile_definitions(h24w_23 PRIVATE DEBUG)  # for nsight, d3d11on12 is not supported
     #target_compile_definitions(h24w_23 PRIVATE NSIGHT)
 endmacro()
 
