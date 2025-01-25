@@ -100,9 +100,9 @@ public:
         m_handle = manager->Play(m_effect, 0, 0, 0);
         manager->SetLocation(
             m_handle,
-            DirectX::XMVectorGetX(position),
-            DirectX::XMVectorGetY(position),
-            DirectX::XMVectorGetZ(position)
+            DirectX::XMVectorGetX(position) + DirectX::XMVectorGetX(m_direction) * VELOCITY * 2,
+            DirectX::XMVectorGetY(position) + DirectX::XMVectorGetY(m_direction) * VELOCITY * 2,
+            DirectX::XMVectorGetZ(position) + DirectX::XMVectorGetZ(m_direction) * VELOCITY * 2
         );
         manager->SetScale(m_handle, EFFECT_SCALE, EFFECT_SCALE, EFFECT_SCALE);
 
