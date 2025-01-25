@@ -34,8 +34,7 @@ void Network::CreateSocket()
 
     m_partnerAddr.sin_family = AF_INET;
     m_partnerAddr.sin_port = htons(m_port);
-    int r
-        = inet_pton(AF_INET, m_partnerIpAddr.c_str(), &m_partnerAddr.sin_addr);
+    int r = inet_pton(AF_INET, m_partnerIpAddr.c_str(), &m_partnerAddr.sin_addr);
     if (r == 0)
     {
         std::println("inet_pton failed with error: {}", WSAGetLastError());
@@ -47,11 +46,7 @@ void Network::CreateSocket()
     clientAddr.sin_family = AF_INET;
     clientAddr.sin_port = htons(m_port);
     clientAddr.sin_addr.s_addr = INADDR_ANY;
-    r = bind(
-        m_sock,
-        reinterpret_cast<sockaddr*>(&clientAddr),
-        sizeof(clientAddr)
-    );
+    r = bind(m_sock, reinterpret_cast<sockaddr*>(&clientAddr), sizeof(clientAddr));
     if (r == SOCKET_ERROR)
     {
         std::println("bind failed with error: {}", WSAGetLastError());
@@ -71,8 +66,7 @@ void Network::Listen()
         int r = recv(m_sock, recvbuf, sizeof(SendData), 0);
         if (r == SOCKET_ERROR)
         {
-            std::cout << "recv failed with error: " << WSAGetLastError()
-                      << std::endl;
+            std::cout << "recv failed with error: " << WSAGetLastError() << std::endl;
             closesocket(m_sock);
             WSACleanup();
             return;
@@ -102,8 +96,8 @@ HRESULT Network::Send(const SendData& data)
     );
     if (r == SOCKET_ERROR)
     {
-        std::cout << "sendto failed with error: " << WSAGetLastError()
-                  << std::endl;
+        // std::cout << "sendto failed with error: " << WSAGetLastError()
+        //           << std::endl;
         closesocket(m_sock);
         WSACleanup();
         return E_FAIL;

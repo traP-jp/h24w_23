@@ -27,26 +27,34 @@ public:
         int index
     ) const;
 
-    void Shoot(DirectX::XMVECTOR default_position)
+    void Shoot(
+        DirectX::XMMATRIX transform,
+        DirectX::XMMATRIX coordinate,
+        DirectX::XMVECTOR direction
+    )
     {
-        m_model->SetPos(
-            DirectX::XMVectorGetX(default_position),
-            DirectX::XMVectorGetY(default_position),
-            DirectX::XMVectorGetZ(default_position)
-        );
+        m_direction = direction;
+        m_model->SetTransformMatrix(transform);
+        m_model->SetCoordinateMatrix(coordinate);
+        m_model->SetScale(DEFAULT_SCALE, DEFAULT_SCALE, DEFAULT_SCALE);
+
+        DirectX::XMVECTOR position = m_model->GetPos();
+        std::cout << "bullet position: " << DirectX::XMVectorGetX(position) << ", "
+                  << DirectX::XMVectorGetY(position) << ", " << DirectX::XMVectorGetZ(position)
+                  << std::endl;
         m_isActive = true;
     }
 
-    void Frame(DirectX::XMVECTOR direction) const
+    void Frame() const
     {
         if (!m_isActive)
         {
             return;
         }
         m_model->Move(
-            DirectX::XMVectorGetX(direction) * VELOCITY,
-            DirectX::XMVectorGetY(direction) * VELOCITY,
-            DirectX::XMVectorGetZ(direction) * VELOCITY
+            DirectX::XMVectorGetX(m_direction) * VELOCITY,
+            DirectX::XMVectorGetY(m_direction) * VELOCITY,
+            DirectX::XMVectorGetZ(m_direction) * VELOCITY
         );
         //
         // std::cout << "bullet position: "
@@ -74,9 +82,9 @@ public:
             PlayEffect(manager);
             m_isActive = false;
 
-            std::cout << "bullet position: " << DirectX::XMVectorGetX(m_model->GetPos()) << ", "
-                      << DirectX::XMVectorGetY(m_model->GetPos()) << ", "
-                      << DirectX::XMVectorGetZ(m_model->GetPos()) << std::endl;
+            // std::cout << "bullet position: " << DirectX::XMVectorGetX(m_model->GetPos()) << ", "
+            //           << DirectX::XMVectorGetY(m_model->GetPos()) << ", "
+            //           << DirectX::XMVectorGetZ(m_model->GetPos()) << std::endl;
         }
 
         return length < radius;
@@ -105,8 +113,10 @@ public:
 
 private:
     static constexpr float VELOCITY = 1.0f;
-    static constexpr float DEFAULT_SCALE = 0.005f;
+    static constexpr float DEFAULT_SCALE = 0.5f;
     static constexpr float EFFECT_SCALE = 0.25f;
+
+    DirectX::XMVECTOR m_direction{};
 
     std::unique_ptr<AquaEngine::FBXModel> m_model;
     bool m_isActive = false;

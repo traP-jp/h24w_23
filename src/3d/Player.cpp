@@ -207,7 +207,7 @@ void Player::Frame() const
 
     for (int i = 0; i < m_bullets.size(); ++i)
     {
-        m_bullets[i].Frame(m_direction);
+        m_bullets[i].Frame();
     }
 }
 
@@ -251,6 +251,10 @@ void Player::Shoot()
         return;
     }
 
-    m_bullets[m_bulletIndex].Shoot(m_models[4]->GetPos());
+    m_bullets[m_bulletIndex]
+        .Shoot(m_models[4]->GetTransformMatrix(), m_models[4]->GetCoordinate(), m_direction);
+    // std::cout << "model pos: " << m_models[4]->GetPos().m128_f32[0] << ", "
+    //           << m_models[4]->GetPos().m128_f32[1] << ", " << m_models[4]->GetPos().m128_f32[2]
+    //           << std::endl;
     m_bulletIndex++;
 }
