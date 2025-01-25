@@ -252,6 +252,10 @@ void Engine::Render()
 
             m_gameView->Render(*m_command);
 
+#ifdef DEBUG
+            m_display->EndRender();
+#endif
+
             HRESULT hr = m_command->Execute();
             if (FAILED(hr))
             {
@@ -259,7 +263,9 @@ void Engine::Render()
                 return;
             }
 
+#ifndef DEBUG
             m_d2dEngine->RenderGameInfo(m_display->GetCurrentBackBufferIndex());
+#endif
 
             m_display->Present();
             break;
@@ -268,7 +274,9 @@ void Engine::Render()
 
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - now).count();
+#ifndef DEBUG
     m_d2dEngine->SetGameInfoFPS(1000.0f / elapsed);
+#endif
 }
 
 void Engine::Timer(int id)
@@ -289,9 +297,11 @@ void Engine::Timer(int id)
             m_gameView->Timer(id);
             if (id == TIMER_FRAME)
             {
+#ifndef DEBUG
                 m_d2dEngine->GameInfoFrame();
                 m_d2dEngine->SetGameInfoVelocity(m_gameView->GetPlayerVelocity());
                 m_d2dEngine->SetGameInfoLeftBullet(m_gameView->GetBullets());
+#endif
             }
             return;
     }
