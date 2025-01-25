@@ -14,7 +14,7 @@
 
 struct SendData
 {
-    DirectX::XMMATRIX transform;
+    WPARAM wParam;
 };
 
 class Network

@@ -32,9 +32,9 @@ HRESULT MainWindow::Create(
     return S_OK;
 }
 
-void MainWindow::Send()
+void MainWindow::Send(WPARAM wParam)
 {
-    SendData data = {m_engine->GetMatrix()};
+    SendData data = {wParam};
     std::cout << "Sending data" << std::endl;
     m_network->Send(data);
 }
@@ -136,52 +136,64 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             std::cout << "WM_TIMER" << std::endl;
             if (wParam == TIMER_FRAME)
             {
+                UINT_PTR flag = 0;
                 if (m_isDecel)
                 {
+                    flag |= H24ACTION_DECEL;
                     m_engine->Decel();
                 }
                 else if (m_isAccel)
                 {
+                    flag |= H24ACTION_ACCEL;
                     m_engine->Accel();
                 }
 
                 if (m_onW)
                 {
+                    flag |= H24ACTION_ROT_UP;
                     m_engine->RotUp();
                 }
 
                 if (m_onA)
                 {
+                    flag |= H24ACTION_ROT_LEFT;
                     m_engine->RotLeft();
                 }
 
                 if (m_onS)
                 {
+                    flag |= H24ACTION_ROT_DOWN;
                     m_engine->RotDown();
                 }
 
                 if (m_onD)
                 {
+                    flag |= H24ACTION_ROT_RIGHT;
                     m_engine->RotRight();
                 }
+
+#ifndef DEBUG
+                Send(flag);
+#endif
             }
             m_engine->Timer(wParam);
 
-#ifndef DEBUG
-            Send();
-#endif
             return 0;
         }
 
         case WM_H24RECV:
             std::cout << "WM_H24RECV" << std::endl;
             SendData data = *reinterpret_cast<SendData *>(lParam);
-            m_engine->TranslatePartner(data.transform);
+            m_engine->ActionPartner(data.wParam);
             return 0;
 
         case WM_LBUTTONDOWN:
             std::cout << "shoot" << std::endl;
             m_engine->Shoot();
+            UINT_PTR flag = H24ACTION_SHOOT;
+#ifndef DEBUG
+            Send(flag);
+#endif
             return 0;
 
         default:

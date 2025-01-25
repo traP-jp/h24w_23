@@ -33,6 +33,8 @@ public:
         m_gameView->TransformPartner(transform);
     }
 
+    void ActionPartner(WPARAM flag);
+
     void MoveModel(float dx, float dy, float dz) const
     {
         m_gameView->MoveModel(dx, dy, dz);

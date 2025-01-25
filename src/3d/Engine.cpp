@@ -296,3 +296,41 @@ void Engine::Timer(int id)
             return;
     }
 }
+
+void Engine::ActionPartner(WPARAM flag)
+{
+    if (flag & H24ACTION_ACCEL)
+    {
+        m_gameView->PartnerAccel();
+    }
+
+    if (flag & H24ACTION_DECEL)
+    {
+        m_gameView->PartnerDecel();
+    }
+
+    if (flag & H24ACTION_ROT_RIGHT)
+    {
+        m_gameView->PartnerRotRight();
+    }
+
+    if (flag & H24ACTION_ROT_LEFT)
+    {
+        m_gameView->PartnerRotLeft();
+    }
+
+    if (flag & H24ACTION_ROT_UP)
+    {
+        m_gameView->PartnerRotUp();
+    }
+
+    if (flag & H24ACTION_ROT_DOWN)
+    {
+        m_gameView->PartnerRotDown();
+    }
+
+    if (flag & H24ACTION_SHOOT)
+    {
+        m_gameView->PartnerShoot();
+    }
+}

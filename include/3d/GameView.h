@@ -1,9 +1,17 @@
 #ifndef GAMEVIEW_H
 #define GAMEVIEW_H
 
-#define TIMER_MODEL1 1
-#define TIMER_MODEL2 2
-#define TIMER_FRAME  10
+#define TIMER_MODEL1        1
+#define TIMER_MODEL2        2
+#define TIMER_FRAME         10
+
+#define H24ACTION_ACCEL     0x1
+#define H24ACTION_DECEL     0x2
+#define H24ACTION_ROT_RIGHT 0x4
+#define H24ACTION_ROT_LEFT  0x8
+#define H24ACTION_ROT_UP    0x10
+#define H24ACTION_ROT_DOWN  0x20
+#define H24ACTION_SHOOT     0x40
 
 #include <AquaEngine.h>
 
@@ -96,6 +104,53 @@ public:
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Shoot();
         m_bullets--;
+    }
+
+    void PartnerMove(float dx, float dy, float dz) const
+    {
+        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).Move(dx, dy, dz);
+        InvalidateRect(m_hwnd, &m_rc, FALSE);
+    }
+
+    void PartnerAccel()
+    {
+        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).Accel();
+        InvalidateRect(m_hwnd, &m_rc, FALSE);
+    }
+
+    void PartnerDecel()
+    {
+        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).Decel();
+        InvalidateRect(m_hwnd, &m_rc, FALSE);
+    }
+
+    void PartnerRotRight()
+    {
+        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).RotRight();
+        InvalidateRect(m_hwnd, &m_rc, FALSE);
+    }
+
+    void PartnerRotLeft()
+    {
+        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).RotLeft();
+        InvalidateRect(m_hwnd, &m_rc, FALSE);
+    }
+
+    void PartnerRotUp()
+    {
+        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).RotUp();
+        InvalidateRect(m_hwnd, &m_rc, FALSE);
+    }
+
+    void PartnerRotDown()
+    {
+        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).RotDown();
+        InvalidateRect(m_hwnd, &m_rc, FALSE);
+    }
+
+    void PartnerShoot()
+    {
+        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).Shoot();
     }
 
     DirectX::XMMATRIX GetMatrix() const

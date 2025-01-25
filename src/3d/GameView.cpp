@@ -382,8 +382,10 @@ void GameView::Timer(int id)
 
         case TIMER_FRAME:
         {
-            (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Frame();
+            m_playerModel1.Frame();
+            m_playerModel2.Frame();
 
+            // camera, ui translation
             DirectX::XMVECTOR dr = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDrForCamera();
             m_camera->Move(dr);
 

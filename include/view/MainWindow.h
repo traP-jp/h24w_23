@@ -52,7 +52,7 @@ private:
 
     LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) override;
 
-    void Send();
+    void Send(WPARAM wParam);
 };
 
 #endif  // MAINWINDOW_H
