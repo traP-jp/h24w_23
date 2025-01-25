@@ -201,6 +201,11 @@ public:
         return m_velocity;
     }
 
+    DirectX::XMVECTOR GetPos()
+    {
+        return m_models[0]->GetPos();
+    }
+
     DirectX::XMMATRIX GetTransformMatrix() const
     {
         return m_models[0]->GetTransformMatrix();
