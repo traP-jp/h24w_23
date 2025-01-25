@@ -50,7 +50,7 @@ public:
         {
             m_bullets[i].CreateEffect(manager);
         }
-        //CreateBusterEffect(manager);
+        // CreateBusterEffect(manager);
         CreateGunEffect(manager);
     }
 
