@@ -19,16 +19,8 @@ HRESULT MainWindow::Create(
     bool isPlayer1
 )
 {
-    HRESULT hr = BaseWindow::Create(
-        lpWindowName,
-        dwStyle,
-        dwExStyle,
-        x,
-        y,
-        nWidth,
-        nHeight,
-        hWndParent
-    );
+    HRESULT hr
+        = BaseWindow::Create(lpWindowName, dwStyle, dwExStyle, x, y, nWidth, nHeight, hWndParent);
     if (FAILED(hr))
     {
         return hr;
