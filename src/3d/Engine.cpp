@@ -291,6 +291,7 @@ void Engine::Timer(int id)
             {
                 m_d2dEngine->GameInfoFrame();
                 m_d2dEngine->SetGameInfoVelocity(m_gameView->GetPlayerVelocity());
+                m_d2dEngine->SetGameInfoLeftBullet(m_gameView->GetBullets());
             }
             return;
     }

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <thread>
 
+#include "music/BGM.h"
 #include "view/IPDialog.h"
 #include "view/MainWindow.h"
 #include "view/resource.h"
@@ -64,6 +65,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     ShowWindow(window.Window(), nCmdShow);
 
+    BGM bgm;
+    std::thread t3(&BGM::Run, &bgm);
+
     MSG msg = {};
 
     while (GetMessage(&msg, nullptr, 0, 0))
@@ -75,6 +79,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 #ifndef DEBUG
     t2.join();
 #endif
+    t3.join();
 
     return 0;
 }

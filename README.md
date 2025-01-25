@@ -5,7 +5,7 @@
 - [FBXSDK](https://aps.autodesk.com/developer/overview/fbx-sdk)
 - [Aqua-Engine](https://github.com/kavos113/aqua-engine)
 - [Effekseer](https://github.com/effekseer/Effekseer)
-- Windows SDK(DirectX12, DirectX11, Direct2D, DirectWrite, WinSock2)
+- Windows SDK(DirectX12, DirectX11, Direct2D, DirectWrite, WinSock2, XAudio2)
 
 ```shell
 vcpkg install

@@ -45,6 +45,11 @@ public:
         m_gameInfo.SetFPS(fps);
     }
 
+    void SetGameInfoLeftBullet(int left_bullet)
+    {
+        m_gameInfo.SetLeftBullet(left_bullet);
+    }
+
 private:
     void BeginRender(UINT back_buffer_index);
     void EndRender(UINT back_buffer_index);

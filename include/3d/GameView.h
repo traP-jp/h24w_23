@@ -94,6 +94,7 @@ public:
     void Shoot()
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Shoot();
+        m_bullets--;
     }
 
     DirectX::XMMATRIX GetMatrix() const
@@ -104,6 +105,11 @@ public:
     float GetPlayerVelocity() const
     {
         return (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetVelocity();
+    }
+
+    int GetBullets() const
+    {
+        return m_bullets;
     }
 
 private:
@@ -129,6 +135,7 @@ private:
     SideUI m_sideUI;
 
     bool m_isPlayer1;
+    int m_bullets = Player::BULLET_COUNT;
 
     void CreateModels(
         AquaEngine::Command &command,

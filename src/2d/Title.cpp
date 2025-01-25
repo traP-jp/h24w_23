@@ -45,11 +45,6 @@ void Title::Render(
     const Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>& brush
 ) const
 {
-    d2dDeviceContext->DrawTextA(
-        m_text,
-        wcslen(m_text),
-        m_textFormat.Get(),
-        m_textRect,
-        brush.Get()
-    );
+    d2dDeviceContext
+        ->DrawTextA(m_text, wcslen(m_text), m_textFormat.Get(), m_textRect, brush.Get());
 }

@@ -27,6 +27,9 @@ macro(create_executable files)
             if (src MATCHES ".*\\.efkefc$")
                 file(COPY ${src} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/effects)
             endif ()
+            if (src MATCHES ".*\\.wav$")
+                file(COPY ${src} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources/music)
+            endif ()
         endif ()
     endforeach ()
 
@@ -49,6 +52,8 @@ macro(create_executable files)
     target_link_libraries(h24w_23 PUBLIC ws2_32.lib)
     target_link_libraries(h24w_23 PUBLIC MsWSock.lib)
     target_link_libraries(h24w_23 PUBLIC AdvAPI32.lib)
+    target_link_libraries(h24w_23 PUBLIC winmm.lib)
+    target_link_libraries(h24w_23 PUBLIC xaudio2.lib)
     target_link_libraries(h24w_23 PUBLIC $ENV{FBXSDK_DIR}/lib/x64/debug/libfbxsdk-md.lib)
     target_link_libraries(h24w_23 PUBLIC $ENV{FBXSDK_DIR}/lib/x64/debug/libxml2-md.lib)
     target_link_libraries(h24w_23 PUBLIC $ENV{FBXSDK_DIR}/lib/x64/debug/zlib-md.lib)
@@ -80,6 +85,7 @@ set(src_files
         src/2d/UIComponent.cpp
         src/2d/GameInfo.cpp
         src/network/Network.cpp
+        src/music/BGM.cpp
 )
 
 set(include_files
@@ -100,6 +106,7 @@ set(include_files
         include/2d/UIComponent.h
         include/2d/GameInfo.h
         include/network/Network.h
+        include/music/BGM.h
 )
 
 # TODO: delete isu, ninja
@@ -155,6 +162,8 @@ set(resources
         resources/UI/UI2/UI2_alpha1.png
         resources/UI/UI2/UI2_alpha2.png
         resources/UI/UI2/UI2_fbx.fbx
+        resources/music/hackathon3_r1.wav
+        resources/music/hackathon3_r2.wav
         shaders/main.hlsl
         shaders/renderTarget.hlsl
         shaders/skybox.hlsl

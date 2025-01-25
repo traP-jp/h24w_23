@@ -143,9 +143,10 @@ void D2DEngine::Init(UINT back_buffer_count, const std::vector<ID3D12Resource *>
 
     m_gameInfo.Init(
         m_dwriteFactory,
-        D2D1::RectF(0, 50, 400, 100),
-        D2D1::RectF(0, 100, 400, 150),
-        D2D1::RectF(0, 150, 400, 200)
+        D2D1::RectF(50, 50, 400, 100),
+        D2D1::RectF(50, 100, 400, 150),
+        D2D1::RectF(50, 150, 400, 200),
+        D2D1::RectF(50, 200, 400, 250)
     );
 }
 

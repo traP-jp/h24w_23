@@ -6,12 +6,14 @@ void GameInfo::Init(
     const Microsoft::WRL::ComPtr<IDWriteFactory>& dwriteFactory,
     const D2D1_RECT_F& timeTextRect,
     const D2D1_RECT_F& velocityTextRect,
-    const D2D1_RECT_F& fpsRect
+    const D2D1_RECT_F& fpsRect,
+    const D2D1_RECT_F& leftBulletRect
 )
 {
     m_timeTextRect = timeTextRect;
     m_velocityTextRect = velocityTextRect;
     m_fpsRect = fpsRect;
+    m_leftBulletRect = leftBulletRect;
 
     HRESULT hr = dwriteFactory->CreateTextFormat(
         L"Cascadia Code",
@@ -52,6 +54,7 @@ void GameInfo::Render(
     std::wstring time = m_timeText + std::to_wstring(m_time);
     std::wstring velocity = m_velocityText + std::to_wstring(m_velocity) + L" km/h";
     std::wstring fps = m_fpsText + std::to_wstring(m_fps);
+    std::wstring bullet = m_leftBulletText + std::to_wstring(m_leftBullet);
 
     d2dDeviceContext
         ->DrawTextA(time.c_str(), time.length(), m_textFormat.Get(), m_timeTextRect, brush.Get());
@@ -66,4 +69,12 @@ void GameInfo::Render(
 
     d2dDeviceContext
         ->DrawTextA(fps.c_str(), fps.length(), m_textFormat.Get(), m_fpsRect, brush.Get());
+
+    d2dDeviceContext->DrawTextA(
+        bullet.c_str(),
+        bullet.length(),
+        m_textFormat.Get(),
+        m_leftBulletRect,
+        brush.Get()
+    );
 }
