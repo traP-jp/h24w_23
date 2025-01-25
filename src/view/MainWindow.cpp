@@ -43,7 +43,7 @@ HRESULT MainWindow::Create(
 void MainWindow::Send()
 {
     SendData data = {m_engine->GetMatrix()};
-    // std::cout << "Sending data" << std::endl;
+    std::cout << "Sending data" << std::endl;
     m_network->Send(data);
 }
 
@@ -57,6 +57,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         case WM_PAINT:
         {
+            std::cout << "WM_PAINT" << std::endl;
             PAINTSTRUCT ps;
             BeginPaint(m_hwnd, &ps);
 
@@ -68,6 +69,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         case WM_KEYDOWN:
         {
+            std::cout << "WM_KEYDOWN" << std::endl;
             if (m_engine->GetStartStatus() == Engine::StartStatus::TITLE)
             {
                 SetTimer(m_hwnd, TIMER_TITLE, 25, nullptr);
@@ -108,6 +110,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         case WM_KEYUP:
         {
+            std::cout << "WM_KEYUP" << std::endl;
             switch (wParam)
             {
                 case VK_SHIFT:
@@ -138,6 +141,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         case WM_TIMER:
         {
+            std::cout << "WM_TIMER" << std::endl;
             if (wParam == TIMER_FRAME)
             {
                 if (m_isDecel)
@@ -178,6 +182,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
 
         case WM_H24RECV:
+            std::cout << "WM_H24RECV" << std::endl;
             SendData data = *reinterpret_cast<SendData *>(lParam);
             m_engine->TranslatePartner(data.transform);
             return 0;
