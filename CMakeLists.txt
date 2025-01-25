@@ -93,7 +93,7 @@ set(src_files
         src/2d/GameInfo.cpp
         src/2d/TitleImage.cpp
         src/2d/Result.cpp
-        src/network/Network.cppj
+        src/network/Network.cpp
         src/music/BGM.cpp
 )
 

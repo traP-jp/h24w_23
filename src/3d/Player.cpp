@@ -236,8 +236,23 @@ void Player::Timer() const
     }
 }
 
-void Player::Frame() const
+void Player::Frame()
 {
+    if (m_isaccel)
+    {
+        if (m_accelFrame == 0)
+        {
+            m_velocity += ACCEL_FAST;
+        }
+        else if (m_accelFrame == ACCEL_SECOND_FRAME)
+        {
+            m_isaccel = false;
+            m_velocity -= (ACCEL_FAST - ACCEL_SLOW);
+        }
+
+        m_accelFrame++;
+    }
+
     DirectX::XMVECTOR dr = m_direction * m_velocity;
     Move(dr.m128_f32[0], dr.m128_f32[1], dr.m128_f32[2]);
 

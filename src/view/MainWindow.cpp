@@ -77,7 +77,8 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 switch (wParam)
                 {
                     case VK_SHIFT:
-                        m_isAccel = true;
+                        std::cout << "accel" << std::endl;
+                        m_engine->Accel();
                         break;
 
                     case VK_SPACE:
@@ -109,10 +110,6 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             // std::cout << "WM_KEYUP" << std::endl;
             switch (wParam)
             {
-                case VK_SHIFT:
-                    m_isAccel = false;
-                    break;
-
                 case VK_SPACE:
                     m_isDecel = false;
                     break;
@@ -143,10 +140,6 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 if (m_isDecel)
                 {
                     m_engine->Decel();
-                }
-                else if (m_isAccel)
-                {
-                    m_engine->Accel();
                 }
 
                 if (m_onW)

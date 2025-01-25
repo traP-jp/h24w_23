@@ -76,22 +76,41 @@ public:
 
     void Timer() const;
 
-    void Frame() const;
+    void Frame();
 
     void BulletFrame() const;
 
     void Shoot(DirectX::XMVECTOR direction, float velocity);
 
+    bool GetIsAccel() const
+    {
+        return m_isaccel;
+    }
+
+    int GetAccelFrame() const
+    {
+        return m_accelFrame;
+    }
+
     DirectX::XMVECTOR Accel()
     {
-        m_velocity += ACCELERATION;
+        // m_velocity += ACCELERATION;
+        //
+        // if (m_velocity > MAX_VELOCITY)
+        // {
+        //     m_velocity = MAX_VELOCITY;
+        //     return {0.0f, 0.0f, 0.0f, 0.0f};
+        // }
+        // // return m_direction * -ACCELERATION * 0.2;
 
-        if (m_velocity > MAX_VELOCITY)
+        if (m_isaccel)
         {
-            m_velocity = MAX_VELOCITY;
-            return {0.0f, 0.0f, 0.0f, 0.0f};
+            return DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
         }
-        return m_direction * -ACCELERATION * 0.2;
+
+        m_isaccel = true;
+        m_accelFrame = 0;
+        return DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
     }
 
     DirectX::XMVECTOR Decel()
@@ -103,7 +122,8 @@ public:
             m_velocity = 0.0f;
             return {0.0f, 0.0f, 0.0f, 0.0f};
         }
-        return m_direction * -DECELERATION * 0.2;
+        // return m_direction * -DECELERATION * 0.2;
+        return DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
     }
 
     void RotRight()
@@ -363,6 +383,16 @@ private:
     Effekseer::Handle m_gunHandle = 0;
 
     Effekseer::ManagerRef m_manager;
+
+    int m_accelFrame = 0;
+    bool m_isaccel = false;
+
+    static constexpr float ACCEL_FAST = 1.2f;
+    static constexpr float ACCEL_SLOW = 0.2f;
+
+    static constexpr int ACCEL_FIRST_FRAME = 3;
+    static constexpr int ACCEL_SECOND_FRAME = 15;
+    static constexpr int ACCEL_THIRD_FRAME = 21;
 
     void ImportModel(AquaEngine::Command &command);
 
