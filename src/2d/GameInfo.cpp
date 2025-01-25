@@ -14,7 +14,7 @@ void GameInfo::Init(
     m_fpsRect = fpsRect;
 
     HRESULT hr = dwriteFactory->CreateTextFormat(
-        L"Arial",
+        L"Cascadia Code",
         nullptr,
         DWRITE_FONT_WEIGHT_NORMAL,
         DWRITE_FONT_STYLE_NORMAL,
