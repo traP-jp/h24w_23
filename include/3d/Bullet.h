@@ -30,13 +30,15 @@ public:
     void Shoot(
         DirectX::XMMATRIX transform,
         DirectX::XMMATRIX coordinate,
-        DirectX::XMVECTOR direction
+        DirectX::XMVECTOR direction,
+        float velocity
     )
     {
         m_direction = direction;
         m_model->SetTransformMatrix(transform);
         m_model->SetCoordinateMatrix(coordinate);
         m_model->SetScale(DEFAULT_SCALE, DEFAULT_SCALE, DEFAULT_SCALE);
+        m_velocity = velocity;
 
         DirectX::XMVECTOR position = m_model->GetPos();
         // std::cout << "bullet position: " << DirectX::XMVectorGetX(position) << ", "
@@ -52,9 +54,9 @@ public:
             return;
         }
         m_model->Move(
-            DirectX::XMVectorGetX(m_direction) * VELOCITY,
-            DirectX::XMVectorGetY(m_direction) * VELOCITY,
-            DirectX::XMVectorGetZ(m_direction) * VELOCITY
+            DirectX::XMVectorGetX(m_direction) * m_velocity,
+            DirectX::XMVectorGetY(m_direction) * m_velocity,
+            DirectX::XMVectorGetZ(m_direction) * m_velocity
         );
         //
         // std::cout << "bullet position: "
@@ -82,16 +84,16 @@ public:
             PlayEffect(manager);
             m_isActive = false;
 
-            std::cout << "bullet position: "
-                      << DirectX::XMVectorGetX(m_model->GetPos())
-                             + DirectX::XMVectorGetX(m_direction) * VELOCITY * 2
-                      << ", "
-                      << DirectX::XMVectorGetY(m_model->GetPos())
-                             + DirectX::XMVectorGetY(m_direction) * VELOCITY * 2
-                      << ", "
-                      << DirectX::XMVectorGetZ(m_model->GetPos())
-                             + DirectX::XMVectorGetZ(m_direction) * VELOCITY * 2
-                      << std::endl;
+            // std::cout << "bullet position: "
+            //           << DirectX::XMVectorGetX(m_model->GetPos())
+            //                  + DirectX::XMVectorGetX(m_direction) * DEFAULT_VELOCITY * 2
+            //           << ", "
+            //           << DirectX::XMVectorGetY(m_model->GetPos())
+            //                  + DirectX::XMVectorGetY(m_direction) * DEFAULT_VELOCITY * 2
+            //           << ", "
+            //           << DirectX::XMVectorGetZ(m_model->GetPos())
+            //                  + DirectX::XMVectorGetZ(m_direction) * DEFAULT_VELOCITY * 2
+            //           << std::endl;
         }
 
         return length < radius;
@@ -106,15 +108,21 @@ public:
         DirectX::XMVECTOR position = m_model->GetPos();
         m_handle = manager->Play(
             m_effect,
-            DirectX::XMVectorGetX(position) + DirectX::XMVectorGetX(m_direction) * VELOCITY * 2,
-            DirectX::XMVectorGetY(position) + DirectX::XMVectorGetY(m_direction) * VELOCITY * 2,
-            DirectX::XMVectorGetZ(position) + DirectX::XMVectorGetZ(m_direction) * VELOCITY * 2
+            DirectX::XMVectorGetX(position)
+                + DirectX::XMVectorGetX(m_direction) * DEFAULT_VELOCITY * 2,
+            DirectX::XMVectorGetY(position)
+                + DirectX::XMVectorGetY(m_direction) * DEFAULT_VELOCITY * 2,
+            DirectX::XMVectorGetZ(position)
+                + DirectX::XMVectorGetZ(m_direction) * DEFAULT_VELOCITY * 2
         );
         manager->SetLocation(
             m_handle,
-            DirectX::XMVectorGetX(position) + DirectX::XMVectorGetX(m_direction) * VELOCITY * 2,
-            DirectX::XMVectorGetY(position) + DirectX::XMVectorGetY(m_direction) * VELOCITY * 2,
-            DirectX::XMVectorGetZ(position) + DirectX::XMVectorGetZ(m_direction) * VELOCITY * 2
+            DirectX::XMVectorGetX(position)
+                + DirectX::XMVectorGetX(m_direction) * DEFAULT_VELOCITY * 2,
+            DirectX::XMVectorGetY(position)
+                + DirectX::XMVectorGetY(m_direction) * DEFAULT_VELOCITY * 2,
+            DirectX::XMVectorGetZ(position)
+                + DirectX::XMVectorGetZ(m_direction) * DEFAULT_VELOCITY * 2
         );
         manager->SetScale(m_handle, EFFECT_SCALE, EFFECT_SCALE, EFFECT_SCALE);
 
@@ -123,8 +131,10 @@ public:
         // std::cout << "play effect" << std::endl;
     }
 
+    static constexpr float VELOCITY_CONST = 0.4f;
+
 private:
-    static constexpr float VELOCITY = 1.0f;
+    static constexpr float DEFAULT_VELOCITY = 1.0f;
     static constexpr float DEFAULT_SCALE = 0.5f;
     static constexpr float EFFECT_SCALE = 1.0f;
 
@@ -133,6 +143,8 @@ private:
     std::unique_ptr<AquaEngine::FBXModel> m_model;
     bool m_isActive = false;
     bool m_isEffectActive = false;
+
+    float m_velocity = 0.0f;
 
     Effekseer::EffectRef m_effect = nullptr;
     Effekseer::Handle m_handle = 0;

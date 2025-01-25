@@ -25,6 +25,9 @@
 #include "Player.h"
 #include "SideUI.h"
 
+using DirectX::operator-;
+using DirectX::operator+;
+
 class GameView
 {
 public:
@@ -103,13 +106,79 @@ public:
 
     void Shoot()
     {
-        (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Shoot();
+        DirectX::XMVECTOR r;
+        if (m_isPlayer1)
+        {
+            r = m_playerModel2.GetPos() - m_playerModel1.GetPos();
+        }
+        else
+        {
+            r = m_playerModel1.GetPos() - m_playerModel2.GetPos();
+        }
+
+        r = DirectX::XMVector3Normalize(r);
+
+        float velocity = DirectX::XMVector3Dot(
+                             (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection(),
+                             r
+        )
+                             .m128_f32[0];
+
+        DirectX::XMVECTOR direction;
+        if (m_isPlayer1)
+        {
+            direction = m_playerModel2.GetDirection() * m_playerModel2.GetVelocity()
+                        + (velocity + Bullet::VELOCITY_CONST - m_playerModel2.GetVelocity()) * r;
+        }
+        else
+        {
+            direction = m_playerModel1.GetDirection() * m_playerModel1.GetVelocity()
+                        + (velocity + Bullet::VELOCITY_CONST - m_playerModel1.GetVelocity()) * r;
+        }
+
+        direction = DirectX::XMVector3Normalize(direction);
+
+        (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
+            .Shoot(direction, velocity + Bullet::VELOCITY_CONST);
         m_bullets--;
     }
 
     void PartnerShoot()
     {
-        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).Shoot();
+        DirectX::XMVECTOR r;
+        if (m_isPlayer1)
+        {
+            r = m_playerModel1.GetPos() - m_playerModel2.GetPos();
+        }
+        else
+        {
+            r = m_playerModel2.GetPos() - m_playerModel1.GetPos();
+        }
+
+        r = DirectX::XMVector3Normalize(r);
+
+        float velocity = DirectX::XMVector3Dot(
+                             (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetDirection(),
+                             r
+        )
+                             .m128_f32[0];
+
+        DirectX::XMVECTOR direction;
+        if (m_isPlayer1)
+        {
+            direction = m_playerModel1.GetDirection() * m_playerModel1.GetVelocity()
+                        + (velocity + Bullet::VELOCITY_CONST - m_playerModel1.GetVelocity()) * r;
+        }
+        else
+        {
+            direction = m_playerModel2.GetDirection() * m_playerModel2.GetVelocity()
+                        + (velocity + Bullet::VELOCITY_CONST - m_playerModel2.GetVelocity()) * r;
+        }
+
+        direction = DirectX::XMVector3Normalize(direction);
+
+        (m_isPlayer1 ? m_playerModel2 : m_playerModel1)
+            .Shoot(direction, velocity + Bullet::VELOCITY_CONST);
     }
 
     void SetPartner(

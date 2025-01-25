@@ -291,7 +291,7 @@ void Player::RotZ(float angle) const
     }
 }
 
-void Player::Shoot()
+void Player::Shoot(DirectX::XMVECTOR direction, float velocity)
 {
     if (m_bulletIndex >= m_bullets.size())
     {
@@ -299,25 +299,29 @@ void Player::Shoot()
         return;
     }
 
-    m_bullets[m_bulletIndex]
-        .Shoot(m_models[4]->GetTransformMatrix(), m_models[4]->GetCoordinate(), m_direction);
+    m_bullets[m_bulletIndex].Shoot(
+        m_models[4]->GetTransformMatrix(),
+        m_models[4]->GetCoordinate(),
+        direction,
+        velocity
+    );
     // std::cout << "model pos: " << m_models[4]->GetPos().m128_f32[0] << ", "
     //           << m_models[4]->GetPos().m128_f32[1] << ", " << m_models[4]->GetPos().m128_f32[2]
     //           << std::endl;
     m_bulletIndex++;
 
     DirectX::XMVECTOR position = m_models[4]->GetPos();
-    DirectX::XMVECTOR direction = DirectX::XMVector3Normalize(m_direction);
-    DirectX::XMVECTOR left = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(m_up, direction));
+    DirectX::XMVECTOR dir = DirectX::XMVector3Normalize(m_direction);
+    DirectX::XMVECTOR left = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(m_up, dir));
     m_gunHandle = m_manager->Play(m_gunEffect, 0, 0, 0);
     m_manager->SetScale(m_gunHandle, GUN_EFFECT_SCALE, GUN_EFFECT_SCALE, GUN_EFFECT_SCALE);
     m_manager->SetLocation(
         m_gunHandle,
-        DirectX::XMVectorGetX(position) + DirectX::XMVectorGetX(direction) * 2.4
+        DirectX::XMVectorGetX(position) + DirectX::XMVectorGetX(dir) * 2.4
             - DirectX::XMVectorGetX(left) * 0.5,
-        DirectX::XMVectorGetY(position) + DirectX::XMVectorGetY(direction) * 2.4
+        DirectX::XMVectorGetY(position) + DirectX::XMVectorGetY(dir) * 2.4
             - DirectX::XMVectorGetY(left) * 0.5,
-        DirectX::XMVectorGetZ(position) + DirectX::XMVectorGetZ(direction) * 2.4
+        DirectX::XMVectorGetZ(position) + DirectX::XMVectorGetZ(dir) * 2.4
             - DirectX::XMVectorGetZ(left) * 0.5
     );
 }

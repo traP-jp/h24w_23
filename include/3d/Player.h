@@ -80,7 +80,7 @@ public:
 
     void BulletFrame() const;
 
-    void Shoot();
+    void Shoot(DirectX::XMVECTOR direction, float velocity);
 
     DirectX::XMVECTOR Accel()
     {
