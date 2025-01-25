@@ -183,10 +183,16 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             // std::cout << "WM_H24RECV" << std::endl;
             SendData data = *reinterpret_cast<SendData *>(lParam);
             m_engine->SetPartner(data.transform_matrix, data.coordinate_matrix, data.direction);
+
+            std::cout << "data: " << data.coordinate_matrix.r[3].m128_f32[0] << ", "
+                      << data.coordinate_matrix.r[3].m128_f32[1] << ", "
+                      << data.coordinate_matrix.r[3].m128_f32[2] << std::endl;
+
             if (data.is_shoot)
             {
                 m_engine->PartnerShoot();
             }
+
             return 0;
         }
 
