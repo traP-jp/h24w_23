@@ -78,6 +78,7 @@ set(src_files
         src/2d/Title.cpp
         src/2d/UIManager.cpp
         src/2d/UIComponent.cpp
+        src/2d/GameInfo.cpp
         src/network/Network.cpp
 )
 
@@ -97,6 +98,7 @@ set(include_files
         include/2d/Title.h
         include/2d/UIManager.h
         include/2d/UIComponent.h
+        include/2d/GameInfo.h
         include/network/Network.h
 )
 
