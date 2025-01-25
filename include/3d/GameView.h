@@ -164,18 +164,8 @@ public:
                       .m128_f32[0]
             < 0.6f)
         {
-            float delta
-                = (0.6f
-                   - velocity
-                         / DirectX::XMVector3Length(
-                               (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection()
-                         )
-                               .m128_f32[0])
-                  * 2;
-            direction = DirectX::XMVector3Normalize(
-                (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection() * delta
-                + direction * 0.4f
-            );
+            direction = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection();
+            velocity = Bullet::VELOCITY_CONST * 4.0f;
         }
 
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
