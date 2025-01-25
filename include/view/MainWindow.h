@@ -18,15 +18,14 @@ public:
         int y,
         int nWidth,
         int nHeight,
-        HWND hWndParent
-    ) override;
+        HWND hWndParent,
+        bool isPlayer1
+    );
 
-    void InitNetwork(const std::string& ipaddr, bool isServer)
+    void InitNetwork(const std::string& ipaddr)
     {
         m_network = std::make_unique<Network>(ipaddr, m_hwnd);
         m_network->CreateSocket();
-
-        m_engine->SetIsPlayer1(isServer);
     }
 
     void Listen() const

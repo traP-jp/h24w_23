@@ -19,7 +19,7 @@
 class GameView
 {
 public:
-    GameView(HWND hwnd, RECT rc);
+    GameView(HWND hwnd, RECT rc, bool is_player1);
 
     ~GameView() = default;
 

@@ -15,7 +15,8 @@ HRESULT MainWindow::Create(
     int y,
     int nWidth,
     int nHeight,
-    HWND hWndParent
+    HWND hWndParent,
+    bool isPlayer1
 )
 {
     HRESULT hr = BaseWindow::Create(
@@ -33,7 +34,7 @@ HRESULT MainWindow::Create(
         return hr;
     }
 
-    m_engine = std::make_unique<Engine>(m_hwnd, wr);
+    m_engine = std::make_unique<Engine>(m_hwnd, wr, isPlayer1);
     m_engine->Init();
 
     return S_OK;

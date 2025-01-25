@@ -14,14 +14,15 @@
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-int WINAPI wWinMain(
-    HINSTANCE hInstance,
-    HINSTANCE hPrevInstance,
-    PWSTR pCmdLine,
-    int nCmdShow
-)
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {
     bool is_player1 = false;
+
+    int ret = MessageBox(nullptr, "Are you player1?", "Player1", MB_YESNO);
+    if (ret == IDYES)
+    {
+        is_player1 = true;
+    }
 #ifndef DEBUG
     std::thread t(
         []()
@@ -39,16 +40,9 @@ int WINAPI wWinMain(
 #endif
 
     MainWindow window;
-    HRESULT hr = window.Create(
-        "MainWindow",
-        WS_OVERLAPPEDWINDOW,
-        0,
-        0,
-        0,
-        1920,
-        1200,
-        nullptr
-    );
+    HRESULT hr
+        = window
+              .Create("MainWindow", WS_OVERLAPPEDWINDOW, 0, 0, 0, 1920, 1200, nullptr, is_player1);
     if (FAILED(hr))
     {
         return -1;
@@ -63,7 +57,7 @@ int WINAPI wWinMain(
     std::cout << "ip_addr: " << ip_addr << std::endl;
     std::cout << "is_player1: " << is_player1 << std::endl;
 
-    window.InitNetwork(ip_addr, is_player1);
+    window.InitNetwork(ip_addr);
 
     std::thread t2(&MainWindow::Listen, &window);
 #endif

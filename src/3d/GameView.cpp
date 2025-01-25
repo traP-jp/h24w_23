@@ -4,7 +4,8 @@
 
 using DirectX::operator-;
 
-GameView::GameView(HWND hwnd, RECT rc) : m_hwnd(hwnd), m_rc(rc), m_isPlayer1(false)
+GameView::GameView(HWND hwnd, RECT rc, bool is_player1)
+    : m_hwnd(hwnd), m_rc(rc), m_isPlayer1(is_player1)
 {
 }
 
@@ -498,6 +499,8 @@ void GameView::Timer(int id)
             m_sideUI.SetTransformMatrix((m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetMatrix()
             );
             m_sideUI.Frame();
+
+            std::cout << (m_isPlayer1 ? "player1" : "player2") << std::endl;
 
             break;
         }

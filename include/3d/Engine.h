@@ -21,7 +21,7 @@ public:
         RUNNING
     };
 
-    Engine(HWND hwnd, RECT wr);
+    Engine(HWND hwnd, RECT wr, bool isPlayer1);
     ~Engine();
 
     void Init();
@@ -118,6 +118,8 @@ private:
 
     StartStatus m_startStatus = StartStatus::TITLE;
     float m_elapsedTime = 0.0f;
+
+    bool m_isPlayer1;
 
     void InitRenderTargets();
 };
