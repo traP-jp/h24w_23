@@ -92,6 +92,7 @@ set(src_files
         src/2d/UIComponent.cpp
         src/2d/GameInfo.cpp
         src/2d/TitleImage.cpp
+        src/2d/Result.cpp
         src/network/Network.cpp
         src/music/BGM.cpp
 )
@@ -114,6 +115,7 @@ set(include_files
         include/2d/UIComponent.h
         include/2d/GameInfo.h
         include/2d/TitleImage.h
+        include/2d/Result.h
         include/network/Network.h
         include/music/BGM.h
 )
@@ -316,6 +318,8 @@ set(resources
         shaders/bullet.hlsl
         shaders/ui/ui.hlsl
         shaders/ui/side_ui.hlsl
+        shaders/ui/resultback.hlsl
+        shaders/ui/resulttext.hlsl
 )
 
 create_executable(${src_files} ${include_files} ${resources})
