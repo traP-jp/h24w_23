@@ -196,42 +196,59 @@ public:
         return false;
     }
 
-    float GetVelocity() const
+    [[nodiscard]] float GetVelocity() const
     {
         return m_velocity;
     }
 
-    DirectX::XMVECTOR GetPos()
+    [[nodiscard]] DirectX::XMVECTOR GetPos()
     {
         return m_models[0]->GetPos();
     }
 
-    DirectX::XMMATRIX GetTransformMatrix() const
+    [[nodiscard]] DirectX::XMMATRIX GetTransformMatrix() const
     {
+        std::cout << "TransformMatrix: \n"
+                  << m_models[0]->GetTransformMatrix().r[0].m128_f32[0] << " "
+                  << m_models[0]->GetTransformMatrix().r[0].m128_f32[1] << " "
+                  << m_models[0]->GetTransformMatrix().r[0].m128_f32[2] << " "
+                  << m_models[0]->GetTransformMatrix().r[0].m128_f32[3] << "\n"
+                  << m_models[0]->GetTransformMatrix().r[1].m128_f32[0] << " "
+                  << m_models[0]->GetTransformMatrix().r[1].m128_f32[1] << " "
+                  << m_models[0]->GetTransformMatrix().r[1].m128_f32[2] << " "
+                  << m_models[0]->GetTransformMatrix().r[1].m128_f32[3] << "\n"
+                  << m_models[0]->GetTransformMatrix().r[2].m128_f32[0] << " "
+                  << m_models[0]->GetTransformMatrix().r[2].m128_f32[1] << " "
+                  << m_models[0]->GetTransformMatrix().r[2].m128_f32[2] << " "
+                  << m_models[0]->GetTransformMatrix().r[2].m128_f32[3] << "\n"
+                  << m_models[0]->GetTransformMatrix().r[3].m128_f32[0] << " "
+                  << m_models[0]->GetTransformMatrix().r[3].m128_f32[1] << " "
+                  << m_models[0]->GetTransformMatrix().r[3].m128_f32[2] << " "
+                  << m_models[0]->GetTransformMatrix().r[3].m128_f32[3] << std::endl;
         return m_models[0]->GetTransformMatrix();
     }
 
-    DirectX::XMMATRIX GetMatrix() const
+    [[nodiscard]] DirectX::XMMATRIX GetMatrix() const
     {
         return m_models[0]->GetMatrix();
     }
 
-    DirectX::XMMATRIX GetMappedMatrix() const
+    [[nodiscard]] DirectX::XMMATRIX GetMappedMatrix() const
     {
         return m_models[0]->GetMappedMatrix();
     }
 
-    DirectX::XMMATRIX GetCoordinateMatrix() const
+    [[nodiscard]] DirectX::XMMATRIX GetCoordinateMatrix() const
     {
         return m_models[0]->GetCoordinate();
     }
 
-    std::vector<D3D12_INPUT_ELEMENT_DESC> GetInputElementDescs() const
+    [[nodiscard]] std::vector<D3D12_INPUT_ELEMENT_DESC> GetInputElementDescs() const
     {
         return m_models[0]->GetInputElementDescs();
     }
 
-    UINT GetFrameCount() const
+    [[nodiscard]] UINT GetFrameCount() const
     {
         return m_models[2]->GetFrameCount();
     }
