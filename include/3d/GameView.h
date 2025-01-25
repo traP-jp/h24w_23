@@ -103,13 +103,13 @@ public:
 
     void Shoot()
     {
-        (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Shoot(m_effectManager.GetManager());
+        (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Shoot();
         m_bullets--;
     }
 
     void PartnerShoot()
     {
-        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).Shoot(m_effectManager.GetManager());
+        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).Shoot();
     }
 
     void SetPartner(

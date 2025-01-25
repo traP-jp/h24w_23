@@ -70,7 +70,7 @@ public:
 
     void BulletFrame() const;
 
-    void Shoot(const Effekseer::ManagerRef &manager);
+    void Shoot();
 
     DirectX::XMVECTOR Accel()
     {
@@ -120,6 +120,10 @@ public:
         {
             m_models[i]->RotY(ROTATION);
         }
+
+        m_yAngle += ROTATION;
+
+        m_manager->SetRotation(m_busterHandle, m_xAngle - DirectX::XM_PIDIV2, m_yAngle, 0);
     }
 
     void RotLeft()
@@ -146,6 +150,10 @@ public:
         {
             m_models[i]->RotY(-ROTATION);
         }
+
+        m_yAngle -= ROTATION;
+
+        m_manager->SetRotation(m_busterHandle, m_xAngle - DirectX::XM_PIDIV2, m_yAngle, 0);
     }
 
     void RotUp()
@@ -153,7 +161,7 @@ public:
         m_direction = XMVector3Transform(
             XMVector3Transform(
                 DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f),
-                DirectX::XMMatrixRotationY(-m_yAngle)
+                DirectX::XMMatrixRotationX(-ROTATION)
             ),
             m_models[0]->GetTransformMatrix()
         );
@@ -162,7 +170,7 @@ public:
         m_up = XMVector3Transform(
             XMVector3Transform(
                 DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f),
-                DirectX::XMMatrixRotationY(-m_yAngle)
+                DirectX::XMMatrixRotationX(-ROTATION)
             ),
             m_models[0]->GetTransformMatrix()
         );
@@ -172,6 +180,10 @@ public:
         {
             m_models[i]->RotX(-ROTATION);
         }
+
+        m_xAngle -= ROTATION;
+
+        m_manager->SetRotation(m_busterHandle, m_xAngle - DirectX::XM_PIDIV2, m_yAngle, 0);
     }
 
     void RotDown()
@@ -179,7 +191,7 @@ public:
         m_direction = XMVector3Transform(
             XMVector3Transform(
                 DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f),
-                DirectX::XMMatrixRotationY(-m_yAngle)
+                DirectX::XMMatrixRotationX(ROTATION)
             ),
             m_models[0]->GetTransformMatrix()
         );
@@ -188,7 +200,7 @@ public:
         m_up = XMVector3Transform(
             XMVector3Transform(
                 DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f),
-                DirectX::XMMatrixRotationY(-m_yAngle)
+                DirectX::XMMatrixRotationX(ROTATION)
             ),
             m_models[0]->GetTransformMatrix()
         );
@@ -198,6 +210,10 @@ public:
         {
             m_models[i]->RotX(ROTATION);
         }
+
+        m_xAngle += ROTATION;
+
+        m_manager->SetRotation(m_busterHandle, m_xAngle - DirectX::XM_PIDIV2, m_yAngle, 0);
     }
 
     void SetMatrix(const DirectX::XMMATRIX &matrix) const;
@@ -306,13 +322,13 @@ public:
     static constexpr float DEFAULT_SCALE = 0.002f;
 
 private:
-    static constexpr float ACCELERATION = 0.5f;
-    static constexpr float DECELERATION = -1.5f;
-    static constexpr float MAX_VELOCITY = 100.0f;
+    static constexpr float ACCELERATION = 0.2f;
+    static constexpr float DECELERATION = -0.6f;
+    static constexpr float MAX_VELOCITY = 50.0f;
     static constexpr float ROTATION = 0.1f;
     static constexpr float RADIUS = DEFAULT_SCALE * 1201.28f;
 
-    static constexpr float BUSTER_EFFECT_SCALE = 0.2f;
+    static constexpr float BUSTER_EFFECT_SCALE = 0.4f;
     static constexpr float GUN_EFFECT_SCALE = 0.14f;
 
     std::array<std::unique_ptr<AquaEngine::FBXModel>, 8> m_models;
@@ -330,6 +346,8 @@ private:
 
     Effekseer::EffectRef m_gunEffect = nullptr;
     Effekseer::Handle m_gunHandle = 0;
+
+    Effekseer::ManagerRef m_manager;
 
     void ImportModel(AquaEngine::Command &command);
 

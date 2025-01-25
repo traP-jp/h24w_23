@@ -204,6 +204,15 @@ void Player::Frame() const
 {
     DirectX::XMVECTOR dr = m_direction * m_velocity;
     Move(dr.m128_f32[0], dr.m128_f32[1], dr.m128_f32[2]);
+
+    DirectX::XMVECTOR direction = DirectX::XMVector3Normalize(m_direction);
+
+    m_manager->SetLocation(
+        m_busterHandle,
+        DirectX::XMVectorGetX(m_models[2]->GetPos()) - DirectX::XMVectorGetX(direction) * 0.5f,
+        DirectX::XMVectorGetY(m_models[2]->GetPos()) - DirectX::XMVectorGetY(direction) * 0.5f,
+        DirectX::XMVectorGetZ(m_models[2]->GetPos()) - DirectX::XMVectorGetZ(direction) * 0.5f
+    );
 }
 
 void Player::BulletFrame() const
@@ -246,7 +255,7 @@ void Player::RotZ(float angle) const
     }
 }
 
-void Player::Shoot(const Effekseer::ManagerRef &manager)
+void Player::Shoot()
 {
     if (m_bulletIndex >= m_bullets.size())
     {
@@ -264,9 +273,9 @@ void Player::Shoot(const Effekseer::ManagerRef &manager)
     DirectX::XMVECTOR position = m_models[4]->GetPos();
     DirectX::XMVECTOR direction = DirectX::XMVector3Normalize(m_direction);
     DirectX::XMVECTOR left = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(m_up, direction));
-    m_gunHandle = manager->Play(m_gunEffect, 0, 0, 0);
-    manager->SetScale(m_gunHandle, GUN_EFFECT_SCALE, GUN_EFFECT_SCALE, GUN_EFFECT_SCALE);
-    manager->SetLocation(
+    m_gunHandle = m_manager->Play(m_gunEffect, 0, 0, 0);
+    m_manager->SetScale(m_gunHandle, GUN_EFFECT_SCALE, GUN_EFFECT_SCALE, GUN_EFFECT_SCALE);
+    m_manager->SetLocation(
         m_gunHandle,
         DirectX::XMVectorGetX(position) + DirectX::XMVectorGetX(direction) * 2.4
             - DirectX::XMVectorGetX(left) * 0.5,
@@ -294,8 +303,12 @@ void Player::CreateBusterEffect(const Effekseer::ManagerRef &manager)
         m_busterHandle,
         DirectX::XMVectorGetX(position),
         DirectX::XMVectorGetY(position),
-        DirectX::XMVectorGetZ(position)
+        DirectX::XMVectorGetZ(position) - 0.5f
     );
+
+    manager->SetRotation(m_busterHandle, -DirectX::XM_PIDIV2, 0, 0);
+
+    m_manager = manager;
 }
 
 void Player::CreateGunEffect(const Effekseer::ManagerRef &manager)
