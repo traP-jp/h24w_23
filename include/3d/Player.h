@@ -50,6 +50,8 @@ public:
         {
             m_bullets[i].CreateEffect(manager);
         }
+        //CreateBusterEffect(manager);
+        CreateGunEffect(manager);
     }
 
     void Move(float dx, float dy, float dz) const;
@@ -126,24 +128,6 @@ public:
         {
             m_models[i]->RotY(-ROTATION);
         }
-        //
-        // std::cout << "TransformMatrix Rot: \n"
-        //           << m_models[0]->GetTransformMatrix().r[0].m128_f32[0] << " "
-        //           << m_models[0]->GetTransformMatrix().r[0].m128_f32[1] << " "
-        //           << m_models[0]->GetTransformMatrix().r[0].m128_f32[2] << " "
-        //           << m_models[0]->GetTransformMatrix().r[0].m128_f32[3] << "\n"
-        //           << m_models[0]->GetTransformMatrix().r[1].m128_f32[0] << " "
-        //           << m_models[0]->GetTransformMatrix().r[1].m128_f32[1] << " "
-        //           << m_models[0]->GetTransformMatrix().r[1].m128_f32[2] << " "
-        //           << m_models[0]->GetTransformMatrix().r[1].m128_f32[3] << "\n"
-        //           << m_models[0]->GetTransformMatrix().r[2].m128_f32[0] << " "
-        //           << m_models[0]->GetTransformMatrix().r[2].m128_f32[1] << " "
-        //           << m_models[0]->GetTransformMatrix().r[2].m128_f32[2] << " "
-        //           << m_models[0]->GetTransformMatrix().r[2].m128_f32[3] << "\n"
-        //           << m_models[0]->GetTransformMatrix().r[3].m128_f32[0] << " "
-        //           << m_models[0]->GetTransformMatrix().r[3].m128_f32[1] << " "
-        //           << m_models[0]->GetTransformMatrix().r[3].m128_f32[2] << " "
-        //           << m_models[0]->GetTransformMatrix().r[3].m128_f32[3] << std::endl;
     }
 
     void RotUp()
@@ -228,23 +212,6 @@ public:
 
     [[nodiscard]] DirectX::XMMATRIX GetTransformMatrix() const
     {
-        // std::cout << "When Get TransformMatrix: \n"
-        //           << m_models[0]->GetTransformMatrix().r[0].m128_f32[0] << " "
-        //           << m_models[0]->GetTransformMatrix().r[0].m128_f32[1] << " "
-        //           << m_models[0]->GetTransformMatrix().r[0].m128_f32[2] << " "
-        //           << m_models[0]->GetTransformMatrix().r[0].m128_f32[3] << "\n"
-        //           << m_models[0]->GetTransformMatrix().r[1].m128_f32[0] << " "
-        //           << m_models[0]->GetTransformMatrix().r[1].m128_f32[1] << " "
-        //           << m_models[0]->GetTransformMatrix().r[1].m128_f32[2] << " "
-        //           << m_models[0]->GetTransformMatrix().r[1].m128_f32[3] << "\n"
-        //           << m_models[0]->GetTransformMatrix().r[2].m128_f32[0] << " "
-        //           << m_models[0]->GetTransformMatrix().r[2].m128_f32[1] << " "
-        //           << m_models[0]->GetTransformMatrix().r[2].m128_f32[2] << " "
-        //           << m_models[0]->GetTransformMatrix().r[2].m128_f32[3] << "\n"
-        //           << m_models[0]->GetTransformMatrix().r[3].m128_f32[0] << " "
-        //           << m_models[0]->GetTransformMatrix().r[3].m128_f32[1] << " "
-        //           << m_models[0]->GetTransformMatrix().r[3].m128_f32[2] << " "
-        //           << m_models[0]->GetTransformMatrix().r[3].m128_f32[3] << std::endl;
         return m_models[0]->GetTransformMatrix();
     }
 
@@ -309,6 +276,8 @@ private:
     static constexpr float ROTATION = 0.1f;
     static constexpr float RADIUS = DEFAULT_SCALE * 1201.28f;
 
+    static constexpr float BUSTER_EFFECT_SCALE = 0.2f;
+
     std::array<std::unique_ptr<AquaEngine::FBXModel>, 8> m_models;
     std::array<Bullet, BULLET_COUNT> m_bullets;
     int m_bulletIndex = 0;
@@ -318,7 +287,13 @@ private:
     float m_yAngle = 0.0f;
     float m_xAngle = 0.0f;
 
+    Effekseer::EffectRef m_busterEffect = nullptr;
+    Effekseer::Handle m_busterHandle = 0;
+
     void ImportModel(AquaEngine::Command &command);
+
+    void CreateBusterEffect(const Effekseer::ManagerRef &manager);
+    void CreateGunEffect(const Effekseer::ManagerRef &manager);
 };
 
 #endif  // PLAYER_H

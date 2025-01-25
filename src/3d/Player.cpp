@@ -261,3 +261,24 @@ void Player::Shoot()
     //           << std::endl;
     m_bulletIndex++;
 }
+
+void Player::CreateBusterEffect(const Effekseer::ManagerRef &manager)
+{
+    m_busterEffect = Effekseer::Effect::Create(manager, u"resources/effects/booster.efkefc");
+    if (m_busterEffect == nullptr)
+    {
+        std::cout << "buster effect is null" << std::endl;
+    }
+
+    m_busterHandle = manager->Play(m_busterEffect, 0, 0, 0);
+    manager
+        ->SetScale(m_busterHandle, BUSTER_EFFECT_SCALE, BUSTER_EFFECT_SCALE, BUSTER_EFFECT_SCALE);
+
+    DirectX::XMVECTOR position = m_models[2]->GetPos();
+    manager->SetLocation(
+        m_busterHandle,
+        DirectX::XMVectorGetX(position),
+        DirectX::XMVectorGetY(position),
+        DirectX::XMVectorGetZ(position)
+    );
+}
