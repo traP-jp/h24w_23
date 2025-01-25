@@ -390,6 +390,9 @@ void GameView::Timer(int id)
             DirectX::XMMATRIX partner_transform
                 = (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetMatrix();
             DirectX::XMVECTOR partner_position = partner_transform.r[3];
+            std::cout << "partner position: " << DirectX::XMVectorGetX(partner_position) << ", "
+                      << DirectX::XMVectorGetY(partner_position) << ", "
+                      << DirectX::XMVectorGetZ(partner_position) << std::endl;
             bool hit = (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
                            .IsHit(partner_position, m_effectManager.GetManager());
             if (hit)
@@ -504,7 +507,7 @@ void GameView::Timer(int id)
             );
             m_sideUI.Frame();
 
-            std::cout << (m_isPlayer1 ? "player1" : "player2") << std::endl;
+            // std::cout << (m_isPlayer1 ? "player1" : "player2") << std::endl;
 
             break;
         }
