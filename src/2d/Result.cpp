@@ -31,12 +31,12 @@ void Result::Init(AquaEngine::Command& command)
 
     auto& text_manager = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
         "text",
-        1,
+        2,
         D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
     );
 
     auto text_texture_segment
-        = std::make_shared<AquaEngine::DescriptorHeapSegment>(text_manager.Allocate(1));
+        = std::make_shared<AquaEngine::DescriptorHeapSegment>(text_manager.Allocate(2));
     auto text_texture_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
         D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
         1,
@@ -57,24 +57,11 @@ void Result::Init(AquaEngine::Command& command)
         D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
     );
 
-    auto back_texture_segment
-        = std::make_shared<AquaEngine::DescriptorHeapSegment>(back_manager.Allocate(1));
-    auto back_texture_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
-        D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
-        1,
-        0,
-        0,
-        D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
-    );
-    back_texture_segment->SetRootParameter(
-        D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
-        D3D12_SHADER_VISIBILITY_ALL,
-        std::move(back_texture_range),
-        1
-    );
+    m_resultWinText->CreateShaderResourceView(text_texture_segment, 0);
+    m_resultLoseText->CreateShaderResourceView(text_texture_segment, 1);
 
-    auto input_text = AquaEngine::RectangleTexture::GetInputElementDescs();
-    auto input_back = AquaEngine::Rectangle::GetInputElementDescs();
+    auto input_text = m_resultWinText->GetInputElementDescs();
+    auto input_back = m_background->GetInputElementDescs();
 
     m_textRootSignature.AddStaticSampler(AquaEngine::RootSignature::DefaultStaticSampler());
     m_textRootSignature.SetDescriptorHeapSegmentManager(&text_manager);
@@ -86,8 +73,8 @@ void Result::Init(AquaEngine::Command& command)
     }
 
     AquaEngine::ShaderObject vs, ps;
-    vs.Load(L"resources/shaders/resulttext.hlsl", "main", "vs_5_0");
-    ps.Load(L"resources/shaders/resulttext.hlsl", "main", "ps_5_0");
+    vs.Load(L"shaders/resulttext.hlsl", "vs", "vs_5_0");
+    ps.Load(L"shaders/resulttext.hlsl", "ps", "ps_5_0");
     m_textPipelineState.SetRootSignature(&m_textRootSignature);
     m_textPipelineState.SetVertexShader(&vs);
     m_textPipelineState.SetPixelShader(&ps);
@@ -122,8 +109,8 @@ void Result::Init(AquaEngine::Command& command)
     }
 
     AquaEngine::ShaderObject back_vs, back_ps;
-    back_vs.Load(L"resources/shaders/resultback.hlsl", "main", "vs_5_0");
-    back_ps.Load(L"resources/shaders/resultback.hlsl", "main", "ps_5_0");
+    back_vs.Load(L"shaders/resultback.hlsl", "vs", "vs_5_0");
+    back_ps.Load(L"shaders/resultback.hlsl", "ps", "ps_5_0");
     m_backgroundPipelineState.SetRootSignature(&m_backgroundRootSignature);
     m_backgroundPipelineState.SetVertexShader(&back_vs);
     m_backgroundPipelineState.SetPixelShader(&back_ps);

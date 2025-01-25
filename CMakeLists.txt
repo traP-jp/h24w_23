@@ -309,6 +309,8 @@ set(resources
         resources/UI/UI2/UI2_fbx.fbx
         resources/UI/title3.png
         resources/UI/titlelogo.png
+        resources/UI/result_lose.png
+        resources/UI/result_win.png
         resources/music/hackathon3_r1.wav
         resources/music/hackathon3_r2.wav
         shaders/main.hlsl
