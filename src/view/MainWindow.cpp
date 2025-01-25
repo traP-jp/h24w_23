@@ -35,9 +35,9 @@ HRESULT MainWindow::Create(
 void MainWindow::Send(bool isShoot)
 {
     SendData data
-        = {m_engine->GetPartnerTransformMatrix(),
-           m_engine->GetPartnerCoordinateMatrix(),
-           m_engine->GetPartnerDirection(),
+        = {m_engine->GetTransformMatrix(),
+           m_engine->GetCoordinateMatrix(),
+           m_engine->GetDirection(),
            isShoot};
     // std::cout << "Sending data" << std::endl;
     m_network->Send(data);

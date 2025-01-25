@@ -107,24 +107,6 @@ public:
         {
             m_models[i]->RotY(ROTATION);
         }
-
-        std::cout << "TransformMatrix Rot: \n"
-                  << m_models[0]->GetTransformMatrix().r[0].m128_f32[0] << " "
-                  << m_models[0]->GetTransformMatrix().r[0].m128_f32[1] << " "
-                  << m_models[0]->GetTransformMatrix().r[0].m128_f32[2] << " "
-                  << m_models[0]->GetTransformMatrix().r[0].m128_f32[3] << "\n"
-                  << m_models[0]->GetTransformMatrix().r[1].m128_f32[0] << " "
-                  << m_models[0]->GetTransformMatrix().r[1].m128_f32[1] << " "
-                  << m_models[0]->GetTransformMatrix().r[1].m128_f32[2] << " "
-                  << m_models[0]->GetTransformMatrix().r[1].m128_f32[3] << "\n"
-                  << m_models[0]->GetTransformMatrix().r[2].m128_f32[0] << " "
-                  << m_models[0]->GetTransformMatrix().r[2].m128_f32[1] << " "
-                  << m_models[0]->GetTransformMatrix().r[2].m128_f32[2] << " "
-                  << m_models[0]->GetTransformMatrix().r[2].m128_f32[3] << "\n"
-                  << m_models[0]->GetTransformMatrix().r[3].m128_f32[0] << " "
-                  << m_models[0]->GetTransformMatrix().r[3].m128_f32[1] << " "
-                  << m_models[0]->GetTransformMatrix().r[3].m128_f32[2] << " "
-                  << m_models[0]->GetTransformMatrix().r[3].m128_f32[3] << std::endl;
     }
 
     void RotLeft()
@@ -142,24 +124,24 @@ public:
         {
             m_models[i]->RotY(-ROTATION);
         }
-
-        std::cout << "TransformMatrix Rot: \n"
-                  << m_models[0]->GetTransformMatrix().r[0].m128_f32[0] << " "
-                  << m_models[0]->GetTransformMatrix().r[0].m128_f32[1] << " "
-                  << m_models[0]->GetTransformMatrix().r[0].m128_f32[2] << " "
-                  << m_models[0]->GetTransformMatrix().r[0].m128_f32[3] << "\n"
-                  << m_models[0]->GetTransformMatrix().r[1].m128_f32[0] << " "
-                  << m_models[0]->GetTransformMatrix().r[1].m128_f32[1] << " "
-                  << m_models[0]->GetTransformMatrix().r[1].m128_f32[2] << " "
-                  << m_models[0]->GetTransformMatrix().r[1].m128_f32[3] << "\n"
-                  << m_models[0]->GetTransformMatrix().r[2].m128_f32[0] << " "
-                  << m_models[0]->GetTransformMatrix().r[2].m128_f32[1] << " "
-                  << m_models[0]->GetTransformMatrix().r[2].m128_f32[2] << " "
-                  << m_models[0]->GetTransformMatrix().r[2].m128_f32[3] << "\n"
-                  << m_models[0]->GetTransformMatrix().r[3].m128_f32[0] << " "
-                  << m_models[0]->GetTransformMatrix().r[3].m128_f32[1] << " "
-                  << m_models[0]->GetTransformMatrix().r[3].m128_f32[2] << " "
-                  << m_models[0]->GetTransformMatrix().r[3].m128_f32[3] << std::endl;
+        //
+        // std::cout << "TransformMatrix Rot: \n"
+        //           << m_models[0]->GetTransformMatrix().r[0].m128_f32[0] << " "
+        //           << m_models[0]->GetTransformMatrix().r[0].m128_f32[1] << " "
+        //           << m_models[0]->GetTransformMatrix().r[0].m128_f32[2] << " "
+        //           << m_models[0]->GetTransformMatrix().r[0].m128_f32[3] << "\n"
+        //           << m_models[0]->GetTransformMatrix().r[1].m128_f32[0] << " "
+        //           << m_models[0]->GetTransformMatrix().r[1].m128_f32[1] << " "
+        //           << m_models[0]->GetTransformMatrix().r[1].m128_f32[2] << " "
+        //           << m_models[0]->GetTransformMatrix().r[1].m128_f32[3] << "\n"
+        //           << m_models[0]->GetTransformMatrix().r[2].m128_f32[0] << " "
+        //           << m_models[0]->GetTransformMatrix().r[2].m128_f32[1] << " "
+        //           << m_models[0]->GetTransformMatrix().r[2].m128_f32[2] << " "
+        //           << m_models[0]->GetTransformMatrix().r[2].m128_f32[3] << "\n"
+        //           << m_models[0]->GetTransformMatrix().r[3].m128_f32[0] << " "
+        //           << m_models[0]->GetTransformMatrix().r[3].m128_f32[1] << " "
+        //           << m_models[0]->GetTransformMatrix().r[3].m128_f32[2] << " "
+        //           << m_models[0]->GetTransformMatrix().r[3].m128_f32[3] << std::endl;
     }
 
     void RotUp()
@@ -244,23 +226,23 @@ public:
 
     [[nodiscard]] DirectX::XMMATRIX GetTransformMatrix() const
     {
-        std::cout << "When Get TransformMatrix: \n"
-                  << m_models[0]->GetTransformMatrix().r[0].m128_f32[0] << " "
-                  << m_models[0]->GetTransformMatrix().r[0].m128_f32[1] << " "
-                  << m_models[0]->GetTransformMatrix().r[0].m128_f32[2] << " "
-                  << m_models[0]->GetTransformMatrix().r[0].m128_f32[3] << "\n"
-                  << m_models[0]->GetTransformMatrix().r[1].m128_f32[0] << " "
-                  << m_models[0]->GetTransformMatrix().r[1].m128_f32[1] << " "
-                  << m_models[0]->GetTransformMatrix().r[1].m128_f32[2] << " "
-                  << m_models[0]->GetTransformMatrix().r[1].m128_f32[3] << "\n"
-                  << m_models[0]->GetTransformMatrix().r[2].m128_f32[0] << " "
-                  << m_models[0]->GetTransformMatrix().r[2].m128_f32[1] << " "
-                  << m_models[0]->GetTransformMatrix().r[2].m128_f32[2] << " "
-                  << m_models[0]->GetTransformMatrix().r[2].m128_f32[3] << "\n"
-                  << m_models[0]->GetTransformMatrix().r[3].m128_f32[0] << " "
-                  << m_models[0]->GetTransformMatrix().r[3].m128_f32[1] << " "
-                  << m_models[0]->GetTransformMatrix().r[3].m128_f32[2] << " "
-                  << m_models[0]->GetTransformMatrix().r[3].m128_f32[3] << std::endl;
+        // std::cout << "When Get TransformMatrix: \n"
+        //           << m_models[0]->GetTransformMatrix().r[0].m128_f32[0] << " "
+        //           << m_models[0]->GetTransformMatrix().r[0].m128_f32[1] << " "
+        //           << m_models[0]->GetTransformMatrix().r[0].m128_f32[2] << " "
+        //           << m_models[0]->GetTransformMatrix().r[0].m128_f32[3] << "\n"
+        //           << m_models[0]->GetTransformMatrix().r[1].m128_f32[0] << " "
+        //           << m_models[0]->GetTransformMatrix().r[1].m128_f32[1] << " "
+        //           << m_models[0]->GetTransformMatrix().r[1].m128_f32[2] << " "
+        //           << m_models[0]->GetTransformMatrix().r[1].m128_f32[3] << "\n"
+        //           << m_models[0]->GetTransformMatrix().r[2].m128_f32[0] << " "
+        //           << m_models[0]->GetTransformMatrix().r[2].m128_f32[1] << " "
+        //           << m_models[0]->GetTransformMatrix().r[2].m128_f32[2] << " "
+        //           << m_models[0]->GetTransformMatrix().r[2].m128_f32[3] << "\n"
+        //           << m_models[0]->GetTransformMatrix().r[3].m128_f32[0] << " "
+        //           << m_models[0]->GetTransformMatrix().r[3].m128_f32[1] << " "
+        //           << m_models[0]->GetTransformMatrix().r[3].m128_f32[2] << " "
+        //           << m_models[0]->GetTransformMatrix().r[3].m128_f32[3] << std::endl;
         return m_models[0]->GetTransformMatrix();
     }
 

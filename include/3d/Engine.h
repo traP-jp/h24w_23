@@ -122,6 +122,21 @@ public:
         return m_gameView->GetPartnerDirection();
     }
 
+    DirectX::XMMATRIX GetTransformMatrix() const
+    {
+        return m_gameView->GetTransformMatrix();
+    }
+
+    DirectX::XMMATRIX GetCoordinateMatrix() const
+    {
+        return m_gameView->GetCoordinateMatrix();
+    }
+
+    DirectX::XMVECTOR GetDirection() const
+    {
+        return m_gameView->GetDirection();
+    }
+
 private:
     struct Weight
     {

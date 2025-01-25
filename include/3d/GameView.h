@@ -141,6 +141,21 @@ public:
         return (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetDirection();
     }
 
+    DirectX::XMMATRIX GetTransformMatrix() const
+    {
+        return (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix();
+    }
+
+    DirectX::XMMATRIX GetCoordinateMatrix() const
+    {
+        return (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetCoordinateMatrix();
+    }
+
+    DirectX::XMVECTOR GetDirection() const
+    {
+        return (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection();
+    }
+
     DirectX::XMMATRIX GetMatrix() const
     {
         return (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetMatrix();
