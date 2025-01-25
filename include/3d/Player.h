@@ -262,6 +262,11 @@ public:
         return false;
     }
 
+    void SetVelocity(float velocity)
+    {
+        m_velocity = velocity;
+    }
+
     [[nodiscard]] float GetVelocity() const
     {
         return m_velocity;

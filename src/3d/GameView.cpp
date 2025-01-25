@@ -498,6 +498,7 @@ void GameView::Timer(int id)
             {
                 std::cout << "my hit" << std::endl;
                 m_gameStatus = GameStatus::LOSE;
+                (m_isPlayer1 ? m_playerModel1 : m_playerModel2).SetVelocity(0.0f);
             }
 
             DirectX::XMVECTOR camera_y = m_camera->GetCamera()->GetUp();
