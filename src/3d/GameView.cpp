@@ -388,7 +388,7 @@ void GameView::Timer(int id)
             m_camera->Move(dr);
 
             DirectX::XMMATRIX partner_transform
-                = (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetTransformMatrix();
+                = (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetMatrix();
             DirectX::XMVECTOR partner_position = partner_transform.r[3];
             bool hit = (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
                            .IsHit(partner_position, m_effectManager.GetManager());

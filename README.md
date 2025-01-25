@@ -28,3 +28,14 @@ clang-tidy $(find -name "*.h" -not -path "./<BUILD_DIR>/*" -or -name "*.cpp" -no
 ```
 
 rename `<BUILD_DIR>` to your build directory
+
+## Play Guide
+
+このゲームは2人用です。
+
+- LANケーブルとスイッチングハブを用いて、2台のPCを接続します。
+- ファイアウォールなどの設定を確認し、通信が可能な状態にします。
+- 最初のダイアログで、どちらかがPlayer1、もう片方がPlayer2を選択します。
+- 次のダイアログで、相手のIPアドレスを入力します。このとき、OKは押さずに待機します。
+- 両方のマシンのコンソールに「Engine Initialized」と表示されたら、2人同時にOKを押します。
+- Have fun!!!!!!
