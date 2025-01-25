@@ -18,11 +18,15 @@ public:
 
     void InitSideUI();
 
+    void InitEye();
+
     void Render(AquaEngine::Command &command) const;
 
     void RenderBullet(AquaEngine::Command &command) const;
 
     void RenderSideUI(AquaEngine::Command &command) const;
+
+    void RenderEye(AquaEngine::Command &command) const;
 
     void Accel(DirectX::XMVECTOR delta);
 

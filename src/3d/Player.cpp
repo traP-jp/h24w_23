@@ -14,10 +14,20 @@ void Player::Init(AquaEngine::Command &command)
 
 void Player::Render(AquaEngine::Command &command) const
 {
-    for (int i = 0; i < m_models.size(); ++i)
+    for (int i = 0; i < 3; ++i)
     {
         m_models[i]->Render(command);
     }
+
+    for (int i = 4; i < m_models.size(); ++i)
+    {
+        m_models[i]->Render(command);
+    }
+}
+
+void Player::RenderEye(AquaEngine::Command &command) const
+{
+    m_models[3]->Render(command);
 }
 
 void Player::RenderBullet(AquaEngine::Command &command) const
@@ -110,9 +120,14 @@ void Player::SetMatrixSegments(
     const int index
 ) const
 {
-    for (int i = 0; i < m_models.size(); ++i)
+    for (int i = 0; i < 3; ++i)
     {
         m_models[i]->CreateMatrixBuffer(segment, 8 * index + i);
+    }
+
+    for (int i = 4; i < m_models.size(); ++i)
+    {
+        m_models[i]->CreateMatrixBuffer(segment, 8 * index + i - 1);
     }
 }
 
@@ -137,10 +152,31 @@ void Player::SetMaterialSegments(
     const int index
 ) const
 {
-    for (int i = 0; i < m_models.size(); ++i)
+    for (int i = 0; i < 3; ++i)
     {
         m_models[i]->CreateMaterialBufferView(segment, 8 * index + i);
     }
+
+    for (int i = 4; i < m_models.size(); ++i)
+    {
+        m_models[i]->CreateMaterialBufferView(segment, 8 * index + i - 1);
+    }
+}
+
+void Player::SetEyeMatrixSegments(
+    const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
+    int index
+) const
+{
+    m_models[3]->CreateMatrixBuffer(segment, index);
+}
+
+void Player::SetEyeMaterialSegments(
+    const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
+    int index
+) const
+{
+    m_models[3]->CreateMaterialBufferView(segment, index);
 }
 
 void Player::SetBulletMatrixSegments(

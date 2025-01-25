@@ -161,6 +161,76 @@ void GameView::CreateModels(
     m_playerModel2.SetTextureSegments(texture_segment, 1);
     m_playerModel2.SetMaterialSegments(material_segment, 1);
 
+    auto &eye_manager = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
+        "eye",
+        10,
+        D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
+    );
+
+    auto eye_matrix_segment
+        = std::make_shared<AquaEngine::DescriptorHeapSegment>(eye_manager.Allocate(2));
+    auto eye_matrix_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
+        D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
+        1,
+        1,
+        0,
+        D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
+    );
+    eye_matrix_segment->SetRootParameter(
+        D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
+        D3D12_SHADER_VISIBILITY_ALL,
+        std::move(eye_matrix_range),
+        1
+    );
+
+    auto eye_material_segment
+        = std::make_shared<AquaEngine::DescriptorHeapSegment>(eye_manager.Allocate(2));
+    auto eye_material_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
+        D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
+        1,
+        2,
+        0,
+        D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
+    );
+    eye_material_segment->SetRootParameter(
+        D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
+        D3D12_SHADER_VISIBILITY_ALL,
+        std::move(eye_material_range),
+        1
+    );
+
+    m_playerModel1.SetEyeMatrixSegments(eye_matrix_segment, 0);
+    m_playerModel1.SetEyeMaterialSegments(eye_material_segment, 0);
+    m_playerModel2.SetEyeMatrixSegments(eye_matrix_segment, 1);
+    m_playerModel2.SetEyeMaterialSegments(eye_material_segment, 1);
+
+    m_camera->InitEye();  // init ni camera range
+
+    m_eyeRootSignature.SetDescriptorHeapSegmentManager(&eye_manager);
+    HRESULT hr = m_eyeRootSignature.Create();
+    if (FAILED(hr))
+    {
+        std::println("failed to create eye root signature");
+        exit(-1);
+    }
+
+    AquaEngine::ShaderObject eye_vs, eye_ps;
+    eye_vs.Load(L"shaders/eye.hlsl", "vs", "vs_5_0");
+    eye_ps.Load(L"shaders/eye.hlsl", "ps", "ps_5_0");
+
+    auto input = m_playerModel1.GetInputElementDescs();
+
+    m_eyePipelineState.SetRootSignature(&m_eyeRootSignature);
+    m_eyePipelineState.SetVertexShader(&eye_vs);
+    m_eyePipelineState.SetPixelShader(&eye_ps);
+    m_eyePipelineState.SetInputLayout(input.data(), input.size());
+    hr = m_eyePipelineState.Create();
+    if (FAILED(hr))
+    {
+        std::println("failed to create eye pipeline state");
+        exit(-1);
+    }
+
     auto &bullet_manager = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
         "bullet",
         7 * Player::BULLET_COUNT,
@@ -353,6 +423,12 @@ void GameView::Render(AquaEngine::Command &command)
         // m_asteroids[i].Render(command);
     }
 
+    m_eyeRootSignature.SetToCommand(command);
+    m_eyePipelineState.SetToCommand(command);
+    m_camera->RenderEye(command);
+    m_playerModel1.RenderEye(command);
+    m_playerModel2.RenderEye(command);
+
     m_bulletRootSignature.SetToCommand(command);
     m_bulletPipelineState.SetToCommand(command);
     m_camera->RenderBullet(command);
@@ -522,7 +598,7 @@ void GameView::Timer(int id)
             }
             else
             {
-                m_uiManager.SetTargetColor(0.1f, 0.0f, 0.2f);
+                m_uiManager.SetTargetColor(0.5f, 0.5f, 1.0f);
                 m_uiManager.SetTargetRotation(0.1f);
             }
             m_uiManager.SetTargetPosition(target_x, target_y);

@@ -199,6 +199,9 @@ private:
     std::unique_ptr<AquaEngine::Buffer> m_bulletAlphaTexture;
     AquaEngine::ShaderResourceView m_bulletAlphaSRV;
 
+    AquaEngine::PipelineState m_eyePipelineState;
+    AquaEngine::RootSignature m_eyeRootSignature;
+
     UIManager m_uiManager;
     SideUI m_sideUI;
     Result m_result;

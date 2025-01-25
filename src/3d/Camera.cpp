@@ -44,6 +44,18 @@ void Camera::InitSideUI()
     m_camera->AddManager("side_ui", std::move(camera_range));
 }
 
+void Camera::InitEye()
+{
+    auto camera_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
+        D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
+        1,
+        0,
+        0,
+        D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
+    );
+    m_camera->AddManager("eye", std::move(camera_range));
+}
+
 void Camera::RenderSideUI(AquaEngine::Command &command) const
 {
     m_camera->Render(command, "side_ui");
@@ -57,6 +69,11 @@ void Camera::Render(AquaEngine::Command &command) const
 void Camera::RenderBullet(AquaEngine::Command &command) const
 {
     m_camera->Render(command, "bullet");
+}
+
+void Camera::RenderEye(AquaEngine::Command &command) const
+{
+    m_camera->Render(command, "eye");
 }
 
 void Camera::Accel(DirectX::XMVECTOR delta)

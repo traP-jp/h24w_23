@@ -18,6 +18,8 @@ public:
 
     void RenderBullet(AquaEngine::Command &command) const;
 
+    void RenderEye(AquaEngine::Command &command) const;
+
     void SetMatrixSegments(
         const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
         int index
@@ -27,6 +29,14 @@ public:
         int index
     ) const;  // this is player index
     void SetMaterialSegments(
+        const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
+        int index
+    ) const;  // this is player index
+    void SetEyeMatrixSegments(
+        const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
+        int index
+    ) const;  // this is player index
+    void SetEyeMaterialSegments(
         const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
         int index
     ) const;  // this is player index

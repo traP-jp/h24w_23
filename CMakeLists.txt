@@ -322,6 +322,7 @@ set(resources
         shaders/ui/side_ui.hlsl
         shaders/ui/resultback.hlsl
         shaders/ui/resulttext.hlsl
+        shaders/eye.hlsl
 )
 
 create_executable(${src_files} ${include_files} ${resources})
