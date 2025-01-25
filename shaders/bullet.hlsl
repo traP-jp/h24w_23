@@ -37,7 +37,11 @@ PSInput vs(
     return output;
 }
 
+Texture2D tex : register(t0);
+Texture2D alpha1_tex : register(t1);
+SamplerState sam : register(s0);
+
 float4 ps(PSInput input) : SV_TARGET
 {
-    return float4(1.0, 1.0, 0.0, 1.0);
+    return tex.Sample(sam, input.uv) * alpha1_tex.Sample(sam, input.uv);
 }

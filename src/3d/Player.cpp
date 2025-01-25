@@ -60,8 +60,7 @@ void Player::ImportModel(AquaEngine::Command &command)
     // std::make_unique<AquaEngine::FBXModel>("resources/models/buster.fbx");
     m_models[2]->Create();
 
-    m_models[3]
-        = std::make_unique<AquaEngine::FBXModel>("resources/models/eye.fbx");
+    m_models[3] = std::make_unique<AquaEngine::FBXModel>("resources/models/eye.fbx");
     m_models[3]->Create();
 
     m_models[4] = std::make_unique<AquaEngine::FBXModel>(
@@ -163,6 +162,17 @@ void Player::SetBulletMaterialSegments(
     for (int i = 0; i < m_bullets.size(); ++i)
     {
         m_bullets[i].SetMaterialSegments(segment, BULLET_COUNT * index + i);
+    }
+}
+
+void Player::SetBulletShaderResourceView(
+    const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
+    int index
+)
+{
+    for (int i = 0; i < m_bullets.size(); ++i)
+    {
+        m_bullets[i].SetShaderResourceView(segment, BULLET_COUNT * index + i);
     }
 }
 

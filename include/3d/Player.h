@@ -39,6 +39,10 @@ public:
         const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
         int index  // this is bullet index
     );
+    void SetBulletShaderResourceView(
+        const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
+        int index  // this is bullet index
+    );
 
     void CreateEffect(const Effekseer::ManagerRef &manager)
     {
@@ -228,8 +232,7 @@ private:
     std::array<Bullet, BULLET_COUNT> m_bullets;
     int m_bulletIndex = 0;
 
-    DirectX::XMVECTOR m_direction
-        = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+    DirectX::XMVECTOR m_direction = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
     float m_velocity = 0.0f;
     float m_yAngle = 0.0f;
     float m_xAngle = 0.0f;

@@ -133,6 +133,7 @@ void SideUI::CreatePipelineState()
                .BlendOpAlpha = D3D12_BLEND_OP_ADD,
                .RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL}}};
     m_pipelineState.SetBlendState(blend);
+    m_pipelineState.SetDepthEnable(false);
     hr = m_pipelineState.Create();
     if (FAILED(hr))
     {

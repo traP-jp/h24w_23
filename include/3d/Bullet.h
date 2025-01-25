@@ -6,6 +6,8 @@
 
 #include <memory>
 
+// TODO: Bullet Rotate
+
 class Bullet
 {
 public:
@@ -17,6 +19,10 @@ public:
         int index
     ) const;
     void SetMaterialSegments(
+        const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
+        int index
+    ) const;
+    void SetShaderResourceView(
         const std::shared_ptr<AquaEngine::DescriptorHeapSegment> &segment,
         int index
     ) const;
@@ -54,20 +60,14 @@ public:
         m_model->Move(dx, dy, dz);
     }
 
-    bool IsHit(
-        DirectX::XMVECTOR position,
-        float radius,
-        const Effekseer::ManagerRef &manager
-    )
+    bool IsHit(DirectX::XMVECTOR position, float radius, const Effekseer::ManagerRef &manager)
     {
         if (!m_isActive)
         {
             return false;
         }
-        DirectX::XMVECTOR distance
-            = DirectX::XMVectorSubtract(m_model->GetPos(), position);
-        float length
-            = DirectX::XMVectorGetX(DirectX::XMVector3Length(distance));
+        DirectX::XMVECTOR distance = DirectX::XMVectorSubtract(m_model->GetPos(), position);
+        float length = DirectX::XMVectorGetX(DirectX::XMVector3Length(distance));
 
         if (length < radius)
         {
@@ -101,7 +101,7 @@ public:
 
 private:
     static constexpr float VELOCITY = 1.0f;
-    static constexpr float DEFAULT_SCALE = 0.5f;
+    static constexpr float DEFAULT_SCALE = 0.005f;
     static constexpr float EFFECT_SCALE = 0.25f;
 
     std::unique_ptr<AquaEngine::FBXModel> m_model;

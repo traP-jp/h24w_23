@@ -56,6 +56,7 @@ void GameView::Init(AquaEngine::Command &command)
         D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
         "bullet"
     );
+    m_bulletRootSignature.AddStaticSampler(AquaEngine::RootSignature::DefaultStaticSampler());
     m_bulletRootSignature.SetDescriptorHeapSegmentManager(&bullet_manager);
     hr = m_bulletRootSignature.Create();
     if (FAILED(hr))
@@ -161,7 +162,7 @@ void GameView::CreateModels(
 
     auto &bullet_manager = AquaEngine::GlobalDescriptorHeapManager::CreateShaderManager(
         "bullet",
-        5 * Player::BULLET_COUNT,
+        7 * Player::BULLET_COUNT,
         D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
     );
 
@@ -199,10 +200,29 @@ void GameView::CreateModels(
         1
     );
 
+    auto bullet_texture_segment = std::make_shared<AquaEngine::DescriptorHeapSegment>(
+        bullet_manager.Allocate(Player::BULLET_COUNT * 2)
+    );
+    auto bullet_texture_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
+        D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
+        1,
+        0,
+        0,
+        D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
+    );
+    bullet_texture_segment->SetRootParameter(
+        D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
+        D3D12_SHADER_VISIBILITY_ALL,
+        std::move(bullet_texture_range),
+        1
+    );
+
     m_playerModel1.SetBulletMatrixSegments(bullet_matrix_segment, 0);
     m_playerModel1.SetBulletMaterialSegments(bullet_material_segment, 0);
+    m_playerModel1.SetBulletShaderResourceView(bullet_texture_segment, 0);
     m_playerModel2.SetBulletMatrixSegments(bullet_matrix_segment, 1);
     m_playerModel2.SetBulletMaterialSegments(bullet_material_segment, 1);
+    m_playerModel2.SetBulletShaderResourceView(bullet_texture_segment, 1);
 
     m_playerModel1.Scale(Player::DEFAULT_SCALE, Player::DEFAULT_SCALE, Player::DEFAULT_SCALE);
     m_playerModel2.Scale(Player::DEFAULT_SCALE, Player::DEFAULT_SCALE, Player::DEFAULT_SCALE);
@@ -210,6 +230,29 @@ void GameView::CreateModels(
         .Move(PLAYER1_DEFAULT_POSITION.x, PLAYER1_DEFAULT_POSITION.y, PLAYER1_DEFAULT_POSITION.z);
     m_playerModel2
         .Move(PLAYER2_DEFAULT_POSITION.x, PLAYER2_DEFAULT_POSITION.y, PLAYER2_DEFAULT_POSITION.z);
+
+    m_bulletAlphaTexture
+        = std::make_unique<AquaEngine::Buffer>(AquaEngine::TextureManager::LoadTextureFromFile(
+            "resources/models/bullet_alpha.png",
+            command
+        ));
+    auto bullet_alpha_texture_segment
+        = std::make_shared<AquaEngine::DescriptorHeapSegment>(bullet_manager.Allocate(1));
+    auto bullet_alpha_texture_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
+        D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
+        1,
+        1,
+        0,
+        D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
+    );
+    bullet_alpha_texture_segment->SetRootParameter(
+        D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
+        D3D12_SHADER_VISIBILITY_PIXEL,
+        std::move(bullet_alpha_texture_range),
+        1
+    );
+    m_bulletAlphaSRV.SetDescriptorHeapSegment(bullet_alpha_texture_segment, 0);
+    m_bulletAlphaSRV.Create(*m_bulletAlphaTexture);
 
     std::mt19937 mt(std::random_device{}());
     std::gamma_distribution<> x_dist(2.0f, 3.1f);
@@ -306,14 +349,16 @@ void GameView::Render(AquaEngine::Command &command)
     m_bulletRootSignature.SetToCommand(command);
     m_bulletPipelineState.SetToCommand(command);
     m_camera->RenderBullet(command);
+    m_bulletAlphaSRV.SetGraphicsRootDescriptorTable(&command);
     m_playerModel1.RenderBullet(command);
     m_playerModel2.RenderBullet(command);
+
     m_sideUI.UseRootSignature(command);
     m_camera->RenderSideUI(command);
+    m_sideUI.Render(command);
 
     m_effectManager.Render(command, m_camera->GetCamera());
 
-    m_sideUI.Render(command);
     m_uiManager.Render(command);
 }
 

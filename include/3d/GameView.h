@@ -117,6 +117,8 @@ private:
 
     AquaEngine::PipelineState m_bulletPipelineState;
     AquaEngine::RootSignature m_bulletRootSignature;
+    std::unique_ptr<AquaEngine::Buffer> m_bulletAlphaTexture;
+    AquaEngine::ShaderResourceView m_bulletAlphaSRV;
 
     UIManager m_uiManager;
     SideUI m_sideUI;

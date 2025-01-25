@@ -33,9 +33,21 @@ void Bullet::SetMaterialSegments(
     m_model->CreateMaterialBufferView(segment, index);
 }
 
+void Bullet::SetShaderResourceView(
+    const std::shared_ptr<AquaEngine::DescriptorHeapSegment>& segment,
+    int index
+) const
+{
+    m_model->SetTexture(segment, index);
+}
+
 void Bullet::ImportModel(AquaEngine::Command& command)
 {
-    m_model = std::make_unique<AquaEngine::FBXModel>("resources/models/cube.fbx");
+    m_model = std::make_unique<AquaEngine::FBXModel>(
+        "resources/models/bullet.fbx",
+        "resources/models/bullet_tex.png",
+        command
+    );
     m_model->Create();
 }
 

@@ -136,12 +136,17 @@ set(resources
         resources/models/asteroid_model/asteroid_patern2.fbx
         resources/models/asteroid_tex/asteroid_patern1_diff_tex.png
         resources/models/cube.fbx
+        resources/models/bullet_model/bullet.fbx
+        resources/models/bullet_model/bullet_tex.png
+        resources/models/bullet_model/bullet_alpha.png
         resources/textures/space.hdr
         resources/textures/sample1.hdr
         resources/effects/tyakudan.efkefc
         resources/effects/Texture/ef_common_flashlight01_t.png
         resources/effects/Texture/Star.png
         resources/effects/Texture/tex_eff_light02.png
+        resources/effects/booster.efkefc
+        resources/effects/Texture/alpha.png
         resources/UI/UI1.png
         resources/UI/UI3.png
         resources/UI/UI4.png
