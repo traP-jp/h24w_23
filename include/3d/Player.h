@@ -66,6 +66,8 @@ public:
 
     void Frame() const;
 
+    void BulletFrame() const;
+
     void Shoot();
 
     DirectX::XMVECTOR Accel()

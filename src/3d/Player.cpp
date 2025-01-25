@@ -204,7 +204,10 @@ void Player::Frame() const
 {
     DirectX::XMVECTOR dr = m_direction * m_velocity;
     Move(dr.m128_f32[0], dr.m128_f32[1], dr.m128_f32[2]);
+}
 
+void Player::BulletFrame() const
+{
     for (int i = 0; i < m_bullets.size(); ++i)
     {
         m_bullets[i].Frame();
