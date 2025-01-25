@@ -39,9 +39,9 @@ public:
         m_model->SetScale(DEFAULT_SCALE, DEFAULT_SCALE, DEFAULT_SCALE);
 
         DirectX::XMVECTOR position = m_model->GetPos();
-        std::cout << "bullet position: " << DirectX::XMVectorGetX(position) << ", "
-                  << DirectX::XMVectorGetY(position) << ", " << DirectX::XMVectorGetZ(position)
-                  << std::endl;
+        // std::cout << "bullet position: " << DirectX::XMVectorGetX(position) << ", "
+        //           << DirectX::XMVectorGetY(position) << ", " << DirectX::XMVectorGetZ(position)
+        //           << std::endl;
         m_isActive = true;
     }
 
@@ -108,7 +108,7 @@ public:
 
         m_isEffectActive = true;
 
-        std::cout << "play effect" << std::endl;
+        // std::cout << "play effect" << std::endl;
     }
 
 private:
