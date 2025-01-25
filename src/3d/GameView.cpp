@@ -388,7 +388,7 @@ void GameView::Timer(int id)
             m_camera->Move(dr);
 
             DirectX::XMMATRIX partner_transform
-                = (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetMatrix();
+                = (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetMappedMatrix();
             DirectX::XMVECTOR partner_position = partner_transform.r[3];
             std::cout << "partner position: " << DirectX::XMVectorGetX(partner_position) << ", "
                       << DirectX::XMVectorGetY(partner_position) << ", "

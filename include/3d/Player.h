@@ -190,6 +190,11 @@ public:
         return m_models[0]->GetMatrix();
     }
 
+    DirectX::XMMATRIX GetMappedMatrix() const
+    {
+        return m_models[0]->GetMappedMatrix();
+    }
+
     std::vector<D3D12_INPUT_ELEMENT_DESC> GetInputElementDescs() const
     {
         return m_models[0]->GetInputElementDescs();
