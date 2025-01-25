@@ -474,7 +474,14 @@ void GameView::Timer(int id)
 
             // camera, ui translation
             DirectX::XMVECTOR dr = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDrForCamera();
+            DirectX::XMVECTOR dir = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection();
+            DirectX::XMVECTOR up = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetUp();
+            m_camera->StartFrame(dir, up);
+
             m_camera->Move(dr);
+            m_camera->Accel((m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetAccelFrame());
+
+            m_camera->EndFrame(dir, up);
 
             DirectX::XMMATRIX partner_transform
                 = (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetMatrix();

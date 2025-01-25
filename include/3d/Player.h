@@ -109,6 +109,7 @@ public:
         }
 
         m_isaccel = true;
+        m_isaccel2 = true;
         m_accelFrame = 0;
         return DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
     }
@@ -337,6 +338,11 @@ public:
         return m_direction;
     }
 
+    [[nodiscard]] DirectX::XMVECTOR GetUp() const
+    {
+        return m_up;
+    }
+
     void PlayThurasterAction() const
     {
         m_models[7]->PlayAnimation(
@@ -386,10 +392,12 @@ private:
 
     int m_accelFrame = 0;
     bool m_isaccel = false;
+    bool m_isaccel2 = false;
 
     static constexpr float ACCEL_FAST = 1.2f;
     static constexpr float ACCEL_SLOW = 0.2f;
 
+    // camera mo henshu
     static constexpr int ACCEL_FIRST_FRAME = 3;
     static constexpr int ACCEL_SECOND_FRAME = 15;
     static constexpr int ACCEL_THIRD_FRAME = 21;

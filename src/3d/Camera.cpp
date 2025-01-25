@@ -1,5 +1,9 @@
 #include "3d/Camera.h"
 
+using DirectX::operator-;
+using DirectX::operator+;
+using DirectX::operator*;
+
 void Camera::Init()
 {
     auto camera_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
@@ -76,15 +80,67 @@ void Camera::RenderEye(AquaEngine::Command &command) const
     m_camera->Render(command, "eye");
 }
 
-void Camera::Accel(DirectX::XMVECTOR delta)
+void Camera::StartFrame(DirectX::XMVECTOR direction, DirectX::XMVECTOR up) const
 {
-    m_camera->Move(
-        DirectX::XMVectorGetX(delta),
-        DirectX::XMVectorGetY(delta),
-        DirectX::XMVectorGetZ(delta)
-    );
+    DirectX::XMVECTOR cam
+        = direction * DEFAULT_CAMERA_Z_DISTANCE * CAMERA_ASPECT + up * -DEFAULT_CAMERA_Z_DISTANCE;
 
-    m_delta = DirectX::XMVectorAdd(m_delta, delta);
+    m_camera->Move(
+        -DirectX::XMVectorGetX(m_delta),
+        -DirectX::XMVectorGetY(m_delta),
+        -DirectX::XMVectorGetZ(m_delta)
+    );
+    m_camera->Move(
+        -DirectX::XMVectorGetX(cam),
+        -DirectX::XMVectorGetY(cam),
+        -DirectX::XMVectorGetZ(cam)
+    );
+}
+
+void Camera::EndFrame(DirectX::XMVECTOR direction, DirectX::XMVECTOR up)
+{
+    DirectX::XMVECTOR camera
+        = direction * DEFAULT_CAMERA_Z_DISTANCE * CAMERA_ASPECT + up * -DEFAULT_CAMERA_Z_DISTANCE;
+
+    m_camera->Move(
+        DirectX::XMVectorGetX(camera),
+        DirectX::XMVectorGetY(camera),
+        DirectX::XMVectorGetZ(camera)
+    );
+    m_delta = DirectX::XMVectorSet(
+        DirectX::XMVectorGetX(direction) * m_deltaDistance,
+        DirectX::XMVectorGetY(direction) * m_deltaDistance,
+        DirectX::XMVectorGetZ(direction) * m_deltaDistance,
+        0.0f
+    );
+    m_camera->Move(
+        DirectX::XMVectorGetX(m_delta),
+        DirectX::XMVectorGetY(m_delta),
+        DirectX::XMVectorGetZ(m_delta)
+    );
+}
+
+void Camera::Accel(int accelFrame)
+{
+    float distance = 0;
+    if (accelFrame > 0 && accelFrame <= ACCEL_FIRST_FRAME)
+    {
+        distance = CAMERA_ACCEL_DISTANCE * static_cast<float>(accelFrame) / ACCEL_FIRST_FRAME;
+        // std::cout << "first frame" << std::endl;
+    }
+    else if (accelFrame > ACCEL_FIRST_FRAME && accelFrame <= ACCEL_SECOND_FRAME)
+    {
+        distance = CAMERA_ACCEL_DISTANCE;
+        // std::cout << "second frame" << std::endl;
+    }
+    else if (accelFrame > ACCEL_SECOND_FRAME && accelFrame <= ACCEL_THIRD_FRAME)
+    {
+        distance = CAMERA_ACCEL_DISTANCE * static_cast<float>(ACCEL_THIRD_FRAME - accelFrame)
+                   / (ACCEL_THIRD_FRAME - ACCEL_SECOND_FRAME);
+        // std::cout << "third frame" << std::endl;
+    }
+
+    m_deltaDistance = -distance;
 }
 
 void Camera::Decel(DirectX::XMVECTOR delta)
@@ -98,64 +154,9 @@ void Camera::Decel(DirectX::XMVECTOR delta)
     m_delta = DirectX::XMVectorAdd(m_delta, delta);
 }
 
-void Camera::RotRight(const DirectX::XMMATRIX &transform)
+void Camera::Rot(const DirectX::XMMATRIX &transform)
 {
-    m_camera->Move(
-        -DirectX::XMVectorGetX(m_delta),
-        -DirectX::XMVectorGetY(m_delta),
-        -DirectX::XMVectorGetZ(m_delta)
-    );
     m_camera->Rot(transform);
-    m_camera->Move(
-        DirectX::XMVectorGetX(m_delta),
-        DirectX::XMVectorGetY(m_delta),
-        DirectX::XMVectorGetZ(m_delta)
-    );
-}
-
-void Camera::RotLeft(const DirectX::XMMATRIX &transform)
-{
-    m_camera->Move(
-        -DirectX::XMVectorGetX(m_delta),
-        -DirectX::XMVectorGetY(m_delta),
-        -DirectX::XMVectorGetZ(m_delta)
-    );
-    m_camera->Rot(transform);
-    m_camera->Move(
-        DirectX::XMVectorGetX(m_delta),
-        DirectX::XMVectorGetY(m_delta),
-        DirectX::XMVectorGetZ(m_delta)
-    );
-}
-
-void Camera::RotUp(const DirectX::XMMATRIX &transform)
-{
-    m_camera->Move(
-        -DirectX::XMVectorGetX(m_delta),
-        -DirectX::XMVectorGetY(m_delta),
-        -DirectX::XMVectorGetZ(m_delta)
-    );
-    m_camera->Rot(transform);
-    m_camera->Move(
-        DirectX::XMVectorGetX(m_delta),
-        DirectX::XMVectorGetY(m_delta),
-        DirectX::XMVectorGetZ(m_delta)
-    );
-}
-
-void Camera::RotDown(const DirectX::XMMATRIX &transform)
-{
-    m_camera->Move(
-        -DirectX::XMVectorGetX(m_delta),
-        -DirectX::XMVectorGetY(m_delta),
-        -DirectX::XMVectorGetZ(m_delta)
-    );
-    m_camera->Rot(transform);
-    m_camera->Move(
-        DirectX::XMVectorGetX(m_delta),
-        DirectX::XMVectorGetY(m_delta),
-        DirectX::XMVectorGetZ(m_delta)
-    );
 }
 
 void Camera::Move(DirectX::XMVECTOR dr)

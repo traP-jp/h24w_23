@@ -64,8 +64,7 @@ public:
 
     void Accel()
     {
-        DirectX::XMVECTOR delta = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Accel();
-        m_camera->Accel(delta);
+        (m_isPlayer1 ? m_playerModel1 : m_playerModel2).Accel();
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
@@ -79,28 +78,48 @@ public:
     void RotRight()
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotRight();
-        m_camera->RotRight((m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix());
+        DirectX::XMVECTOR direction
+            = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection();
+        DirectX::XMVECTOR up = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetUp();
+        m_camera->StartFrame(direction, up);
+        m_camera->Rot((m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix());
+        m_camera->EndFrame(direction, up);
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
     void RotLeft()
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotLeft();
-        m_camera->RotLeft((m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix());
+        DirectX::XMVECTOR direction
+            = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection();
+        DirectX::XMVECTOR up = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetUp();
+        m_camera->StartFrame(direction, up);
+        m_camera->Rot((m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix());
+        m_camera->EndFrame(direction, up);
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
     void RotUp()
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotUp();
-        m_camera->RotUp((m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix());
+        DirectX::XMVECTOR direction
+            = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection();
+        DirectX::XMVECTOR up = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetUp();
+        m_camera->StartFrame(direction, up);
+        m_camera->Rot((m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix());
+        m_camera->EndFrame(direction, up);
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 
     void RotDown()
     {
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2).RotDown();
-        m_camera->RotDown((m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix());
+        DirectX::XMVECTOR direction
+            = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection();
+        DirectX::XMVECTOR up = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetUp();
+        m_camera->StartFrame(direction, up);
+        m_camera->Rot((m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetTransformMatrix());
+        m_camera->EndFrame(direction, up);
         InvalidateRect(m_hwnd, &m_rc, FALSE);
     }
 

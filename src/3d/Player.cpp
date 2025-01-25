@@ -238,7 +238,7 @@ void Player::Timer() const
 
 void Player::Frame()
 {
-    if (m_isaccel)
+    if (m_isaccel2)
     {
         if (m_accelFrame == 0)
         {
@@ -248,6 +248,10 @@ void Player::Frame()
         {
             m_isaccel = false;
             m_velocity -= (ACCEL_FAST - ACCEL_SLOW);
+        }
+        else if (m_accelFrame == ACCEL_THIRD_FRAME)
+        {
+            m_isaccel2 = false;
         }
 
         m_accelFrame++;
