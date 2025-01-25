@@ -117,7 +117,7 @@ public:
         DirectX::XMVECTOR direction
     )
     {
-        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).SetMatrix(transform);
+        (m_isPlayer1 ? m_playerModel2 : m_playerModel1).SetTransformMatrix(transform);
         (m_isPlayer1 ? m_playerModel2 : m_playerModel1).SetCoordinateMatrix(coordinate);
         (m_isPlayer1 ? m_playerModel2 : m_playerModel1).SetDirection(direction);
     }
