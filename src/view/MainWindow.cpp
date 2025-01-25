@@ -188,6 +188,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             return 0;
 
         case WM_LBUTTONDOWN:
+        {
             std::cout << "shoot" << std::endl;
             m_engine->Shoot();
             UINT_PTR flag = H24ACTION_SHOOT;
@@ -195,6 +196,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             Send(flag);
 #endif
             return 0;
+        }
 
         default:
             return DefWindowProc(m_hwnd, uMsg, wParam, lParam);
