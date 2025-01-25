@@ -6,7 +6,8 @@
 
 #include <string>
 
-class GameInfo {
+class GameInfo
+{
 public:
     GameInfo() = default;
 
@@ -20,6 +21,7 @@ public:
         const Microsoft::WRL::ComPtr<ID2D1DeviceContext2>& d2dDeviceContext,
         const Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>& brush
     ) const;
+
 private:
     Microsoft::WRL::ComPtr<IDWriteTextFormat> m_textFormat;
 
@@ -33,6 +35,4 @@ private:
     float m_velocity = 0.0f;
 };
 
-
-
-#endif //GAMEINFO_H
+#endif  // GAMEINFO_H

@@ -50,13 +50,8 @@ void GameInfo::Render(
     std::wstring time = m_timeText + std::to_wstring(m_time);
     std::wstring velocity = m_velocityText + std::to_wstring(m_velocity);
 
-    d2dDeviceContext->DrawTextA(
-        time.c_str(),
-        time.length(),
-        m_textFormat.Get(),
-        m_timeTextRect,
-        brush.Get()
-    );
+    d2dDeviceContext
+        ->DrawTextA(time.c_str(), time.length(), m_textFormat.Get(), m_timeTextRect, brush.Get());
 
     d2dDeviceContext->DrawTextA(
         velocity.c_str(),
