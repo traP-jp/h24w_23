@@ -246,7 +246,7 @@ void Player::RotZ(float angle) const
     }
 }
 
-void Player::Shoot()
+void Player::Shoot(const Effekseer::ManagerRef &manager)
 {
     if (m_bulletIndex >= m_bullets.size())
     {
@@ -260,6 +260,21 @@ void Player::Shoot()
     //           << m_models[4]->GetPos().m128_f32[1] << ", " << m_models[4]->GetPos().m128_f32[2]
     //           << std::endl;
     m_bulletIndex++;
+
+    DirectX::XMVECTOR position = m_models[4]->GetPos();
+    DirectX::XMVECTOR direction = DirectX::XMVector3Normalize(m_direction);
+    DirectX::XMVECTOR left = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(m_up, direction));
+    m_gunHandle = manager->Play(m_gunEffect, 0, 0, 0);
+    manager->SetScale(m_gunHandle, GUN_EFFECT_SCALE, GUN_EFFECT_SCALE, GUN_EFFECT_SCALE);
+    manager->SetLocation(
+        m_gunHandle,
+        DirectX::XMVectorGetX(position) + DirectX::XMVectorGetX(direction) * 2.4
+            - DirectX::XMVectorGetX(left) * 0.5,
+        DirectX::XMVectorGetY(position) + DirectX::XMVectorGetY(direction) * 2.4
+            - DirectX::XMVectorGetY(left) * 0.5,
+        DirectX::XMVectorGetZ(position) + DirectX::XMVectorGetZ(direction) * 2.4
+            - DirectX::XMVectorGetZ(left) * 0.5
+    );
 }
 
 void Player::CreateBusterEffect(const Effekseer::ManagerRef &manager)
@@ -281,4 +296,13 @@ void Player::CreateBusterEffect(const Effekseer::ManagerRef &manager)
         DirectX::XMVectorGetY(position),
         DirectX::XMVectorGetZ(position)
     );
+}
+
+void Player::CreateGunEffect(const Effekseer::ManagerRef &manager)
+{
+    m_gunEffect = Effekseer::Effect::Create(manager, u"resources/effects/ef_lightning01.efkefc");
+    if (m_gunEffect == nullptr)
+    {
+        std::cout << "gun effect is null" << std::endl;
+    }
 }
