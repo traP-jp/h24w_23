@@ -1,6 +1,6 @@
-#include "music/BGM.h"
+#include "music/AudioManager.h"
 
-void BGM::Run()
+void AudioManager::Run()
 {
     HRESULT hr = XAudio2Create(&pXAudio, 0, XAUDIO2_DEFAULT_PROCESSOR);
     if (FAILED(hr))
@@ -34,7 +34,7 @@ void BGM::Run()
     memcpy(&waveFormat, &waveData.waveFormat, sizeof(WAVEFORMATEX));
     waveFormat.wBitsPerSample = waveFormat.nBlockAlign * 8 / waveFormat.nChannels;
 
-    hr = pXAudio->CreateSourceVoice(&pSourceVoice, &waveFormat);
+    hr = pXAudio->CreateSourceVoice(&pBgmSourceVoice, &waveFormat);
     if (FAILED(hr))
     {
         OutputDebugString("FATAL: CreateSourceVoice failed\n");
@@ -50,22 +50,22 @@ void BGM::Run()
     buffer.Flags = XAUDIO2_END_OF_STREAM;
     buffer.LoopCount = XAUDIO2_LOOP_INFINITE;
 
-    hr = pSourceVoice->SubmitSourceBuffer(&buffer);
+    hr = pBgmSourceVoice->SubmitSourceBuffer(&buffer);
     if (FAILED(hr))
     {
         OutputDebugString("FATAL: SubmitSourceBuffer failed\n");
-        pSourceVoice->DestroyVoice();
+        pBgmSourceVoice->DestroyVoice();
         pMasteringVoice->DestroyVoice();
         pXAudio->Release();
         CoUninitialize();
         return;
     }
 
-    hr = pSourceVoice->Start(0);
+    hr = pBgmSourceVoice->Start(0);
     if (FAILED(hr))
     {
         OutputDebugString("FATAL: Start failed\n");
-        pSourceVoice->DestroyVoice();
+        pBgmSourceVoice->DestroyVoice();
         pMasteringVoice->DestroyVoice();
         pXAudio->Release();
         CoUninitialize();
@@ -75,7 +75,7 @@ void BGM::Run()
     XAUDIO2_VOICE_STATE state = {};
     while (true)
     {
-        pSourceVoice->GetState(&state);
+        pBgmSourceVoice->GetState(&state);
         if (state.BuffersQueued == 0)
         {
             break;
@@ -83,14 +83,14 @@ void BGM::Run()
     }
 }
 
-void BGM::ShutDown()
+void AudioManager::ShutDown()
 {
-    pSourceVoice->DestroyVoice();
+    pBgmSourceVoice->DestroyVoice();
     pMasteringVoice->DestroyVoice();
     pXAudio->Release();
 }
 
-HRESULT BGM::LoadWaveFile(const std::string& filePath, WaveData* out)
+HRESULT AudioManager::LoadWaveFile(const std::string& filePath, WaveData* out)
 {
     if (out)
     {

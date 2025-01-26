@@ -70,7 +70,7 @@ macro(create_executable files)
 
     set_property(TARGET h24w_23 PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDebugDLL")
 
-    target_compile_definitions(h24w_23 PRIVATE DEBUG)  # for nsight, d3d11on12 is not supported
+    #target_compile_definitions(h24w_23 PRIVATE DEBUG)  # for nsight, d3d11on12 is not supported
     #target_compile_definitions(h24w_23 PRIVATE NSIGHT)
 endmacro()
 
@@ -94,7 +94,7 @@ set(src_files
         src/2d/TitleImage.cpp
         src/2d/Result.cpp
         src/network/Network.cpp
-        src/music/BGM.cpp
+        src/music/AudioManager.cpp
 )
 
 set(include_files
@@ -117,7 +117,7 @@ set(include_files
         include/2d/TitleImage.h
         include/2d/Result.h
         include/network/Network.h
-        include/music/BGM.h
+        include/music/AudioManager.h
 )
 
 set(resources
@@ -313,6 +313,9 @@ set(resources
         resources/UI/result_win.png
         resources/music/hackathon3_r1.wav
         resources/music/hackathon3_r2.wav
+        resources/music/booster.wav
+        resources/music/hassya.wav
+        resources/music/tyakudan.wav
         shaders/main.hlsl
         shaders/renderTarget.hlsl
         shaders/skybox.hlsl
