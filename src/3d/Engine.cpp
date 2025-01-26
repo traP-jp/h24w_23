@@ -2,7 +2,10 @@
 
 #include <iostream>
 
-Engine::Engine(HWND hwnd, RECT wr, bool isPlayer1) : m_hwnd(hwnd), m_wr(wr), m_isPlayer1(isPlayer1)
+Engine::Engine(HWND hwnd, RECT wr, bool isPlayer1)
+    : m_hwnd(hwnd)
+    , m_wr(wr)
+    , m_isPlayer1(isPlayer1)
 {
 #ifdef NSIGHT
     AquaEngine::Factory::Init(false);
@@ -96,9 +99,11 @@ void Engine::InitRenderTargets()
         return;
     }
 
-    m_weightBuffer.Create(BUFFER_DEFAULT(
-        AquaEngine::AlignmentSize(sizeof(Weight), D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT)
-    ));
+    m_weightBuffer.Create(
+        BUFFER_DEFAULT(
+            AquaEngine::AlignmentSize(sizeof(Weight), D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT)
+        )
+    );
     m_weightBuffer.GetMappedBuffer()->gameWeight = m_gameWeight;
     auto weight_segment
         = std::make_shared<AquaEngine::DescriptorHeapSegment>(render_target_manager.Allocate(1));
@@ -155,8 +160,33 @@ void Engine::Render()
 
     switch (m_startStatus)
     {
-        case StartStatus::TITLE:
+    case StartStatus::TITLE:
+    {
+        m_display->BeginRender();
+        m_display->SetViewports();
+
+        HRESULT hr = m_command->Execute();
+        if (FAILED(hr))
         {
+            std::println("Failed to execute command");
+            return;
+        }
+#ifndef DEBUG
+        m_d2dEngine->RenderTitle(m_display->GetCurrentBackBufferIndex());
+#else
+            std::cout << "press any button to start" << std::endl;
+#endif
+        m_display->Present();
+        break;
+    }
+    case StartStatus::STARTING:
+    {
+        if (m_elapsedTime < 1.0f)
+        {
+            float weight = 1.0f - m_elapsedTime;
+#ifndef DEBUG
+            m_d2dEngine->SetTitleBackgroundColor(D2D1::ColorF(weight, weight, weight, 1.0f));
+#endif
             m_display->BeginRender();
             m_display->SetViewports();
 
@@ -168,93 +198,13 @@ void Engine::Render()
             }
 #ifndef DEBUG
             m_d2dEngine->RenderTitle(m_display->GetCurrentBackBufferIndex());
-#else
-            std::cout << "press any button to start" << std::endl;
 #endif
             m_display->Present();
-            break;
-        }
-        case StartStatus::STARTING:
-        {
-            if (m_elapsedTime < 1.0f)
-            {
-                float weight = 1.0f - m_elapsedTime;
-#ifndef DEBUG
-                m_d2dEngine->SetTitleBackgroundColor(D2D1::ColorF(weight, weight, weight, 1.0f));
-#endif
-                m_display->BeginRender();
-                m_display->SetViewports();
-
-                HRESULT hr = m_command->Execute();
-                if (FAILED(hr))
-                {
-                    std::println("Failed to execute command");
-                    return;
-                }
-#ifndef DEBUG
-                m_d2dEngine->RenderTitle(m_display->GetCurrentBackBufferIndex());
-#endif
-                m_display->Present();
-            }
-            else if (m_elapsedTime < 2.0f)
-            {
-                m_display->BeginRender();
-                m_display->SetViewports();
-                m_display->EndRender();
-
-                HRESULT hr = m_command->Execute();
-                if (FAILED(hr))
-                {
-                    std::println("Failed to execute command");
-                    return;
-                }
-
-                m_display->Present();
-            }
-            else
-            {
-                m_gameWeight = m_elapsedTime - 2.0f;
-                m_weightBuffer.GetMappedBuffer()->gameWeight = m_gameWeight;
-
-                m_gameRenderTarget.BeginRender(*m_command);
-
-                m_display->SetViewports();
-                m_gameView->Render(*m_command);
-
-                m_gameRenderTarget.EndRender(*m_command);
-
-                m_display->BeginRender();
-
-                m_rootSignature.SetToCommand(*m_command);
-                m_pipelineState.SetToCommand(*m_command);
-                m_gameRenderTarget.UseAsTexture(*m_command);
-                m_weightCBV.SetGraphicsRootDescriptorTable(m_command.get());
-                m_display->SetViewports();
-                m_gameRenderTarget.Render(*m_command);
-
-                m_display->EndRender();
-
-                HRESULT hr = m_command->Execute();
-                if (FAILED(hr))
-                {
-                    std::println("Failed to execute command");
-                    return;
-                }
-
-                m_display->Present();
-            }
-            break;
-        }
-        case StartStatus::RUNNING:
+        } else if (m_elapsedTime < 2.0f)
         {
             m_display->BeginRender();
             m_display->SetViewports();
-
-            m_gameView->Render(*m_command);
-
-#ifdef DEBUG
             m_display->EndRender();
-#endif
 
             HRESULT hr = m_command->Execute();
             if (FAILED(hr))
@@ -263,13 +213,66 @@ void Engine::Render()
                 return;
             }
 
-#ifndef DEBUG
-            m_d2dEngine->RenderGameInfo(m_display->GetCurrentBackBufferIndex());
-#endif
+            m_display->Present();
+        } else
+        {
+            m_gameWeight = m_elapsedTime - 2.0f;
+            m_weightBuffer.GetMappedBuffer()->gameWeight = m_gameWeight;
+
+            m_gameRenderTarget.BeginRender(*m_command);
+
+            m_display->SetViewports();
+            m_gameView->Render(*m_command);
+
+            m_gameRenderTarget.EndRender(*m_command);
+
+            m_display->BeginRender();
+
+            m_rootSignature.SetToCommand(*m_command);
+            m_pipelineState.SetToCommand(*m_command);
+            m_gameRenderTarget.UseAsTexture(*m_command);
+            m_weightCBV.SetGraphicsRootDescriptorTable(m_command.get());
+            m_display->SetViewports();
+            m_gameRenderTarget.Render(*m_command);
+
+            m_display->EndRender();
+
+            HRESULT hr = m_command->Execute();
+            if (FAILED(hr))
+            {
+                std::println("Failed to execute command");
+                return;
+            }
 
             m_display->Present();
-            break;
         }
+        break;
+    }
+    case StartStatus::RUNNING:
+    {
+        m_display->BeginRender();
+        m_display->SetViewports();
+
+        m_gameView->Render(*m_command);
+
+#ifdef DEBUG
+            m_display->EndRender();
+#endif
+
+        HRESULT hr = m_command->Execute();
+        if (FAILED(hr))
+        {
+            std::println("Failed to execute command");
+            return;
+        }
+
+#ifndef DEBUG
+        m_d2dEngine->RenderGameInfo(m_display->GetCurrentBackBufferIndex());
+#endif
+
+        m_display->Present();
+        break;
+    }
     }
 
     auto end = std::chrono::high_resolution_clock::now();
@@ -283,26 +286,28 @@ void Engine::Timer(int id)
 {
     switch (id)
     {
-        case TIMER_TITLE:
-            m_elapsedTime += 0.05f;
-            if (m_elapsedTime >= 3.0f && m_startStatus != StartStatus::RUNNING)
-            {
-                m_startStatus = StartStatus::RUNNING;
-                m_gameView->Start();
-            }
-            InvalidateRect(m_hwnd, &m_wr, FALSE);
-            return;
+    case TIMER_TITLE:
+        m_elapsedTime += 0.05f;
+        if (m_elapsedTime >= 3.0f && m_startStatus != StartStatus::RUNNING)
+        {
+            m_startStatus = StartStatus::RUNNING;
+            m_gameView->Start();
+            m_audioManager.RunBoosterAudio(true);
+            m_audioManager.RunBoosterAudio(false);
+        }
+        InvalidateRect(m_hwnd, &m_wr, FALSE);
+        return;
 
-        default:
-            m_gameView->Timer(id);
-            if (id == TIMER_FRAME)
-            {
+    default:
+        m_gameView->Timer(id);
+        if (id == TIMER_FRAME)
+        {
 #ifndef DEBUG
-                m_d2dEngine->GameInfoFrame();
-                m_d2dEngine->SetGameInfoVelocity(m_gameView->GetPlayerVelocity());
-                m_d2dEngine->SetGameInfoLeftBullet(m_gameView->GetBullets());
+            m_d2dEngine->GameInfoFrame();
+            m_d2dEngine->SetGameInfoVelocity(m_gameView->GetPlayerVelocity());
+            m_d2dEngine->SetGameInfoLeftBullet(m_gameView->GetBullets());
 #endif
-            }
-            return;
+        }
+        return;
     }
 }

@@ -86,6 +86,9 @@ private:
     X3DAUDIO_EMITTER player1Emitter = {};
     X3DAUDIO_EMITTER player2Emitter = {};
 
+    XAUDIO2_BUFFER hasshaBuffer = {};
+    XAUDIO2_BUFFER tyakudanBuffer = {};
+
     DirectX::XMFLOAT3 listenerPos = {};
 
     DirectX::XMFLOAT3 player1Pos = {};

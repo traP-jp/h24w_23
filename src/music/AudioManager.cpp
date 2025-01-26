@@ -63,11 +63,11 @@ void AudioManager::Init()
     player1Emitter.OrientFront = {0.0f, 0.0f, 1.0f};
     player1Emitter.OrientTop = {0.0f, 1.0f, 0.0f};
     player1Emitter.Velocity = {0.0f, 0.0f, 0.0f};
-    player1Emitter.InnerRadius = 4.0f;
+    player1Emitter.InnerRadius = 100.0f;
     player1Emitter.InnerRadiusAngle = X3DAUDIO_2PI;
     player1Emitter.ChannelCount = 2;
     player1Emitter.ChannelRadius = 1.0f;
-    player1Emitter.CurveDistanceScaler = 4.0f;
+    player1Emitter.CurveDistanceScaler = 100.0f;
     player1Emitter.DopplerScaler = 1.0f;
     FLOAT32 *player1EmitterAzimuths = new FLOAT32[2];
     player1EmitterAzimuths[0] = 0.0f;
@@ -80,11 +80,11 @@ void AudioManager::Init()
     player2Emitter.OrientFront = {0.0f, 0.0f, 1.0f};
     player2Emitter.OrientTop = {0.0f, 1.0f, 0.0f};
     player2Emitter.Velocity = {0.0f, 0.0f, 0.0f};
-    player2Emitter.InnerRadius = 4.0f;
+    player2Emitter.InnerRadius = 100.0f;
     player2Emitter.InnerRadiusAngle = X3DAUDIO_2PI;
     player2Emitter.ChannelCount = 2;
     player2Emitter.ChannelRadius = 1.0f;
-    player2Emitter.CurveDistanceScaler = 4.0f;
+    player2Emitter.CurveDistanceScaler = 100.0f;
     player2Emitter.DopplerScaler = 1.0f;
     FLOAT32 *player2EmitterAzimuths = new FLOAT32[2];
     player2EmitterAzimuths[0] = 0.0f;
@@ -204,7 +204,7 @@ void AudioManager::Init()
     boosterBuffer.AudioBytes = boosterWaveData.dataSize;
     boosterBuffer.pAudioData = reinterpret_cast<BYTE *>(boosterWaveData.data);
     boosterBuffer.Flags = XAUDIO2_END_OF_STREAM;
-    boosterBuffer.LoopCount = 0;
+    boosterBuffer.LoopCount = XAUDIO2_LOOP_INFINITE;
 
     hr = pBoosterSourceVoice->SubmitSourceBuffer(&boosterBuffer);
     if (FAILED(hr))
@@ -258,7 +258,7 @@ void AudioManager::Init()
         return;
     }
 
-    XAUDIO2_BUFFER hasshaBuffer = {};
+    hasshaBuffer = {};
     hasshaBuffer.AudioBytes = hasshaWaveData.dataSize;
     hasshaBuffer.pAudioData = reinterpret_cast<BYTE *>(hasshaWaveData.data);
     hasshaBuffer.Flags = XAUDIO2_END_OF_STREAM;
@@ -318,7 +318,7 @@ void AudioManager::Init()
         return;
     }
 
-    XAUDIO2_BUFFER tyakudanBuffer = {};
+    tyakudanBuffer = {};
     tyakudanBuffer.AudioBytes = tyakudanWaveData.dataSize;
     tyakudanBuffer.pAudioData = reinterpret_cast<BYTE *>(tyakudanWaveData.data);
     tyakudanBuffer.Flags = XAUDIO2_END_OF_STREAM;
@@ -386,16 +386,6 @@ void AudioManager::RunBoosterAudio(bool isPlayer1)
             CoUninitialize();
             return;
         }
-
-        XAUDIO2_VOICE_STATE state = {};
-        while (true)
-        {
-            pBoosterSourceVoice->GetState(&state);
-            if (state.BuffersQueued == 0)
-            {
-                break;
-            }
-        }
     } else
     {
         HRESULT hr = pPlayer2BoosterSourceVoice->Start(0);
@@ -408,16 +398,6 @@ void AudioManager::RunBoosterAudio(bool isPlayer1)
             CoUninitialize();
             return;
         }
-
-        XAUDIO2_VOICE_STATE state = {};
-        while (true)
-        {
-            pPlayer2BoosterSourceVoice->GetState(&state);
-            if (state.BuffersQueued == 0)
-            {
-                break;
-            }
-        }
     }
 }
 
@@ -425,7 +405,40 @@ void AudioManager::RunHasshaAudio(bool isPlayer1)
 {
     if (isPlayer1)
     {
-        HRESULT hr = pHasshaSourceVoice->Start(0);
+        HRESULT hr = pHasshaSourceVoice->Stop();
+        if (FAILED(hr))
+        {
+            OutputDebugString("FATAL: Stop failed\n");
+            pHasshaSourceVoice->DestroyVoice();
+            pMasteringVoice->DestroyVoice();
+            pXAudio->Release();
+            CoUninitialize();
+            return;
+        }
+
+        hr = pHasshaSourceVoice->FlushSourceBuffers();
+        if (FAILED(hr))
+        {
+            OutputDebugString("FATAL: FlushSourceBuffers failed\n");
+            pHasshaSourceVoice->DestroyVoice();
+            pMasteringVoice->DestroyVoice();
+            pXAudio->Release();
+            CoUninitialize();
+            return;
+        }
+
+        hr = pHasshaSourceVoice->SubmitSourceBuffer(&hasshaBuffer);
+        if (FAILED(hr))
+        {
+            OutputDebugString("FATAL: SubmitSourceBuffer failed\n");
+            pHasshaSourceVoice->DestroyVoice();
+            pMasteringVoice->DestroyVoice();
+            pXAudio->Release();
+            CoUninitialize();
+            return;
+        }
+
+        hr = pHasshaSourceVoice->Start(0);
         if (FAILED(hr))
         {
             OutputDebugString("FATAL: Start failed\n");
@@ -435,19 +448,42 @@ void AudioManager::RunHasshaAudio(bool isPlayer1)
             CoUninitialize();
             return;
         }
-
-        XAUDIO2_VOICE_STATE state = {};
-        while (true)
-        {
-            pHasshaSourceVoice->GetState(&state);
-            if (state.BuffersQueued == 0)
-            {
-                break;
-            }
-        }
     } else
     {
-        HRESULT hr = pPlayer2HasshaSourceVoice->Start(0);
+        HRESULT hr = pPlayer2HasshaSourceVoice->Stop();
+        if (FAILED(hr))
+        {
+            OutputDebugString("FATAL: Stop failed\n");
+            pPlayer2HasshaSourceVoice->DestroyVoice();
+            pMasteringVoice->DestroyVoice();
+            pXAudio->Release();
+            CoUninitialize();
+            return;
+        }
+
+        hr = pPlayer2HasshaSourceVoice->FlushSourceBuffers();
+        if (FAILED(hr))
+        {
+            OutputDebugString("FATAL: FlushSourceBuffers failed\n");
+            pPlayer2HasshaSourceVoice->DestroyVoice();
+            pMasteringVoice->DestroyVoice();
+            pXAudio->Release();
+            CoUninitialize();
+            return;
+        }
+
+        hr = pPlayer2HasshaSourceVoice->SubmitSourceBuffer(&hasshaBuffer);
+        if (FAILED(hr))
+        {
+            OutputDebugString("FATAL: SubmitSourceBuffer failed\n");
+            pPlayer2HasshaSourceVoice->DestroyVoice();
+            pMasteringVoice->DestroyVoice();
+            pXAudio->Release();
+            CoUninitialize();
+            return;
+        }
+
+        hr = pPlayer2HasshaSourceVoice->Start(0);
         if (FAILED(hr))
         {
             OutputDebugString("FATAL: Start failed\n");
@@ -457,16 +493,6 @@ void AudioManager::RunHasshaAudio(bool isPlayer1)
             CoUninitialize();
             return;
         }
-
-        XAUDIO2_VOICE_STATE state = {};
-        while (true)
-        {
-            pPlayer2HasshaSourceVoice->GetState(&state);
-            if (state.BuffersQueued == 0)
-            {
-                break;
-            }
-        }
     }
 }
 
@@ -474,7 +500,40 @@ void AudioManager::RunTyakudanAudio(bool isPlayer1)
 {
     if (isPlayer1)
     {
-        HRESULT hr = pTyakudanSourceVoice->Start(0);
+        HRESULT hr = pTyakudanSourceVoice->Stop();
+        if (FAILED(hr))
+        {
+            OutputDebugString("FATAL: Stop failed\n");
+            pTyakudanSourceVoice->DestroyVoice();
+            pMasteringVoice->DestroyVoice();
+            pXAudio->Release();
+            CoUninitialize();
+            return;
+        }
+
+        hr = pTyakudanSourceVoice->FlushSourceBuffers();
+        if (FAILED(hr))
+        {
+            OutputDebugString("FATAL: FlushSourceBuffers failed\n");
+            pTyakudanSourceVoice->DestroyVoice();
+            pMasteringVoice->DestroyVoice();
+            pXAudio->Release();
+            CoUninitialize();
+            return;
+        }
+
+        hr = pTyakudanSourceVoice->SubmitSourceBuffer(&tyakudanBuffer);
+        if (FAILED(hr))
+        {
+            OutputDebugString("FATAL: SubmitSourceBuffer failed\n");
+            pTyakudanSourceVoice->DestroyVoice();
+            pMasteringVoice->DestroyVoice();
+            pXAudio->Release();
+            CoUninitialize();
+            return;
+        }
+
+        hr = pTyakudanSourceVoice->Start(0);
         if (FAILED(hr))
         {
             OutputDebugString("FATAL: Start failed\n");
@@ -484,19 +543,42 @@ void AudioManager::RunTyakudanAudio(bool isPlayer1)
             CoUninitialize();
             return;
         }
-
-        XAUDIO2_VOICE_STATE state = {};
-        while (true)
-        {
-            pTyakudanSourceVoice->GetState(&state);
-            if (state.BuffersQueued == 0)
-            {
-                break;
-            }
-        }
     } else
     {
-        HRESULT hr = pPlayer2TyakudanSourceVoice->Start(0);
+        HRESULT hr = pPlayer2TyakudanSourceVoice->Stop();
+        if (FAILED(hr))
+        {
+            OutputDebugString("FATAL: Stop failed\n");
+            pPlayer2TyakudanSourceVoice->DestroyVoice();
+            pMasteringVoice->DestroyVoice();
+            pXAudio->Release();
+            CoUninitialize();
+            return;
+        }
+
+        hr = pPlayer2TyakudanSourceVoice->FlushSourceBuffers();
+        if (FAILED(hr))
+        {
+            OutputDebugString("FATAL: FlushSourceBuffers failed\n");
+            pPlayer2TyakudanSourceVoice->DestroyVoice();
+            pMasteringVoice->DestroyVoice();
+            pXAudio->Release();
+            CoUninitialize();
+            return;
+        }
+
+        hr = pPlayer2TyakudanSourceVoice->SubmitSourceBuffer(&tyakudanBuffer);
+        if (FAILED(hr))
+        {
+            OutputDebugString("FATAL: SubmitSourceBuffer failed\n");
+            pPlayer2TyakudanSourceVoice->DestroyVoice();
+            pMasteringVoice->DestroyVoice();
+            pXAudio->Release();
+            CoUninitialize();
+            return;
+        }
+
+        hr = pPlayer2TyakudanSourceVoice->Start(0);
         if (FAILED(hr))
         {
             OutputDebugString("FATAL: Start failed\n");
@@ -505,16 +587,6 @@ void AudioManager::RunTyakudanAudio(bool isPlayer1)
             pXAudio->Release();
             CoUninitialize();
             return;
-        }
-
-        XAUDIO2_VOICE_STATE state = {};
-        while (true)
-        {
-            pPlayer2TyakudanSourceVoice->GetState(&state);
-            if (state.BuffersQueued == 0)
-            {
-                break;
-            }
         }
     }
 }

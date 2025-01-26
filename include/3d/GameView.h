@@ -24,6 +24,7 @@
 #include "EffectManager.h"
 #include "Player.h"
 #include "SideUI.h"
+#include "music/AudioManager.h"
 
 using DirectX::operator-;
 using DirectX::operator+;
@@ -129,8 +130,7 @@ public:
         if (m_isPlayer1)
         {
             r = m_playerModel2.GetPos() - m_playerModel1.GetPos();
-        }
-        else
+        } else
         {
             r = m_playerModel1.GetPos() - m_playerModel2.GetPos();
         }
@@ -138,18 +138,17 @@ public:
         r = DirectX::XMVector3Normalize(r);
 
         float velocity = DirectX::XMVector3Dot(
-                             (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection(),
-                             r
-        )
-                             .m128_f32[0];
+                (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection(),
+                r
+            )
+            .m128_f32[0];
 
         DirectX::XMVECTOR direction;
         if (m_isPlayer1)
         {
             direction = m_playerModel2.GetDirection() * m_playerModel2.GetVelocity()
                         + (velocity + Bullet::VELOCITY_CONST - m_playerModel2.GetVelocity()) * r;
-        }
-        else
+        } else
         {
             direction = m_playerModel1.GetDirection() * m_playerModel1.GetVelocity()
                         + (velocity + Bullet::VELOCITY_CONST - m_playerModel1.GetVelocity()) * r;
@@ -158,10 +157,10 @@ public:
         direction = DirectX::XMVector3Normalize(direction);
 
         if (velocity
-                / DirectX::XMVector3Length(
-                      (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection()
-                )
-                      .m128_f32[0]
+            / DirectX::XMVector3Length(
+                (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection()
+            )
+            .m128_f32[0]
             < 0.6f)
         {
             direction = (m_isPlayer1 ? m_playerModel1 : m_playerModel2).GetDirection();
@@ -171,6 +170,8 @@ public:
         (m_isPlayer1 ? m_playerModel1 : m_playerModel2)
             .Shoot(direction, velocity + Bullet::VELOCITY_CONST);
         m_bullets--;
+
+        m_audioManager.RunHasshaAudio(m_isPlayer1);
     }
 
     void PartnerShoot()
@@ -179,8 +180,7 @@ public:
         if (m_isPlayer1)
         {
             r = m_playerModel1.GetPos() - m_playerModel2.GetPos();
-        }
-        else
+        } else
         {
             r = m_playerModel2.GetPos() - m_playerModel1.GetPos();
         }
@@ -188,18 +188,17 @@ public:
         r = DirectX::XMVector3Normalize(r);
 
         float velocity = DirectX::XMVector3Dot(
-                             (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetDirection(),
-                             r
-        )
-                             .m128_f32[0];
+                (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetDirection(),
+                r
+            )
+            .m128_f32[0];
 
         DirectX::XMVECTOR direction;
         if (m_isPlayer1)
         {
             direction = m_playerModel1.GetDirection() * m_playerModel1.GetVelocity()
                         + (velocity + Bullet::VELOCITY_CONST - m_playerModel1.GetVelocity()) * r;
-        }
-        else
+        } else
         {
             direction = m_playerModel2.GetDirection() * m_playerModel2.GetVelocity()
                         + (velocity + Bullet::VELOCITY_CONST - m_playerModel2.GetVelocity()) * r;
@@ -208,28 +207,21 @@ public:
         direction = DirectX::XMVector3Normalize(direction);
 
         if (velocity
-                / DirectX::XMVector3Length(
-                      (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetDirection()
-                )
-                      .m128_f32[0]
+            / DirectX::XMVector3Length(
+                (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetDirection()
+            )
+            .m128_f32[0]
             < 0.6f)
         {
-            float delta
-                = (0.6f
-                   - velocity
-                         / DirectX::XMVector3Length(
-                               (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetDirection()
-                         )
-                               .m128_f32[0])
-                  * 2;
-            direction = DirectX::XMVector3Normalize(
-                (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetDirection() * delta
-                + direction * 0.4f
-            );
+            direction = (m_isPlayer1 ? m_playerModel2 : m_playerModel1).GetDirection();
+            velocity = Bullet::VELOCITY_CONST * 4.0f;
         }
 
         (m_isPlayer1 ? m_playerModel2 : m_playerModel1)
             .Shoot(direction, velocity + Bullet::VELOCITY_CONST);
+        m_bullets--;
+
+        m_audioManager.RunHasshaAudio(!m_isPlayer1);
     }
 
     void SetPartner(
@@ -293,6 +285,47 @@ public:
         return m_bullets;
     }
 
+    void SetAudioManager(AudioManager &audioManager)
+    {
+        m_audioManager = audioManager;
+
+        DirectX::XMVECTOR player1pos = m_playerModel1.GetPos();
+        DirectX::XMVECTOR player2pos = m_playerModel2.GetPos();
+        m_audioManager.SetPlayer1Pos(
+            {
+                DirectX::XMVectorGetX(player1pos),
+                DirectX::XMVectorGetY(player1pos),
+                DirectX::XMVectorGetZ(player1pos)
+            }
+        );
+        m_audioManager.SetPlayer2Pos(
+            {
+                DirectX::XMVectorGetX(player2pos),
+                DirectX::XMVectorGetY(player2pos),
+                DirectX::XMVectorGetZ(player2pos)
+            }
+        );
+        if (m_isPlayer1)
+        {
+            m_audioManager.SetListenerPos(
+                {
+                    DirectX::XMVectorGetX(player1pos),
+                    DirectX::XMVectorGetY(player1pos),
+                    DirectX::XMVectorGetZ(player1pos)
+                }
+            );
+        } else
+        {
+            m_audioManager.SetListenerPos(
+                {
+                    DirectX::XMVectorGetX(player2pos),
+                    DirectX::XMVectorGetY(player2pos),
+                    DirectX::XMVectorGetZ(player2pos)
+                }
+            );
+        }
+    }
+
 private:
     enum class GameStatus
     {
@@ -333,6 +366,8 @@ private:
     bool m_isPlayer1;
     int m_bullets = Player::BULLET_COUNT;
 
+    AudioManager m_audioManager;
+
     void CreateModels(
         AquaEngine::Command &command,
         AquaEngine::DescriptorHeapSegmentManager &manager
@@ -351,9 +386,9 @@ private:
     static constexpr float DEFAULT_CAMERA_Z_DISTANCE = -4.2f;
     static constexpr float CAMERA_ASPECT = 1.2f;
     static constexpr DirectX::XMFLOAT3 PLAYER1_DEFAULT_CAMERA
-        = {1.0f, -DEFAULT_CAMERA_Z_DISTANCE, DEFAULT_CAMERA_Z_DISTANCE *CAMERA_ASPECT};
+        = {1.0f, -DEFAULT_CAMERA_Z_DISTANCE, DEFAULT_CAMERA_Z_DISTANCE * CAMERA_ASPECT};
     static constexpr DirectX::XMFLOAT3 PLAYER2_DEFAULT_CAMERA
-        = {-1.0f, -DEFAULT_CAMERA_Z_DISTANCE, DEFAULT_CAMERA_Z_DISTANCE *CAMERA_ASPECT};
+        = {-1.0f, -DEFAULT_CAMERA_Z_DISTANCE, DEFAULT_CAMERA_Z_DISTANCE * CAMERA_ASPECT};
 };
 
 #endif  // GAMEVIEW_H

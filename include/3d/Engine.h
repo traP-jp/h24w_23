@@ -10,6 +10,7 @@
 
 #include "2d/D2DEngine.h"
 #include "GameView.h"
+#include "music/AudioManager.h"
 
 class Engine
 {
@@ -22,10 +23,13 @@ public:
     };
 
     Engine(HWND hwnd, RECT wr, bool isPlayer1);
+
     ~Engine();
 
     void Init();
+
     void Render();
+
     void Timer(int id);
 
     void TranslatePartner(const DirectX::XMMATRIX &transform) const
@@ -137,6 +141,12 @@ public:
         return m_gameView->GetDirection();
     }
 
+    void SetAudioManager(AudioManager &audioManager)
+    {
+        m_audioManager = audioManager;
+        m_gameView->SetAudioManager(audioManager);
+    }
+
 private:
     struct Weight
     {
@@ -159,6 +169,8 @@ private:
 
     HWND m_hwnd;
     RECT m_wr;
+
+    AudioManager m_audioManager;
 
     StartStatus m_startStatus = StartStatus::TITLE;
     float m_elapsedTime = 0.0f;

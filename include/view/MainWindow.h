@@ -22,7 +22,7 @@ public:
         bool isPlayer1
     );
 
-    void InitNetwork(const std::string& ipaddr)
+    void InitNetwork(const std::string &ipaddr)
     {
         m_network = std::make_unique<Network>(ipaddr, m_hwnd);
         m_network->CreateSocket();
@@ -31,6 +31,12 @@ public:
     void Listen() const
     {
         m_network->Listen();
+    }
+
+    void SetAudioManager(AudioManager &audioManager)
+    {
+        m_audioManager = audioManager;
+        m_engine->SetAudioManager(audioManager);
     }
 
 private:
@@ -44,6 +50,8 @@ private:
     bool m_onA = false;
     bool m_onS = false;
     bool m_onD = false;
+
+    AudioManager m_audioManager;
 
     LPCSTR ClassName() const override
     {

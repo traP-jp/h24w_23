@@ -67,6 +67,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     AudioManager bgm;
     bgm.Init();
+    window.SetAudioManager(bgm);
     std::thread t3(&AudioManager::RunBGMAudio, &bgm);
 
     MSG msg = {};
