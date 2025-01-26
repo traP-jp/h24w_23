@@ -29,6 +29,15 @@ void GameView::Init(AquaEngine::Command &command)
     m_camera->InitSideUI();  // init ni camera range
     m_sideUI.CreatePipelineState();
 
+    auto light_range = std::make_unique<D3D12_DESCRIPTOR_RANGE>(
+        D3D12_DESCRIPTOR_RANGE_TYPE_CBV,
+        1,
+        3,
+        0,
+        D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND
+    );
+    m_directionLight.Init({0.0f, -1.0f, 1.0f}, {1.0f, 1.0f, 1.0f}, manager, std::move(light_range));
+
     m_rootSignature.AddStaticSampler(AquaEngine::RootSignature::DefaultStaticSampler());
     m_rootSignature.SetDescriptorHeapSegmentManager(&manager);
     HRESULT hr = m_rootSignature.Create();
@@ -415,6 +424,7 @@ void GameView::Render(AquaEngine::Command &command)
     m_pipelineState.SetToCommand(command);
 
     m_camera->Render(command);
+    m_directionLight.Render(command);
     m_playerModel1.Render(command);
     m_playerModel2.Render(command);
 

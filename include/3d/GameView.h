@@ -322,6 +322,8 @@ private:
     AquaEngine::PipelineState m_eyePipelineState;
     AquaEngine::RootSignature m_eyeRootSignature;
 
+    AquaEngine::DirectionLight m_directionLight;
+
     UIManager m_uiManager;
     SideUI m_sideUI;
     Result m_result;
