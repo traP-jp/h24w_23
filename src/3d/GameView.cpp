@@ -434,7 +434,7 @@ void GameView::Render(AquaEngine::Command &command)
 
     for (int i = 0; i < m_asteroids.size(); ++i)
     {
-        // m_asteroids[i].Render(command);
+        m_asteroids[i].Render(command);
     }
 
     m_eyeRootSignature.SetToCommand(command);
