@@ -69,7 +69,7 @@ void AudioManager::Init()
     player1Emitter.ChannelRadius = 1.0f;
     player1Emitter.CurveDistanceScaler = 4.0f;
     player1Emitter.DopplerScaler = 1.0f;
-    FLOAT32* player1EmitterAzimuths = new FLOAT32[2];
+    FLOAT32 *player1EmitterAzimuths = new FLOAT32[2];
     player1EmitterAzimuths[0] = 0.0f;
     player1EmitterAzimuths[1] = X3DAUDIO_2PI;
     player1Emitter.pChannelAzimuths = player1EmitterAzimuths;
@@ -86,7 +86,7 @@ void AudioManager::Init()
     player2Emitter.ChannelRadius = 1.0f;
     player2Emitter.CurveDistanceScaler = 4.0f;
     player2Emitter.DopplerScaler = 1.0f;
-    FLOAT32* player2EmitterAzimuths = new FLOAT32[2];
+    FLOAT32 *player2EmitterAzimuths = new FLOAT32[2];
     player2EmitterAzimuths[0] = 0.0f;
     player2EmitterAzimuths[1] = X3DAUDIO_2PI;
     player2Emitter.pChannelAzimuths = player2EmitterAzimuths;
@@ -157,7 +157,7 @@ void AudioManager::Init()
 
     XAUDIO2_BUFFER buffer = {};
     buffer.AudioBytes = bgmWaveData.dataSize;
-    buffer.pAudioData = reinterpret_cast<BYTE*>(bgmWaveData.data);
+    buffer.pAudioData = reinterpret_cast<BYTE *>(bgmWaveData.data);
     buffer.Flags = XAUDIO2_END_OF_STREAM;
     buffer.LoopCount = XAUDIO2_LOOP_INFINITE;
 
@@ -202,7 +202,7 @@ void AudioManager::Init()
 
     XAUDIO2_BUFFER boosterBuffer = {};
     boosterBuffer.AudioBytes = boosterWaveData.dataSize;
-    boosterBuffer.pAudioData = reinterpret_cast<BYTE*>(boosterWaveData.data);
+    boosterBuffer.pAudioData = reinterpret_cast<BYTE *>(boosterWaveData.data);
     boosterBuffer.Flags = XAUDIO2_END_OF_STREAM;
     boosterBuffer.LoopCount = 0;
 
@@ -260,7 +260,7 @@ void AudioManager::Init()
 
     XAUDIO2_BUFFER hasshaBuffer = {};
     hasshaBuffer.AudioBytes = hasshaWaveData.dataSize;
-    hasshaBuffer.pAudioData = reinterpret_cast<BYTE*>(hasshaWaveData.data);
+    hasshaBuffer.pAudioData = reinterpret_cast<BYTE *>(hasshaWaveData.data);
     hasshaBuffer.Flags = XAUDIO2_END_OF_STREAM;
     hasshaBuffer.LoopCount = 0;
 
@@ -320,7 +320,7 @@ void AudioManager::Init()
 
     XAUDIO2_BUFFER tyakudanBuffer = {};
     tyakudanBuffer.AudioBytes = tyakudanWaveData.dataSize;
-    tyakudanBuffer.pAudioData = reinterpret_cast<BYTE*>(tyakudanWaveData.data);
+    tyakudanBuffer.pAudioData = reinterpret_cast<BYTE *>(tyakudanWaveData.data);
     tyakudanBuffer.Flags = XAUDIO2_END_OF_STREAM;
     tyakudanBuffer.LoopCount = 0;
 
@@ -345,8 +345,6 @@ void AudioManager::Init()
         CoUninitialize();
         return;
     }
-
-
 }
 
 void AudioManager::RunBGMAudio()
@@ -398,8 +396,7 @@ void AudioManager::RunBoosterAudio(bool isPlayer1)
                 break;
             }
         }
-    }
-    else
+    } else
     {
         HRESULT hr = pPlayer2BoosterSourceVoice->Start(0);
         if (FAILED(hr))
@@ -422,7 +419,6 @@ void AudioManager::RunBoosterAudio(bool isPlayer1)
             }
         }
     }
-
 }
 
 void AudioManager::RunHasshaAudio(bool isPlayer1)
@@ -449,8 +445,7 @@ void AudioManager::RunHasshaAudio(bool isPlayer1)
                 break;
             }
         }
-    }
-    else
+    } else
     {
         HRESULT hr = pPlayer2HasshaSourceVoice->Start(0);
         if (FAILED(hr))
@@ -499,8 +494,7 @@ void AudioManager::RunTyakudanAudio(bool isPlayer1)
                 break;
             }
         }
-    }
-    else
+    } else
     {
         HRESULT hr = pPlayer2TyakudanSourceVoice->Start(0);
         if (FAILED(hr))
@@ -639,14 +633,13 @@ void AudioManager::Update()
     }
 }
 
-HRESULT AudioManager::LoadWaveFile(const std::string& filePath, WaveData* out)
+HRESULT AudioManager::LoadWaveFile(const std::string &filePath, WaveData *out)
 {
     if (out)
     {
         out->data = nullptr;
         out->dataSize = 0;
-    }
-    else
+    } else
     {
         OutputDebugString("LoadWaveFile: out is nullptr\n");
         return E_INVALIDARG;
