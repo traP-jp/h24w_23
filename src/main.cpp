@@ -43,7 +43,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     MainWindow window;
     HRESULT hr
         = window
-              .Create("MainWindow", WS_OVERLAPPEDWINDOW, 0, 0, 0, 1920, 1200, nullptr, is_player1);
+        .Create("MainWindow", WS_OVERLAPPEDWINDOW, 0, 0, 0, 1920, 1200, nullptr, is_player1);
     if (FAILED(hr))
     {
         return -1;
@@ -66,7 +66,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     ShowWindow(window.Window(), nCmdShow);
 
     AudioManager bgm;
-    std::thread t3(&AudioManager::Run, &bgm);
+    bgm.Init();
+    std::thread t3(&AudioManager::RunBGMAudio, &bgm);
 
     MSG msg = {};
 
